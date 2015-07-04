@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,7 +34,12 @@ namespace sharp_stem.sockets
         /// <summary>
         /// Connect to the parameters specified before.
         /// </summary>
-        public void Connect()
+        public async void Connect()
+        {
+            await Connect_Async();
+        }
+
+        private async Task Connect_Async()
         {
             if (Connected)
                 this.Close();
@@ -49,7 +51,12 @@ namespace sharp_stem.sockets
         /// <summary>
         /// Close the current connection.
         /// </summary>
-        public void Close()
+        public async void Close()
+        {
+            await Close_Async();
+        }
+
+        private async Task Close_Async()
         {
             if (Connected)
                 _socket.Close();
@@ -68,6 +75,13 @@ namespace sharp_stem.sockets
         {
             if (!format)
                 _socket.Send(Encoding.UTF8.GetBytes(message));
+
+
+        }
+
+        ~ControlSocket()
+        {
+            this.Close();
         }
     }
 }
