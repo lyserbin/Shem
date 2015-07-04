@@ -1,0 +1,30 @@
+@type server-descriptor 1.0
+router Coruscant 88.182.161.122 9001 0 9030
+platform Tor 0.2.3.25 on Linux
+opt protocols Link 1 2 Circuit 1
+published 2013-05-18 11:16:19
+opt fingerprint 0B98 2154 5C48 E496 AEED 9ECC 0DB5 06C4 9FF8 158D
+uptime 259738
+bandwidth 102400 204800 122818
+opt extra-info-digest 56403D838DE152421CD401B8E57DAD4483A3D56B
+onion-key
+-----BEGIN RSA PUBLIC KEY-----
+MIGJAoGBAK+rjPilZJVzvWn6slOpak4eUab+VXiGNkRAIKgGAqbpex7lNMcZeXbu
+8uYhiDUdjRaHQUbBjLaj6nAjtlHUl3NCbIpo2p03KEcxfAGi3k6dUMBJ7aIYb8lL
+SDK95huLBpyyNPikeDIiTKS1HNtmrai/iVtUiJS2I4fs3lP1TxevAgMBAAE=
+-----END RSA PUBLIC KEY-----
+signing-key
+-----BEGIN RSA PUBLIC KEY-----
+MIGJAoGBANGDDMHoCtTeL4UTEGip4T+37jd4lEjBgla7lgL8W1gtVTX/uMMo+HGE
+m1sD/FgBI3w8w7zpZlJgYeB/94YPUrw11iAEYAooJVmGDmel2g6CFofDs7KmrzqR
+1FQDIWeY9sQd4+L+jWMquqcA3FyzuZz28gi56hIombjkfr0RwCsNAgMBAAE=
+-----END RSA PUBLIC KEY-----
+opt hidden-service-dir
+contact 1024D/04D2E818 Lénaïc Huard <lenaic dot huard AT laposte dot net>
+reject *:*
+router-signature
+-----BEGIN SIGNATURE-----
+hk4jKRtI0LbjYWdGhjTuev9Hk9AilyBmBtK9nfpBPyamQZDZVirEUuP7PdtxM2U9
+EdCg+KnkrLoKoxh18YumBD2HvwHa2J1VZtezWkwxGB+HPkECTU/byl+dn6ZRncY7
+r0IrVeGUnlK/UaWpswx6amH7FEKXmBZYHxTxyuwwybQ=
+-----END SIGNATURE-----

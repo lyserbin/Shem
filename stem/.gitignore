@@ -1,0 +1,6 @@
+*.pyc
+*.swp
+.tox
+test/data/
+docs/_build/
+

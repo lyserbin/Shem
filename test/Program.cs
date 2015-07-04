@@ -1,7 +1,7 @@
 ﻿using System;
-using sharp_stem.sockets;
+using SharpStem.Sockets;
 
-namespace sharp_stem.test
+namespace SharpStem.test
 {
     class Program
     {

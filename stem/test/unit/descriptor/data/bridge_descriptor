@@ -1,0 +1,12 @@
+@type bridge-server-descriptor 1.0
+router Unnamed 10.18.111.71 9001 0 0
+platform Tor 0.2.0.26-rc (r14597) on Linux i686
+opt protocols Link 1 2 Circuit 1
+published 2008-05-20 19:45:00
+opt fingerprint 4ED5 7358 2B16 ACDA F6E4 2AA0 44A0 38F8 3A7F 6333
+uptime 204
+bandwidth 3220480 6441984 59408
+opt extra-info-digest BB1F13AA431421BEA29B840A2E33BB1C31C2990B
+opt caches-extra-info
+reject *:*
+router-digest 00F1CD29AD308A59A9AB5A88B49ECB46E0F215FD
