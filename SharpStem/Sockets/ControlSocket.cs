@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SharpStem.Sockets
 {
@@ -60,18 +59,42 @@ namespace SharpStem.Sockets
         /// Send a message to the TOR
         /// </summary>
         /// <param name="message">The message to send-to TOR.</param>
-        /// <param name="format">If the message should be formatted.</param>
-        public void Send(string message, bool format = false)
+        public void Send(string message)
         {
-            if (!format)
-                _socket.Send(Encoding.UTF8.GetBytes(message));
-
-
+            _socket.Send(Encoding.ASCII.GetBytes(message));
         }
+
+        public string Receive()
+        {
+            byte[] buffer = new byte[_socket.Available];
+            _socket.Receive(buffer);
+            return Encoding.ASCII.GetString(buffer);
+        }
+
+        //private string Format(string message)
+        //{
+        //    //From control-spec section 2.2...
+        //    //  Command = Keyword OptArguments CRLF / "+" Keyword OptArguments CRLF CmdData
+        //    //  Keyword = 1*ALPHA
+        //    //  OptArguments = [ SP *(SP / VCHAR) ]
+
+        //    //A command is either a single line containing a Keyword and arguments, or a
+        //    //multiline command whose initial keyword begins with +, and whose data
+        //    //section ends with a single "." on a line of its own.
+
+        //    //if we already have \r\n entries then standardize on \n to start with
+
+        //    message = message.Replace("\r\n", "\n");
+
+        //    if (message.Contains("\n"))
+        //        return "+" + message.Replace("\n", "\r\n") + "\r\n.\r\n";
+        //    else
+        //        return message + "\r\n";
+        //}
 
         ~ControlSocket()
         {
-            if(Connected)
+            if (Connected)
                 this.Close();
         }
     }
