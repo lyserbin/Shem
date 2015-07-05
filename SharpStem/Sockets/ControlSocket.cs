@@ -34,12 +34,7 @@ namespace SharpStem.Sockets
         /// <summary>
         /// Connect to the parameters specified before.
         /// </summary>
-        public async void Connect()
-        {
-            await Connect_Async();
-        }
-
-        private async Task Connect_Async()
+        public void Connect()
         {
             if (Connected)
                 this.Close();
@@ -51,12 +46,7 @@ namespace SharpStem.Sockets
         /// <summary>
         /// Close the current connection.
         /// </summary>
-        public async void Close()
-        {
-            await Close_Async();
-        }
-
-        private async Task Close_Async()
+        public void Close()
         {
             if (Connected)
                 _socket.Close();

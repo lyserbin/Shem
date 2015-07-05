@@ -15,6 +15,7 @@ namespace SharpStem.test
                 ControlSocket tryit;
                 tryit = new ControlSocket("127.0.0.1", 9051, false);
                 tryit.Connect();
+                tryit.Send("QUIT\r\n");
             }
             catch (Exception ex)
             {
