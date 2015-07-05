@@ -1,0 +1,4 @@
+tor.log
+Data/cached*
+Data/lock
+Data/state
