@@ -1,5 +1,6 @@
 ﻿using System;
 using SharpStem.Sockets;
+using SharpStem.Utils;
 
 namespace SharpStem.test
 {
@@ -7,7 +8,7 @@ namespace SharpStem.test
     {
         static void Main(string[] args)
         {
-            Console.Write("meow");
+            Logger.Log(LogType.INFO, "meow");
 
             try
             {

@@ -7,8 +7,8 @@
     <ProjectGuid>{E037CF47-3F89-42F1-8937-AA3D777C8F5D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>sharp_stem</RootNamespace>
-    <AssemblyName>sharp-stem</AssemblyName>
+    <RootNamespace>SharpStem</RootNamespace>
+    <AssemblyName>SharpStem</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -46,6 +46,7 @@
     <Compile Include="Sockets\ControlSocket.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sockets\SocketNotConnectedException.cs" />
+    <Compile Include="Utils\Logger.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

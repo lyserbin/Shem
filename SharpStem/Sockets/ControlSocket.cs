@@ -81,7 +81,8 @@ namespace SharpStem.Sockets
 
         ~ControlSocket()
         {
-            this.Close();
+            if(Connected)
+                this.Close();
         }
     }
 }
