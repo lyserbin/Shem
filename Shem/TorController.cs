@@ -4,14 +4,22 @@ using Shem.Sockets;
 
 namespace Shem
 {
+    /// <summary>
+    /// This class is the main class of the library, it is used to
+    /// manage tor through easy-to-use functions
+    /// </summary>
     public class TorController
     {
         private ControlSocket controlSocket;
 
         private int sleep = 10;
 
-        private int responseTimeout = 1000;
-        public int ResponseTimeout
+        private uint responseTimeout = 1000;
+
+        /// <summary>
+        /// The time the library should wait for a reply
+        /// </summary>
+        public uint ResponseTimeout
         {
             get { return responseTimeout; }
             set { responseTimeout = value; }
@@ -19,26 +27,27 @@ namespace Shem
 
 
         /// <summary>
-        /// TODO
+        /// Construct a new TorController, used to control TOR
         /// </summary>
-        /// <param name="address"></param>
-        /// <param name="port"></param>
-        public TorController(string address = "127.0.0.1", uint port = 9051)
+        /// <param name="address">The address where the ControlPort is (usually localhost)</param>
+        /// <param name="port">The port where TOR has binded the ControlPort</param>
+        /// <param name="connect">If the controller should connect just after the initialization</param>
+        public TorController(string address = "127.0.0.1", uint port = 9051, bool connect = true)
         {
-            controlSocket = new ControlSocket(address, port);
+            controlSocket = new ControlSocket(address, port, connect);
         }
 
         /// <summary>
-        /// TODO
+        /// Send a command and returns the reply as a raw string
         /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
+        /// <param name="command">The command to be sent</param>
+        /// <returns>Returns the raw string replied by the server</returns>
         public string SendCommand(TCCommand command)
         {
             //Send the command
             controlSocket.Send(command.Raw());
             //Wait for response
-            int timeout = ResponseTimeout / sleep;
+            int timeout = (int)ResponseTimeout / sleep;
             int i = 1;
             while (!controlSocket.ResponseAvailable && i < timeout)
             {
@@ -50,7 +59,15 @@ namespace Shem
         }
 
         /// <summary>
-        /// TODO
+        /// Connect to the control port.
+        /// </summary>
+        public void Connect()
+        {
+            controlSocket.Connect();
+        }
+
+        /// <summary>
+        /// Close the socket connection.
         /// </summary>  
         public void Close()
         {
@@ -60,7 +77,7 @@ namespace Shem
         ~TorController()
         {
             if(controlSocket.Connected)
-                controlSocket.Close();
+                Close();
         }
     }
 }
