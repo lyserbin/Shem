@@ -1,5 +1,5 @@
 ﻿
-namespace Shem.Protocols.TC
+namespace Shem.Commands
 {
     public abstract class TCCommand
     {

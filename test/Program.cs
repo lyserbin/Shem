@@ -1,6 +1,6 @@
 ﻿using System;
-using Shem.Controllers;
-using Shem.Protocols.TC.Commands;
+using Shem;
+using Shem.Commands;
 using Shem.Utils;
 
 namespace Shem.test

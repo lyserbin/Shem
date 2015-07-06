@@ -1,11 +1,11 @@
-﻿using System;
-
-namespace Shem.Protocols.TC.Commands
+﻿
+using System;
+namespace Shem.Commands
 {
-    public class GETCONF : TCCommand
+    public class GETINFO : TCCommand
     {
         string[] keywords;
-        public GETCONF(params string[] keywords)
+        public GETINFO(params string[] keywords)
         {
             this.keywords = keywords;
         }
@@ -22,7 +22,7 @@ namespace Shem.Protocols.TC.Commands
                 return ks;
             }))();
 
-            return string.Format("GETCONF{0}\r\n", keys);
+            return string.Format("GETINFO{0}\r\n", keys);
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System.Threading;
-using Shem.Protocols.TC;
+using Shem.Commands;
 using Shem.Sockets;
 
-namespace Shem.Controllers
+namespace Shem
 {
     public class TorController
     {
@@ -59,7 +59,8 @@ namespace Shem.Controllers
 
         ~TorController()
         {
-            controlSocket.Close();
+            if(controlSocket.Connected)
+                controlSocket.Close();
         }
     }
 }

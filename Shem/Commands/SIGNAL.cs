@@ -1,5 +1,5 @@
 ﻿
-namespace Shem.Protocols.TC.Commands
+namespace Shem.Commands
 {
     public class SIGNAL : TCCommand
     {
