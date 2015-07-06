@@ -1,5 +1,0 @@
-Version
-=======
-
-.. automodule:: stem.version
-
