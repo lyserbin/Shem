@@ -48,9 +48,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SharpStem\SharpStem.csproj">
+    <ProjectReference Include="..\Shem\Shem.csproj">
       <Project>{e037cf47-3f89-42f1-8937-aa3d777c8f5d}</Project>
-      <Name>SharpStem</Name>
+      <Name>Shem</Name>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>

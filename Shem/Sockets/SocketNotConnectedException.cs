@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharpStem.Sockets
+namespace Shem.Sockets
 {
     /// <summary>
     /// The ControlSocket isn't connected to TOR.

@@ -1,5 +1,5 @@
 ﻿
-namespace SharpStem.Protocols.TC.Commands
+namespace Shem.Protocols.TC.Commands
 {
     public class SIGNAL : TCCommand
     {

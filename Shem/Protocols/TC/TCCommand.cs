@@ -1,5 +1,5 @@
 ﻿
-namespace SharpStem.Protocols.TC
+namespace Shem.Protocols.TC
 {
     public abstract class TCCommand
     {

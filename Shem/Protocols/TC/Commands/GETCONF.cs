@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SharpStem.Protocols.TC.Commands
+namespace Shem.Protocols.TC.Commands
 {
     public class GETCONF : TCCommand
     {

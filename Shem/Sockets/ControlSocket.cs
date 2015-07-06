@@ -1,9 +1,9 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using SharpStem.Utils;
+using Shem.Utils;
 
-namespace SharpStem.Sockets
+namespace Shem.Sockets
 {
     /// <summary>
     /// This class manage to communicate with TOR, low level way.

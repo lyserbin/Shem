@@ -1,7 +1,8 @@
 ﻿using System.Threading;
-using SharpStem.Protocols.TC;
-using SharpStem.Sockets;
-namespace SharpStem.Controllers
+using Shem.Protocols.TC;
+using Shem.Sockets;
+
+namespace Shem.Controllers
 {
     public class TorController
     {
@@ -50,7 +51,7 @@ namespace SharpStem.Controllers
 
         /// <summary>
         /// TODO
-        /// </summary>
+        /// </summary>  
         public void Close()
         {
             controlSocket.Close();

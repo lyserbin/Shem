@@ -1,9 +1,9 @@
 ﻿using System;
-using SharpStem.Controllers;
-using SharpStem.Protocols.TC.Commands;
-using SharpStem.Utils;
+using Shem.Controllers;
+using Shem.Protocols.TC.Commands;
+using Shem.Utils;
 
-namespace SharpStem.test
+namespace Shem.test
 {
     class Program
     {
