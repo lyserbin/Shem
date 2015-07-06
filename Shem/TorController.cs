@@ -42,7 +42,7 @@ namespace Shem
         /// </summary>
         /// <param name="command">The command to be sent</param>
         /// <returns>Returns the raw string replied by the server</returns>
-        public string SendCommand(TCCommand command)
+        public string SendRawCommand(TCCommand command)
         {
             //Send the command
             controlSocket.Send(command.Raw());

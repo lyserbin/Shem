@@ -15,10 +15,10 @@ namespace Shem.test
             {
                 TorController tryit;
                 tryit = new TorController("127.0.0.1", 9051);
-                tryit.SendCommand(new AUTHENTICATE());
-                tryit.SendCommand(new SIGNAL(SIGNAL.Signals.HEARTBEAT));
-                tryit.SendCommand(new GETINFO("version", "config-file"));
-                tryit.SendCommand(new GETCONF("Log", "SocksPort"));
+                tryit.SendRawCommand(new AUTHENTICATE("test"));
+                tryit.SendRawCommand(new SIGNAL(SIGNAL.Signals.HEARTBEAT));
+                tryit.SendRawCommand(new GETINFO("version", "config-file"));
+                tryit.SendRawCommand(new GETCONF("Log", "SocksPort"));
                 tryit.Close();
             }
             catch (Exception ex)

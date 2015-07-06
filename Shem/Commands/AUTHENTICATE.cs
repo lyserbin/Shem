@@ -1,18 +1,29 @@
-﻿
+﻿using Shem.Utils;
+
 namespace Shem.Commands
 {
+    /// <summary>
+    /// The command used to authenticate with TOR
+    /// </summary>
     public class AUTHENTICATE : TCCommand
     {
-        private string token = "";
+        private bool ishex = false;
+        private string password = "";
 
-        public AUTHENTICATE(string token = "")
+        /// <summary>
+        /// Create a new Authentication message
+        /// </summary>
+        /// <param name="password">The give password as plain text or hex</param>
+        /// <param name="ishex">If you provided an hex password you have to set 'true' here</param>
+        public AUTHENTICATE(string password = "", bool ishex = false)
         {
-            this.token = token;
+            this.password = password;
         }
 
         public override string Raw()
         {
-            return token == "" ? "AUTHENTICATE\r\n" : string.Format("AUTHENTICATE {0}\r\n", token);
+            // TODO: autohash unhashed password (boring to implement s2k on .NET)
+            return password == "" ? "AUTHENTICATE\r\n" : ishex ? string.Format("AUTHENTICATE {0}\r\n", password) : string.Format("AUTHENTICATE \"{0}\"\r\n", password);
         }
     }
 }
