@@ -39,6 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Replies\AuthenticateReply.cs" />
+    <Compile Include="Replies\Reply.cs" />
+    <Compile Include="Replies\ReplyCodes.cs" />
     <Compile Include="TorController.cs" />
     <Compile Include="Commands\AUTHENTICATE.cs" />
     <Compile Include="Commands\GETCONF.cs" />
