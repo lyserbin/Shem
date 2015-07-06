@@ -1,7 +1,7 @@
-﻿using SharpStem.Utils;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using SharpStem.Utils;
 
 namespace SharpStem.Sockets
 {
@@ -13,6 +13,7 @@ namespace SharpStem.Sockets
         public IPAddress Address { get; private set; }
         public uint Port { get; private set; }
         public bool Connected { get; private set; }
+        public bool ResponseAvailable { get { return _socket.Available > 0; } }
         private Socket _socket;
 
         /// <summary>

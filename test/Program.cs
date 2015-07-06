@@ -1,7 +1,7 @@
 ﻿using System;
-using SharpStem.Sockets;
+using SharpStem.Controllers;
+using SharpStem.Protocols.TC.Commands;
 using SharpStem.Utils;
-using System.Threading;
 
 namespace SharpStem.test
 {
@@ -13,20 +13,17 @@ namespace SharpStem.test
 
             try
             {
-                ControlSocket tryit;
-                tryit = new ControlSocket("127.0.0.1", 9051, false);
-                tryit.Connect();
-                tryit.Send("AUTHENTICATE\r\n");
-                Thread.Sleep(100);
-                tryit.Receive();
-                tryit.Send("SIGNAL HEARTBEAT\r\n");
-                Thread.Sleep(100);
-                tryit.Receive();
+                TorController tryit;
+                tryit = new TorController("127.0.0.1", 9051);
+                tryit.SendCommand(new AUTHENTICATE());
+                tryit.SendCommand(new SIGNAL(SIGNAL.Signals.HEARTBEAT));
+                tryit.SendCommand(new GETINFO("version", "config-file"));
+                tryit.SendCommand(new GETCONF("Log", "SocksPort"));
                 tryit.Close();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Logger.Log(LogType.ERROR, ex.Message);
             }
 
             Console.ReadKey();

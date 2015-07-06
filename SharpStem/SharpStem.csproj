@@ -39,15 +39,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Controllers\EventType.cs" />
-    <Compile Include="Controllers\Listener.cs" />
-    <Compile Include="Controllers\State.cs" />
+    <Compile Include="Controllers\TorController.cs" />
+    <Compile Include="Protocols\TC\Commands\AUTHENTICATE.cs" />
+    <Compile Include="Protocols\TC\Commands\GETCONF.cs" />
+    <Compile Include="Protocols\TC\Commands\GETINFO.cs" />
+    <Compile Include="Protocols\TC\Commands\SIGNAL.cs" />
+    <Compile Include="Protocols\TC\TCCommand.cs" />
     <Compile Include="Sockets\ControlSocket.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sockets\SocketNotConnectedException.cs" />
     <Compile Include="Utils\Logger.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
