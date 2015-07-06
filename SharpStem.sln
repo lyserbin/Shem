@@ -9,6 +9,7 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "stem", "stem\stem.pyproj", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{58BF2401-B5D1-42A7-8531-98B81B554C69}"
 	ProjectSection(SolutionItems) = preProject
+		control-spec-tor-0.2.6.9.txt = control-spec-tor-0.2.6.9.txt
 		README.md = README.md
 	EndProjectSection
 EndProject
