@@ -1,5 +1,4 @@
 ﻿using System;
-using Shem;
 using Shem.Commands;
 using Shem.Utils;
 
@@ -14,12 +13,12 @@ namespace Shem.test
             try
             {
                 TorController tryit;
+
                 tryit = new TorController("127.0.0.1", 9051);
                 tryit.SendRawCommand(new AUTHENTICATE("test"));
                 tryit.SendRawCommand(new SIGNAL(SIGNAL.Signals.HEARTBEAT));
-                tryit.SendRawCommand(new GETINFO("version", "config-file"));
+                tryit.SendRawCommand(new GETINFO(GETINFO.Keywords.version, GETINFO.Keywords.config_text));
                 tryit.SendRawCommand(new GETCONF("Log", "SocksPort"));
-                tryit.Close();
             }
             catch (Exception ex)
             {
