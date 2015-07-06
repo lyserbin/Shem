@@ -51,6 +51,7 @@
     <ProjectReference Include="..\SharpStem\SharpStem.csproj">
       <Project>{e037cf47-3f89-42f1-8937-aa3d777c8f5d}</Project>
       <Name>SharpStem</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

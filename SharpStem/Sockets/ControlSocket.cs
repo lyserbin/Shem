@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using SharpStem.Utils;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
@@ -38,6 +39,7 @@ namespace SharpStem.Sockets
             if (Connected)
                 this.Close();
 
+            Logger.Log(LogType.DEBUG, string.Format("Connecting to the server \"{0}:{1}\"", this.Address, this.Port));
             _socket.Connect(Address, (int)Port);
             Connected = true;
         }
@@ -48,7 +50,10 @@ namespace SharpStem.Sockets
         public void Close()
         {
             if (Connected)
+            {
+                Logger.Log(LogType.DEBUG, string.Format("Closing the connection to \"{0}:{1}\"", this.Address, this.Port));
                 _socket.Close();
+            }
             else
                 throw new SocketNotConnectedException();
 
@@ -61,14 +66,22 @@ namespace SharpStem.Sockets
         /// <param name="message">The message to send-to TOR.</param>
         public void Send(string message)
         {
+            Logger.Log(LogType.DEBUG, string.Format("Sent message to the server: \"{0}\"", message.Replace("\r\n", "\\r\\n")));
             _socket.Send(Encoding.ASCII.GetBytes(message));
         }
 
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <returns>TODO</returns>
         public string Receive()
         {
             byte[] buffer = new byte[_socket.Available];
+            string reply;
             _socket.Receive(buffer);
-            return Encoding.ASCII.GetString(buffer);
+            reply = Encoding.ASCII.GetString(buffer);
+            Logger.Log(LogType.DEBUG, string.Format("Received a replie from the server: \"{0}\"", reply.Replace("\r\n", "\\r\\n")));
+            return reply;
         }
 
         //private string Format(string message)
