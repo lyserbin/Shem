@@ -48,7 +48,9 @@
     <Compile Include="Sockets\ControlSocket.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sockets\SocketNotConnectedException.cs" />
+    <Compile Include="Utils\ClassExtensions.cs" />
     <Compile Include="Utils\Logger.cs" />
+    <Compile Include="Utils\StringValueAttribute.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
