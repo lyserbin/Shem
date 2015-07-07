@@ -8,10 +8,29 @@ namespace Shem.Utils
     /// </summary>
     public enum LogType
     {
+        /// <summary>
+        /// Don't log shit.
+        /// </summary>
         NONE,
+
+        /// <summary>
+        /// Log errors only.
+        /// </summary>
         ERROR,
+
+        /// <summary>
+        /// Warning and errors will be logged (RECCOMENDED CHOOSE! =D).
+        /// </summary>
         WARNING,
+
+        /// <summary>
+        /// Notices, warnings and errors will be logged.
+        /// </summary>
         INFO,
+
+        /// <summary>
+        /// Log everything loggable.
+        /// </summary>
         DEBUG
     }
 
@@ -23,13 +42,16 @@ namespace Shem.Utils
     public static class Logger
     {
         /// <summary>
-        /// Represent the level of logging.
-        /// DEBUG will log DEBUG, INFO, WARNING and ERROR,
-        /// in the same way INFO will log INFO, WARNING and ERROR,
-        /// and so on this way.
+        /// Represent the level of logging to the console.
         /// </summary>
-        public static LogType LogLevel = LogType.INFO;
+        public static LogType ConsoleLogLevel = LogType.INFO;
 
+        /// <summary>
+        /// Represent the level of logging to the file.
+        /// </summary>
+        public static LogType FileLogLevel = LogType.WARNING;
+
+        // the file where to log to.
         private static string _logfile = "shem.log";
         
         /// <summary>
@@ -37,16 +59,16 @@ namespace Shem.Utils
         /// </summary>
         /// <param name="type">The type of the log (DEBUG, INFO, WARNING, ERROR).</param>
         /// <param name="message">The message to be logged.</param>
-        /// <param name="what">A <c>LogHow</c> class that specify what to log.</param>
+        /// <param name="logtoconsole">Should the message be logged to the console?</param>
+        /// <param name="logtofile">Should the message be logged to file?</param>
         public static void Log(LogType type, string message, bool logtoconsole = true, bool logtofile = true)
         {
-            if (LogLevel >= type)
-            {
-                string formatted = String.Format("{0} [{1}]: {2}", DateTime.Now, type.ToString(), message);
+            if (ConsoleLogLevel >= type && logtoconsole)
+                Console.WriteLine(String.Format("[{0} {1}] {2}", DateTime.Now.ToString("HH:mm:ss"), type.ToString(), message));
 
-                if (logtoconsole) Console.WriteLine(formatted);
-                if (logtofile) File.AppendAllText(_logfile, formatted + "\r\n");
-            }
+            if (FileLogLevel >= type && logtofile)
+                File.AppendAllText(_logfile, String.Format("[{0} {1}] {2}\r\n", DateTime.Now, type.ToString(), message));
+
         }
     }
 }
