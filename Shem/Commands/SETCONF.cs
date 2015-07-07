@@ -3,63 +3,6 @@ namespace Shem.Commands
 {
     public class SETCONF : TCCommand
     {
-        /// <summary>
-        /// Configurations availables for SETCONF command.
-        /// </summary>
-        public enum Configs
-        {
-            SocksPort,
-
-            SocksPolicy,
-
-            MaxMemInQueues,
-
-            Log,
-
-            RunAsDaemon,
-
-            DataDirectory,
-
-            ControlPort,
-
-            HashedControlPassword,
-
-            CookieAuthentication,
-
-            HiddenServiceDir,
-
-            HiddenServicePort,
-
-            ORPort,
-
-            Address,
-
-            OutboundBindAddress,
-
-            Nickname,
-
-            RelayBandwidthRate,
-
-            RelayBandwidthBurst,
-
-            AccountingMax,
-
-            AccountingStart,
-
-            ContactInfo,
-
-            DirPort,
-
-            DirPortFrontPage,
-
-            MyFamily,
-
-            ExitPolicy,
-
-            BridgeRelay,
-
-            PublishServerDescriptor
-        }
 
         private Configs configs;
 

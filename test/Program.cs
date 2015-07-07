@@ -18,9 +18,10 @@ namespace Shem.test
 
                 tryit = new TorController("127.0.0.1", 9051);
                 testit = tryit.SendCommand(new AUTHENTICATE("test"));
-                tryit.SendRawCommand(new SIGNAL(SIGNAL.Signals.HEARTBEAT));
-                tryit.SendRawCommand(new GETINFO(GETINFO.Keywords.version, GETINFO.Keywords.config_text));
-                tryit.SendRawCommand(new GETCONF("Log", "SocksPort"));
+                tryit.SendRawCommand(new SIGNAL(Signals.HEARTBEAT));
+                tryit.SendRawCommand(new GETINFO(Informations.version, Informations.status_clients_seen));
+                tryit.SendRawCommand(new GETCONF(Configs.ORPort));
+                tryit.SendCommand(new SETCONF(Configs.SocksPort, "9052"));
             }
             catch (Exception ex)
             {
