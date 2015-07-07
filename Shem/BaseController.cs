@@ -2,6 +2,7 @@
 using Shem.Commands;
 using Shem.Sockets;
 using Shem.Replies;
+using System.Collections.ObjectModel;
 
 namespace Shem
 {
@@ -60,7 +61,7 @@ namespace Shem
             return controlSocket.Receive();
         }
 
-        public Reply SendCommand(TCCommand command)
+        public Collection<Reply> SendCommand(TCCommand command)
         {
             return ReplyParser.Parse(SendRawCommand(command));
         }
