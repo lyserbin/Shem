@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using Shem.Commands;
 using Shem.Sockets;
+using Shem.Replies;
 
 namespace Shem
 {
@@ -56,6 +57,11 @@ namespace Shem
             }
             //Read Response
             return controlSocket.Receive();
+        }
+
+        public Reply SendCommand(TCCommand command)
+        {
+            return ReplyParser.Parse(SendRawCommand(command));
         }
 
         /// <summary>

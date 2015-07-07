@@ -1,6 +1,7 @@
 ﻿
 namespace Shem.Replies
 {
+    /*
     public class AuthenticateReply : Reply
     {
         private string raw;
@@ -21,4 +22,5 @@ namespace Shem.Replies
 
         }
     }
+     * */
 }
