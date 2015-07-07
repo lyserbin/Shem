@@ -5,8 +5,12 @@ using Shem.Utils;
 
 namespace Shem.Replies
 {
+    /// <summary>
+    /// Static class used to parse replies
+    /// </summary>
     static class ReplyParser
     {
+        // i is the position, named i only cause is shorter to write.
         private static void rparse(string rawstring, int i, ref Collection<Reply> current)
         {
             int tmpcode = 0;
@@ -34,6 +38,11 @@ namespace Shem.Replies
             }
         }
 
+        /// <summary>
+        /// Parse a reply from the tor deamon
+        /// </summary>
+        /// <param name="rawstring">The string the server replied</param>
+        /// <returns>A collection of replies (IT COULD BE EMPTY)</returns>
         public static Collection<Reply> Parse(string rawstring)
         {
             Collection<Reply> replies = new Collection<Reply>();
