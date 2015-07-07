@@ -41,7 +41,7 @@ namespace Shem.Sockets
             if (Connected)
                 this.Close();
 
-            Logger.Log(LogType.DEBUG, string.Format("Connecting to the server \"{0}:{1}\"", this.Address, this.Port));
+            Logger.LogDebug(string.Format("Connecting to the server \"{0}:{1}\"", this.Address, this.Port));
             _socket.Connect(Address, (int)Port);
             Connected = true;
         }
@@ -53,7 +53,7 @@ namespace Shem.Sockets
         {
             if (Connected)
             {
-                Logger.Log(LogType.DEBUG, string.Format("Closing the connection to \"{0}:{1}\"", this.Address, this.Port));
+                Logger.LogDebug(string.Format("Closing the connection to \"{0}:{1}\"", this.Address, this.Port));
                 _socket.Close();
             }
             else
@@ -68,7 +68,7 @@ namespace Shem.Sockets
         /// <param name="message">The message to send-to TOR.</param>
         public void Send(string message)
         {
-            Logger.Log(LogType.DEBUG, string.Format("Sent message to the server: \"{0}\"", message.Replace("\r\n", "\\r\\n")));
+            Logger.LogDebug(string.Format("Sent message to the server: \"{0}\"", message.Replace("\r\n", "\\r\\n")));
             _socket.Send(Encoding.ASCII.GetBytes(message));
         }
 
@@ -78,7 +78,7 @@ namespace Shem.Sockets
             string reply;
             _socket.Receive(buffer);
             reply = Encoding.ASCII.GetString(buffer);
-            Logger.Log(LogType.DEBUG, string.Format("Received a reply from the server: \"{0}\"", reply.Replace("\r\n", "\\r\\n")));
+            Logger.LogDebug(string.Format("Received a reply from the server: \"{0}\"", reply.Replace("\r\n", "\\r\\n")));
             return reply;
         }
 

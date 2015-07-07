@@ -6,7 +6,7 @@ namespace Shem.Utils
     /// <summary>
     /// Enum to present the various LogLevel types.
     /// </summary>
-    public enum LogType
+    public enum LogTypes
     {
         /// <summary>
         /// Don't log shit.
@@ -44,12 +44,12 @@ namespace Shem.Utils
         /// <summary>
         /// Represent the level of logging to the console.
         /// </summary>
-        public static LogType ConsoleLogLevel = LogType.INFO;
+        public static LogTypes ConsoleLogLevel = LogTypes.INFO;
 
         /// <summary>
         /// Represent the level of logging to the file.
         /// </summary>
-        public static LogType FileLogLevel = LogType.WARNING;
+        public static LogTypes FileLogLevel = LogTypes.WARNING;
 
         // the file where to log to.
         private static string _logfile = "shem.log";
@@ -61,14 +61,36 @@ namespace Shem.Utils
         /// <param name="message">The message to be logged.</param>
         /// <param name="logtoconsole">Should the message be logged to the console?</param>
         /// <param name="logtofile">Should the message be logged to file?</param>
-        public static void Log(LogType type, string message, bool logtoconsole = true, bool logtofile = true)
+        private static void Log(string message, LogTypes type = LogTypes.INFO, bool logtoconsole = true, bool logtofile = true)
         {
-            if (ConsoleLogLevel >= type && logtoconsole)
+            if (type <= LogTypes.NONE) // Goat boy is a bad boy.
+                return;
+
+            if ((ConsoleLogLevel >= type) || logtoconsole)
                 Console.WriteLine(String.Format("[{0} {1}] {2}", DateTime.Now.ToString("HH:mm:ss"), type.ToString(), message));
 
-            if (FileLogLevel >= type && logtofile)
-                File.AppendAllText(_logfile, String.Format("[{0} {1}] {2}\r\n", DateTime.Now, type.ToString(), message));
+            if ((FileLogLevel >= type) || logtofile)
+                File.AppendAllText(_logfile, String.Format("[{0} {1}] {2}\r\n", DateTime.Now.ToString("dd MMM yyyy-HH:mm:ss:fff"), type.ToString(), message));
+        }
 
+        public static void LogError(string message, bool logtoconsole = true, bool logtofile = true)
+        {
+            Log(message, LogTypes.ERROR, logtoconsole, logtofile);
+        }
+
+        public static void LogWarn(string message, bool logtoconsole = true, bool logtofile = true)
+        {
+            Log(message, LogTypes.WARNING, logtoconsole, logtofile);
+        }
+
+        public static void LogInfo(string message, bool logtoconsole = true, bool logtofile = true)
+        {
+            Log(message, LogTypes.INFO, logtoconsole, logtofile);
+        }
+
+        public static void LogDebug(string message, bool logtoconsole = true, bool logtofile = true)
+        {
+            Log(message, LogTypes.DEBUG, logtoconsole, logtofile);
         }
     }
 }

@@ -10,8 +10,8 @@ namespace Shem.test
     {
         static void Main(string[] args)
         {
-            Logger.ConsoleLogLevel = LogType.DEBUG;
-            Logger.FileLogLevel = LogType.DEBUG;
+            Logger.ConsoleLogLevel = LogTypes.DEBUG;
+            Logger.FileLogLevel = LogTypes.DEBUG;
 
             try
             {
@@ -24,7 +24,7 @@ namespace Shem.test
                 tc.Close();
             } catch (Exception ex)
             {
-                Logger.Log(LogType.ERROR, ex.StackTrace);
+                Logger.LogError(string.Format("{0} {1}",ex.Message, ex.StackTrace));
             }
 
             Console.ReadKey();
