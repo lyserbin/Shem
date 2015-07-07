@@ -54,7 +54,7 @@
     <Compile Include="Commands\SAVECONF.cs" />
     <Compile Include="Commands\SETCONF.cs" />
     <Compile Include="Replies\AuthenticateReply.cs" />
-    <Compile Include="Replies\NullReplyCodeException.cs" />
+    <Compile Include="Exceptions\NullReplyCodeException.cs" />
     <Compile Include="Replies\Reply.cs" />
     <Compile Include="Replies\ReplyCodes.cs" />
     <Compile Include="Replies\ReplyParser.cs" />
@@ -66,7 +66,8 @@
     <Compile Include="Commands\TCCommand.cs" />
     <Compile Include="Sockets\ControlSocket.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sockets\SocketNotConnectedException.cs" />
+    <Compile Include="Exceptions\SocketNotConnectedException.cs" />
+    <Compile Include="TorController.cs" />
     <Compile Include="Utils\ClassExtensions.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Utils\StringValueAttribute.cs" />
