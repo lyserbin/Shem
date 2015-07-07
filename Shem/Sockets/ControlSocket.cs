@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.Text;
 using Shem.Utils;
+using Shem.Exceptions;
 
 namespace Shem.Sockets
 {
@@ -71,17 +72,13 @@ namespace Shem.Sockets
             _socket.Send(Encoding.ASCII.GetBytes(message));
         }
 
-        /// <summary>
-        /// TODO: document this
-        /// </summary>
-        /// <returns>TODO: document this</returns>
         public string Receive()
         {
             byte[] buffer = new byte[_socket.Available];
             string reply;
             _socket.Receive(buffer);
             reply = Encoding.ASCII.GetString(buffer);
-            Logger.Log(LogType.DEBUG, string.Format("Received a replie from the server: \"{0}\"", reply.Replace("\r\n", "\\r\\n")));
+            Logger.Log(LogType.DEBUG, string.Format("Received a reply from the server: \"{0}\"", reply.Replace("\r\n", "\\r\\n")));
             return reply;
         }
 

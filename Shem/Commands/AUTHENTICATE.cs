@@ -22,7 +22,7 @@ namespace Shem.Commands
 
         public override string Raw()
         {
-            // TODO: autohash unhashed password (boring to implement s2k on .NET)
+            // TODO: autohash unhashed password (hard to implement s2k on .NET)
             return password == "" ? "AUTHENTICATE\r\n" : ishex ? string.Format("AUTHENTICATE {0}\r\n", password) : string.Format("AUTHENTICATE \"{0}\"\r\n", password);
         }
     }
