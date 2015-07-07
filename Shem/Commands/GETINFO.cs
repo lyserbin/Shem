@@ -3,6 +3,9 @@ using Shem.Utils;
 
 namespace Shem.Commands
 {
+    /// <summary>
+    /// Unlike GETCONF, this message is used for data that are not stored in the Tor configuration file.
+    /// </summary>
     public class GETINFO : TCCommand
     {
         private string info = "";

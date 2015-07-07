@@ -2,12 +2,15 @@
 
 namespace Shem.Commands
 {
+    /// <summary>
+    /// Request the value of a configuration variable.
+    /// </summary>
     public class GETCONF : TCCommand
     {
         private string configs;
 
         /// <summary>
-        /// Returns requested configs of tor instance.
+        /// Request the value of a configuration variable.
         /// </summary>
         /// <param name="configs"></param>
         public GETCONF(string configs)
@@ -16,7 +19,7 @@ namespace Shem.Commands
         }
 
         /// <summary>
-        /// Returns requested configs of tor instance.
+        /// Request the value of a configuration variable.
         /// </summary>
         /// <param name="configs"></param>
         public GETCONF(params Configs[] configs)
