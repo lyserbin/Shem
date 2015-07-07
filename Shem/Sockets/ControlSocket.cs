@@ -72,9 +72,9 @@ namespace Shem.Sockets
         }
 
         /// <summary>
-        /// TODO
+        /// TODO: document this
         /// </summary>
-        /// <returns>TODO</returns>
+        /// <returns>TODO: document this</returns>
         public string Receive()
         {
             byte[] buffer = new byte[_socket.Available];
