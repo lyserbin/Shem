@@ -4,25 +4,95 @@ namespace Shem.Commands
 {
     public class GETCONF : TCCommand
     {
-        string[] keywords;
-        public GETCONF(params string[] keywords)
+        /// <summary>
+        /// Configs availables for GETCONF command.
+        /// </summary>
+        public enum Configs
         {
-            this.keywords = keywords;
+            SocksPort,
+
+            SocksPolicy,
+
+            MaxMemInQueues,
+
+            Log,
+
+            RunAsDaemon,
+
+            DataDirectory,
+
+            ControlPort,
+
+            HashedControlPassword,
+
+            CookieAuthentication,
+
+            HiddenServiceDir,
+
+            HiddenServicePort,
+
+            ORPort,
+
+            Address,
+
+            OutboundBindAddress,
+
+            Nickname,
+
+            RelayBandwidthRate,
+
+            RelayBandwidthBurst,
+
+            AccountingMax,
+
+            AccountingStart,
+
+            ContactInfo,
+
+            DirPort,
+
+            DirPortFrontPage,
+
+            MyFamily,
+
+            ExitPolicy,
+
+            BridgeRelay,
+
+            PublishServerDescriptor
+        }
+
+        private string configs;
+
+        /// <summary>
+        /// Returns requested configs of tor instance.
+        /// </summary>
+        /// <param name="configs"></param>
+        public GETCONF(string configs)
+        {
+            this.configs = configs;
+        }
+
+        /// <summary>
+        /// Returns requested configs of tor instance.
+        /// </summary>
+        /// <param name="configs"></param>
+        public GETCONF(params Configs[] configs)
+        {
+            this.configs = new Func<string>(() =>
+            {
+                string ks = "";
+                foreach (var k in configs)
+                {
+                    ks += " " + k.ToString();
+                }
+                return ks;
+            })();
         }
 
         public override string Raw()
         {
-            string keys = (new Func<string>(() =>
-            {
-                string ks = "";
-                foreach (var k in keywords)
-                {
-                    ks += " " + k;
-                }
-                return ks;
-            }))();
-
-            return string.Format("GETCONF{0}\r\n", keys);
+            return string.Format("GETCONF{0}\r\n", configs);
         }
     }
 }

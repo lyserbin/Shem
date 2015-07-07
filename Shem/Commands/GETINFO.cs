@@ -6,9 +6,9 @@ namespace Shem.Commands
     public class GETINFO : TCCommand
     {
         /// <summary>
-        /// 
+        /// Informations availables from GETINFO command.
         /// </summary>
-        public enum Keywords
+        public enum Informations
         {
             /// <summary>
             /// The version of the server's software, including the name of the software. (example: "Tor 0.0.9.4")
@@ -437,18 +437,18 @@ namespace Shem.Commands
             network_liveness
         }
 
-        private string keywords = "";
+        private string info = "";
 
         /// <summary>
-        /// 
+        /// Returns requested informations about tor instance.
         /// </summary>
-        /// <param name="keywords"></param>
-        public GETINFO(params Keywords[] keywords)
+        /// <param name="informations"></param>
+        public GETINFO(params Informations[] informations)
         {
-            this.keywords = (new Func<string>(() =>
+            this.info = (new Func<string>(() =>
             {
                 string ks = "";
-                foreach (var k in keywords)
+                foreach (var k in informations)
                 {
                     ks += " " + k.GetStringValue();
                 }
@@ -457,17 +457,17 @@ namespace Shem.Commands
         }
 
         /// <summary>
-        /// 
+        /// Returns requested informations about tor instance.
         /// </summary>
-        /// <param name="keywords"></param>
-        public GETINFO(string keywords)
+        /// <param name="informations"></param>
+        public GETINFO(string informations)
         {
-            this.keywords = keywords;
+            this.info = informations;
         }
 
         public override string Raw()
         {
-            return string.Format("GETINFO{0}\r\n", keywords);
+            return string.Format("GETINFO{0}\r\n", info);
         }
     }
 }
