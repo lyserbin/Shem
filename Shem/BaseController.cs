@@ -6,10 +6,11 @@ using Shem.Replies;
 namespace Shem
 {
     /// <summary>
-    /// This class is the main class of the library, it is used to
-    /// manage tor through easy-to-use functions
+    /// This class is the first interface to the control port.
+    /// If you wanna do things in the right way use the 'TorController'
+    /// class instead.
     /// </summary>
-    public class TorController
+    public class BaseController
     {
         private ControlSocket controlSocket;
 
@@ -33,7 +34,7 @@ namespace Shem
         /// <param name="address">The address where the ControlPort is (usually localhost)</param>
         /// <param name="port">The port where TOR has binded the ControlPort</param>
         /// <param name="connect">If the controller should connect just after the initialization</param>
-        public TorController(string address = "127.0.0.1", uint port = 9051, bool connect = true)
+        public BaseController(string address = "127.0.0.1", uint port = 9051, bool connect = true)
         {
             controlSocket = new ControlSocket(address, port, connect);
         }
@@ -74,13 +75,15 @@ namespace Shem
 
         /// <summary>
         /// Close the socket connection.
+        /// Is a good idea to call it before your program exits.
         /// </summary>  
         public void Close()
         {
+            SendRawCommand(new QUIT());
             controlSocket.Close();
         }
 
-        ~TorController()
+        ~BaseController()
         {
             if(controlSocket != null && controlSocket.Connected)
                 Close();
