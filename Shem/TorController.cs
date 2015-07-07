@@ -76,7 +76,7 @@ namespace Shem
 
         ~TorController()
         {
-            if(controlSocket.Connected)
+            if(controlSocket != null && controlSocket.Connected)
                 Close();
         }
     }

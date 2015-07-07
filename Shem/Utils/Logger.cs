@@ -30,7 +30,7 @@ namespace Shem.Utils
         /// </summary>
         public static LogType LogLevel = LogType.INFO;
 
-        private static string _logfile = "sharpstem.log";
+        private static string _logfile = "shem.log";
         
         /// <summary>
         /// Log a message.

@@ -197,3 +197,6 @@ FakesAssemblies/
 
 ## Ignore the old 'stem' path, for the ones who have it.
 stem/
+
+## Ignore tor.log!
+tor.log
