@@ -34,6 +34,5 @@ namespace Shem.Commands
             }))();
             return string.Format("RESETCONF{0}\r\n", command);
         }
-
     }
 }
