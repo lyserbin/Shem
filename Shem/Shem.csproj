@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\SETCONF.cs" />
     <Compile Include="Replies\AuthenticateReply.cs" />
     <Compile Include="Replies\Reply.cs" />
     <Compile Include="Replies\ReplyCodes.cs" />
