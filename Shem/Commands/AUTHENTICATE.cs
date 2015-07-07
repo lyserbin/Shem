@@ -25,7 +25,6 @@ namespace Shem.Commands
 
         public override string Raw()
         {
-            // TODO: autohash unhashed password (hard to implement s2k on .NET)
             return password == "" ? "AUTHENTICATE\r\n" :
                 string.Format("AUTHENTICATE {0}\r\n", ishex ? password :
                 BitConverter.ToString(Encoding.UTF8.GetBytes(password)).Replace("-", "")); // << this fucking sucks
