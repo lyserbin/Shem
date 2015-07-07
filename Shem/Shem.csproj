@@ -42,6 +42,7 @@
     <Compile Include="Commands\Enums\Configs.cs" />
     <Compile Include="Commands\Enums\Informations.cs" />
     <Compile Include="Commands\Enums\Signals.cs" />
+    <Compile Include="Commands\RESETCONF.cs" />
     <Compile Include="Commands\SETCONF.cs" />
     <Compile Include="Replies\AuthenticateReply.cs" />
     <Compile Include="Replies\NullReplyCodeException.cs" />
