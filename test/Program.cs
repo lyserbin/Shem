@@ -20,7 +20,7 @@ namespace Shem.test
 
                 tc = new TorController("127.0.0.1", 9051);
                 tc.SendCommand(new AUTHENTICATE("test"));
-                replies = tc.SendCommand(new GETINFO(Informations.config_file, Informations.version));
+                //replies = tc.SendCommand(new GETINFO(Informations.config_file, Informations.version));
                 tc.Close();
             } catch (Exception ex)
             {

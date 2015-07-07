@@ -1,4 +1,6 @@
 ﻿using Shem.Utils;
+using System;
+using System.Text;
 
 namespace Shem.Commands
 {
@@ -18,12 +20,15 @@ namespace Shem.Commands
         public AUTHENTICATE(string password = "", bool ishex = false)
         {
             this.password = password;
+            this.ishex = ishex;
         }
 
         public override string Raw()
         {
             // TODO: autohash unhashed password (hard to implement s2k on .NET)
-            return password == "" ? "AUTHENTICATE\r\n" : ishex ? string.Format("AUTHENTICATE {0}\r\n", password) : string.Format("AUTHENTICATE \"{0}\"\r\n", password);
+            return password == "" ? "AUTHENTICATE\r\n" :
+                string.Format("AUTHENTICATE {0}\r\n", ishex ? password :
+                BitConverter.ToString(Encoding.UTF8.GetBytes(password)).Replace("-", "")); // << this fucking sucks
         }
     }
 }
