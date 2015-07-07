@@ -1,10 +1,17 @@
 ﻿
 namespace Shem.Commands
 {
+    /// <summary>
+    /// Send a signal to the server.
+    /// </summary>
     public class SIGNAL : TCCommand
     {
         private Signals signal;
 
+        /// <summary>
+        /// Send a signal to the server.
+        /// </summary>
+        /// <param name="signal"></param>
         public SIGNAL(Signals signal)
         {
             this.signal = signal;

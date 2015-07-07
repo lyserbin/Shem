@@ -1,34 +1,25 @@
-﻿
-using System;
+﻿using System;
+
 namespace Shem.Commands
 {
-    public class SETCONF : TCCommand
+    /// <summary>
+    /// Change the value of one configuration variables if the value is empty set the default value.
+    /// </summary>
+    public class RESETCONF : TCCommand
     {
         private Configs[] configs;
         private string[] values;
 
         /// <summary>
-        /// Change the value of one configuration variables.
+        /// Change the value of one configuration variables if the value is empty set the default value.
         /// </summary>
         /// <param name="config"></param>
         /// <param name="value"></param>
-        public SETCONF(Configs config, string value)
+        public RESETCONF(Configs config, string value = "")
         {
             this.configs = new Configs[] { config };
             this.values = new string[] { value };
         }
-
-        //TODO: Find a solution to set multiple parameters
-        /// <summary>
-        /// Change the values of one or more configuration variables.
-        /// </summary>
-        /// <param name="configs"></param>
-        /// <param name="values"></param>
-        //public SETCONF(params Configs[] configs, params string[] values)
-        //{
-        //    this.configs = configs;
-        //    this.values = values;
-        //}
 
         public override string Raw()
         {
@@ -41,7 +32,7 @@ namespace Shem.Commands
                 }
                 return ks;
             }))();
-            return string.Format("SETCONF{0}\r\n", command);
+            return string.Format("RESETCONF{0}\r\n", command);
         }
     }
 }
