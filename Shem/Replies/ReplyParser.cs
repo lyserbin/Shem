@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using Shem.Exceptions;
+using Shem.Utils;
 
 namespace Shem.Replies
 {
@@ -20,7 +21,8 @@ namespace Shem.Replies
             {
                 if (rawstring[i] == '\r' && rawstring[i+1] == '\n')
                 {
-                    Enum.TryParse<ReplyCodes>(tmpcode.ToString(), out code);
+                    if (!Enum.TryParse<ReplyCodes>(tmpcode.ToString(), out code))
+                        Logger.LogWarn(string.Format("Reply code not identified \"{0}\" in \"{1}\"", tmpcode, rawstring));
                     current.Add(new Reply(code, replyline, rawstring, tmpcode));
                     if (i + 2 == rawstring.Length) // we are @ the end
                         return;
