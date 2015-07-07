@@ -10,10 +10,15 @@ namespace Shem.Replies
         public virtual ReplyCodes Code { get; protected set; }
 
         /// <summary>
+        /// The actual reply from the server
+        /// </summary>
+        public virtual string ReplyLine { get; protected set; }
+
+        /// <summary>
         /// The int code returned by TOR, when it can't be
         /// handled by the enum
         /// </summary>
-        public int RawCode { get; protected set; }
+        public virtual int RawCode { get; protected set; }
 
         /// <summary>
         /// Returns the raw string replied by TOR
@@ -22,9 +27,11 @@ namespace Shem.Replies
         public virtual string RawString { get; protected set; }
 
 
-        public Reply(ReplyCodes code, string raw, int rawcode = -1)
+
+        public Reply(ReplyCodes code, string replyline, string raw, int rawcode = -1)
         {
             this.Code = code;
+            this.ReplyLine = replyline;
             if (code == ReplyCodes.UNKNOWN)
                 this.RawCode = rawcode;
 

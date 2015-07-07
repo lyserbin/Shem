@@ -1,27 +1,44 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using Shem.Exceptions;
 
 namespace Shem.Replies
 {
     static class ReplyParser
     {
-        public static Reply Parse(string rawstring)
+        private static void rparse(string rawstring, int i, ref Collection<Reply> current)
         {
-            int i = 0, tmp;
-            string code = "";
-            ReplyCodes rcode;
+            int tmpcode = 0;
+            ReplyCodes code;
+            string replyline = "";
 
-            while (i < rawstring.Length && int.TryParse(Convert.ToString(rawstring[i++]), out tmp))
+            if (rawstring.Length < i + 3 && !int.TryParse(rawstring.Substring(i, i + 3), out tmpcode))
+                throw new NullReplyCodeException(rawstring, i);
+
+            i += 4; // skip one char (' ' OR '-')
+            while (i < rawstring.Length)
             {
-                code += tmp;
+                if (rawstring[i] == '\r' && rawstring[i+1] == '\n')
+                {
+                    Enum.TryParse<ReplyCodes>(tmpcode.ToString(), out code);
+                    current.Add(new Reply(code, replyline, rawstring, tmpcode));
+                    if (i + 2 == rawstring.Length) // we are @ the end
+                        return;
+                    else // another ride BABY
+                        rparse(rawstring, i + 2, ref current);
+                }
+
+                replyline += rawstring[i++];
             }
+        }
 
-            if (i == 0)
-                throw new NullReplyCodeException(String.Format("No reply code found for \"{0}\".", rawstring));
+        public static Collection<Reply> Parse(string rawstring)
+        {
+            Collection<Reply> replies = new Collection<Reply>();
 
-            if (Enum.TryParse<ReplyCodes>(code, out rcode))
-                return new Reply(rcode, rawstring);
-            else
-                return new Reply(ReplyCodes.UNKNOWN, rawstring, int.Parse(code));
+            rparse(rawstring, 0, ref replies);
+
+            return replies;
         }
     }
 }

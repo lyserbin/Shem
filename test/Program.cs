@@ -2,6 +2,7 @@
 using Shem.Commands;
 using Shem.Utils;
 using Shem.Replies;
+using System.Collections.ObjectModel;
 
 namespace Shem.test
 {
@@ -9,23 +10,21 @@ namespace Shem.test
     {
         static void Main(string[] args)
         {
-            Logger.LogLevel = LogType.DEBUG;
+            Logger.ConsoleLogLevel = LogType.DEBUG;
+            Logger.FileLogLevel = LogType.DEBUG;
 
             try
             {
-                BaseController tryit;
-                Reply testit;
+                TorController tc;
+                Collection<Reply> replies;
 
-                tryit = new BaseController("127.0.0.1", 9051);
-                testit = tryit.SendCommand(new AUTHENTICATE("test"));
-                tryit.SendRawCommand(new SIGNAL(Signals.RELOAD));
-                tryit.SendRawCommand(new GETINFO(Informations.version));
-                tryit.SendRawCommand(new GETCONF(Configs.ORPort));
-                tryit.SendCommand(new SETCONF(Configs.SocksPort, "9050"));
-            }
-            catch (Exception ex)
+                tc = new TorController("127.0.0.1", 9051);
+                tc.SendCommand(new AUTHENTICATE("test"));
+                replies = tc.SendCommand(new GETINFO(Informations.config_file, Informations.version));
+                tc.Close();
+            } catch (Exception ex)
             {
-                Logger.Log(LogType.ERROR, ex.Message);
+                Logger.Log(LogType.ERROR, ex.StackTrace);
             }
 
             Console.ReadKey();

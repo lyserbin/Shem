@@ -100,14 +100,8 @@
         /// </summary>
         INVALID_CONFIGURATION_VALUE = 553,
 
-        /// <summary>
-        /// TODO: document this
-        /// </summary>
         INVALID_DESCRIPTOR = 554,
 
-        /// <summary>
-        /// TODO: document this
-        /// </summary>
         UNMANAGED_ENTITY = 555,
 
         /// <summary>
