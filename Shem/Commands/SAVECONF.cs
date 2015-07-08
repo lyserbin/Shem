@@ -2,10 +2,14 @@
 namespace Shem.Commands
 {
     /// <summary>
-    /// document this
+    /// Save the current configs to the torrc.
     /// </summary>
     public class SAVECONF : TCCommand
     {
+        /// <summary>
+        /// Returns the raw command.
+        /// </summary>
+        /// <returns></returns>
         public override string Raw()
         {
             return "SAVECONF\r\n";
