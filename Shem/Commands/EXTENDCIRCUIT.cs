@@ -38,7 +38,7 @@ namespace Shem.Commands
                 }
             }
 
-            return string.Format("EXTENDCIRCUIT {0} {1} purpose={2}", circuitID, serverSpecsFormatted, purpose);
+            return string.Format("EXTENDCIRCUIT {0} {1} purpose={2}\r\n", circuitID, serverSpecsFormatted, purpose);
         }
     }
 }

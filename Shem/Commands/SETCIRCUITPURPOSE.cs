@@ -22,7 +22,7 @@ namespace Shem.Commands
 
         public override string Raw()
         {
-            return string.Format("SETCIRCUITPURPOSE {0} purpose={1}", circuitID, purpose);
+            return string.Format("SETCIRCUITPURPOSE {0} purpose={1}\r\n", circuitID, purpose);
         }
     }
 }
