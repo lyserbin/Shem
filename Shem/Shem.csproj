@@ -45,14 +45,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\ADD_ONION.cs" />
+    <Compile Include="Commands\ATTACHSTREAM.cs" />
+    <Compile Include="Commands\AUTHCHALLENGE.cs" />
+    <Compile Include="Commands\CLOSECIRCUIT.cs" />
+    <Compile Include="Commands\CLOSESTREAM.cs" />
+    <Compile Include="Commands\DEL_ONION.cs" />
+    <Compile Include="Commands\DROPGUARDS.cs" />
     <Compile Include="Commands\Enums\Configs.cs" />
     <Compile Include="Commands\Enums\Informations.cs" />
     <Compile Include="Commands\Enums\Signals.cs" />
+    <Compile Include="Commands\EXTENDCIRCUIT.cs" />
+    <Compile Include="Commands\EXTENDED_EVENTS.cs" />
+    <Compile Include="Commands\HSFETCH.cs" />
+    <Compile Include="Commands\HSPOST.cs" />
+    <Compile Include="Commands\LOADCONF.cs" />
+    <Compile Include="Commands\POSTDESCRIPTOR.cs" />
+    <Compile Include="Commands\PROTOCOLINFO.cs" />
     <Compile Include="Commands\QUIT.cs" />
     <Compile Include="Commands\MAPADDRESS.cs" />
+    <Compile Include="Commands\REDIRECTSTREAM.cs" />
     <Compile Include="Commands\RESETCONF.cs" />
+    <Compile Include="Commands\RESOLVE.cs" />
     <Compile Include="Commands\SAVECONF.cs" />
+    <Compile Include="Commands\SETCIRCUITPURPOSE.cs" />
     <Compile Include="Commands\SETCONF.cs" />
+    <Compile Include="Commands\SETEVENTS.cs" />
+    <Compile Include="Commands\SETROUTERPURPOSE.cs" />
+    <Compile Include="Commands\TAKEOWNERSHIP.cs" />
+    <Compile Include="Commands\USEFEATURE.cs" />
+    <Compile Include="Commands\VERBOSE_NAMES.cs" />
     <Compile Include="Replies\AuthenticateReply.cs" />
     <Compile Include="Exceptions\NullReplyCodeException.cs" />
     <Compile Include="Replies\Reply.cs" />
