@@ -16,7 +16,7 @@ namespace Shem.Commands
 
         public override string Raw()
         {
-            string.Format("DROPGUARDS\r\n");
+            return string.Format("DROPGUARDS\r\n");
         }
     }
 }
