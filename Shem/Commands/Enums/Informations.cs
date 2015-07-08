@@ -1,10 +1,11 @@
 ﻿using Shem.Utils;
 
-/// <summary>
-/// Informations availables from GETINFO command.
-/// </summary>
+
 namespace Shem.Commands
 {
+    /// <summary>
+    /// Informations availables from GETINFO command.
+    /// </summary>
     public enum Informations
     {
         /// <summary>

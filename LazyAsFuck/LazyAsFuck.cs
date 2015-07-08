@@ -77,16 +77,16 @@ namespace LazyAsFuck
                                 configs += String.Format("/// </summary>\n{0},\n\n", tmpconfig);
                             }
                             tmpconfig = tmp.Substring(2, tmp.IndexOf("]") - 2);
-                            configs += String.Format("/// <summary>\n/// {0}\n/// \n",
+                            configs += String.Format("/// <summary>\n/// <para>{0}</para>\n/// <para>&#160;</para>\n",
                                                     removeshit(tmp.Substring(tmpconfig.Length + 5))); 
                         }
                         else if (tmp.Length > 3 && tmp.Substring(0, 3) == "   ") // Documentation BOYZ!
                         {
-                            configs += String.Format("/// {0}\n", removeshit(tmp.Substring(4, tmp.Length-4)));
+                            configs += String.Format("/// <para>{0}</para>\n", removeshit(tmp.Substring(4, tmp.Length-4)));
                         }
                         else if (tmp == " +")
                         {
-                            configs += "/// \n";
+                            configs += "/// <para>&#160;</para>\n";
                         }
                     }
                 }
@@ -99,7 +99,7 @@ namespace LazyAsFuck
         {
             string ret = input.Replace("*", "").Replace("_", "").Replace("::", "").Replace("\\", "");
             if (ret.EndsWith(" +"))
-                ret = ret.Substring(0, ret.Length-3);
+                ret = ret.Substring(0, ret.Length-2);
             return ret;
         }
     }
