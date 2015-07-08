@@ -1,5 +1,4 @@
-﻿using Shem.Commands.Enums;
-
+﻿
 namespace Shem.Commands
 {
     /// <summary>

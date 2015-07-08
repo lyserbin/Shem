@@ -1,5 +1,5 @@
 ﻿
-namespace Shem.Commands.Enums
+namespace Shem.Commands
 {
     public enum POSTDESCRIPTOR_Purpose
     {
