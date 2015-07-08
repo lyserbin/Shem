@@ -7,7 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shem", "Shem\Shem.csproj", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{58BF2401-B5D1-42A7-8531-98B81B554C69}"
 	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
 		README.md = README.md
+		tor-man.txt = tor-man.txt
+		tor-restart.bat = tor-restart.bat
+		tor-start.bat = tor-start.bat
+		tor-stop.bat = tor-stop.bat
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{BEA4AC3C-86FD-4C0A-9D84-020A82951C79}"
@@ -229,6 +234,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "old", "old", "{5F615C1B-35D
 		torspec\proposals\ideas\old\xxx-hide-platform.txt = torspec\proposals\ideas\old\xxx-hide-platform.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LazyAsFuck", "LazyAsFuck\LazyAsFuck.csproj", "{0A708966-C49F-4743-9F2F-7696E44248AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -243,6 +250,10 @@ Global
 		{BEA4AC3C-86FD-4C0A-9D84-020A82951C79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEA4AC3C-86FD-4C0A-9D84-020A82951C79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEA4AC3C-86FD-4C0A-9D84-020A82951C79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A708966-C49F-4743-9F2F-7696E44248AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A708966-C49F-4743-9F2F-7696E44248AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A708966-C49F-4743-9F2F-7696E44248AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A708966-C49F-4743-9F2F-7696E44248AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
