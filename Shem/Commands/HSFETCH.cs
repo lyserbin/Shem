@@ -12,7 +12,7 @@ namespace Shem.Commands
         /// </summary>
         public HSFETCH()
         {
-
+            //TODO: Implement this, i don't know how "hidden services" works, sorry... TyKonKet
         }
 
         public override string Raw()
