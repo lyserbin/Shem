@@ -12,7 +12,7 @@ namespace Shem.Commands
         /// </summary>
         public AUTHCHALLENGE()
         {
-
+            //TODO: Implement this, i don't understand the docs :( TyKonKet
         }
 
         public override string Raw()
