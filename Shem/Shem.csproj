@@ -55,6 +55,7 @@
     <Compile Include="Commands\Enums\Configs.cs" />
     <Compile Include="Commands\Enums\Informations.cs" />
     <Compile Include="Commands\Enums\POSTDESCRIPTOR_Purpose.cs" />
+    <Compile Include="Commands\Enums\RELAY_END.cs" />
     <Compile Include="Commands\Enums\Signals.cs" />
     <Compile Include="Commands\EXTENDCIRCUIT.cs" />
     <Compile Include="Commands\EXTENDED_EVENTS.cs" />
