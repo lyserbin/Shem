@@ -1,0 +1,668 @@
+Filename: 220-ecc-id-keys.txt
+Title: Migrate server identity keys to Ed25519
+Authors: Nick Mathewson
+Created: 12 August 2013
+Target: 0.2.x.x
+Status: Draft
+
+   [Note: This is a draft proposal; I've probably made some important
+   mistakes, and there are parts that need more thinking.  I'm
+   publishing it now so that we can do the thinking together.]
+
+0. Introduction
+
+   In current Tor designs, router identity keys are limited to
+   1024-bit RSA keys.
+
+   Clearly, that should change, because RSA doesn't represent a good
+   performance-security tradeoff nowadays, and because 1024-bit RSA is
+   just plain too short.
+
+   We've already got an improved circuit extension handshake protocol
+   that uses curve25519 in place of RSA1024, and we're using (where
+   supported) P256 ECDHE in our TLS handshakes, but there are more uses
+   of RSA1024 to replace, including:
+
+      * Router identity keys
+      * TLS link keys
+      * Hidden service keys
+
+   This proposal describes how we'll migrate away from using 1024-bit
+   RSA in the first two, since they're tightly coupled.  Hidden service
+   crypto changes will be complex, and will merit their own proposal.
+
+   In this proposal, we'll also (incidentally) be extirpating a number
+   of SHA1 usages.
+
+1. Overview
+
+   When this proposal is implemented, every router will have an Ed25519
+   identity key in addition to its current RSA1024 public key.
+
+   Ed25519 (specifically, Ed25519-SHA-512 as described and specified at
+   http://ed25519.cr.yp.to/) is a desirable choice here: it's secure,
+   fast, has small keys and small signatures, is bulletproof in several
+   important ways, and supports fast batch verification. (It isn't quite
+   as fast as RSA1024 when it comes to public key operations, since RSA
+   gets to take advantage of small exponents when generating public
+   keys.)
+
+   (For reference: In Ed25519 public keys are 32 bytes long, private keys
+   are 64 bytes long, and signatures are 64 bytes long.)
+
+   To mirror the way that authority identity keys work, we'll fully
+   support keeping Ed25519 identity keys offline; they'll be used to
+   sign long-ish term signing keys, which in turn will do all of the
+   heavy lifting.  A signing key will get used to sign the things that
+   RSA1024 identity keys currently sign.
+
+1.1. 'Personalized' signatures
+
+   Each of the keys introduced here is used to sign more than one kind
+   of document. While these documents should be unambiguous, I'm going
+   to forward-proof the signatures by specifying each signature to be
+   generated, not on the document itself, but on the document prefixed
+   with some distinguishing string.
+
+2. Certificates and Router descriptors.
+
+2.1. Certificates
+
+   When generating a signing key, we also generate a certificate for it.
+   Unlike the certificates for authorities' signing keys, these
+   certificates need to be sent around frequently, in significant
+   numbers.  So we'll choose a compact representation.
+
+         VERSION         [1 Byte]
+         CERT_TYPE       [1 Byte]
+         EXPIRATION_DATE [4 Bytes]
+         CERT_KEY_TYPE   [1 byte]
+         CERTIFIED_KEY   [32 Bytes]
+         N_EXTENSIONS    [1 byte]
+         EXTENSIONS      [N_EXTENSIONS times]
+         SIGNATURE       [64 Bytes]
+
+   The "VERSION" field holds the value [01].  The "CERT_TYPE" field
+   holds a value depending on the type of certificate. (See appendix
+   A.1.) The CERTIFIED_KEY field is an Ed25519 public key if
+   CERT_KEY_TYPE is [01], or a SHA256 hash of some other key type
+   depending on the value of CERT_KEY_TYPE. The EXPIRATION_DATE is a
+   date, given in HOURS since the epoch, after which this
+   certificate isn't valid. (A four-byte field here will work fine
+   until 10136 A.D.)
+
+   The EXTENSIONS field contains zero or more extensions, each of
+   the format:
+
+         ExtLength [2 bytes]
+         ExtType   [1 byte]
+         ExtFlags  [1 byte]
+         ExtData   [Length bytes]
+
+   The meaning of the ExtData field in an extension is type-dependent.
+
+   The ExtFlags field holds flags; this flag is currently defined:
+
+      1 -- AFFECTS_VALIDATION. If this flag is present, then the
+           extension affects whether the certificate is valid; clients
+           must not accept the certificate as valid unless they
+           understand the extension.
+
+   It is an error for an extension to be truncated; such a
+   certificate is invalid.
+
+   Before processing any certificate, parties MUST know which
+   identity key it is supposed to be signed by, and then check the
+   signature.  The signature is formed by signing the first N-64
+   bytes of the certificate prefixed with the string "Tor node
+   signing key certificate v1".
+
+2.2. Basic extensions
+
+2.2.1. Signed-with-ed25519-key extension [type 04]
+
+   In several places, it's desirable to bundle the key signing a
+   certificate along with the certificate.  We do so with this
+   extension.
+
+        ExtLength = 32
+        ExtData =
+           An ed25519 key    [32 bytes]
+
+   When this extension is present, it MUST match the key used to
+   sign the certificate.
+
+2.3. Revoking keys.
+
+   We also specify a revocation document for revoking a signing key or an
+   identity key.  Its format is:
+         FIXED_PREFIX    [8 Bytes]
+         VERSION         [1 Byte]
+         KEYTYPE         [1 Byte]
+         IDENTITY_KEY    [32 Bytes]
+         REVOKED_KEY     [32 Bytes]
+         PUBLISHED       [8 Bytes]
+         N_EXTENSIONS    [1 Byte]
+           N_EXTENSIONS_TIMES:
+           EXTENSIONS      [N_EXTENSIONS times]
+         SIGNATURE       [64 Bytes]
+
+   FIXED_PREFIX is "REVOKEID" or "REVOKESK". VERSION is [01]. KEYTYPE is
+   [01] for revoking a signing key, [02] for revoking an identity key,
+   or [03] for revoking an RSA identity key.
+   REVOKED_KEY is the key being revoked or a SHA256 hash of the key if
+   it is an RSA identity key; IDENTITY_KEY is the node's
+   Ed25519 identity key. PUBLISHED is the time that the document was
+   generated, in seconds since the epoch. REV_EXTENSIONS is left for a
+   future version of this document.  The SIGNATURE is generated with
+   the same key as in IDENTITY_KEY, and covers the entire revocation,
+   prefixed with "Tor key revocation v1".
+
+   Using these revocation documents is left for a later specification.
+
+2.4. Managing keys
+
+   By default, we can keep the easy-to-setup key management properties
+   that Tor has now, so that node operators aren't required to have
+   offline public keys:
+
+        * When a Tor node starts up with no Ed25519 identity keys, it
+          generates a new identity keypair.
+        * When a Tor node has an Ed25519 identity keypair, and it has
+          no signing key, or its signing key is going to expire within
+          the next 48 hours, it generates a new signing key to last
+          30 days.
+
+   But we also support offline identity keys:
+
+        * When a Tor node starts with an Ed25519 public identity key
+          but no private identity key, it checks whether it has
+          a currently valid certified signing keypair.  If it does,
+          it starts.  Otherwise, it refuses to start.
+        * If a Tor node's signing key is going to expire soon, it starts
+          warning the user.  If it is expired, then the node shuts down.
+
+2.5. Router descriptors
+
+   We specify the following element that may appear at most once in
+   each router descriptor:
+      "identity-ed25519" NL "-----BEGIN ED25519 CERT-----" NL certificate
+           "-----END ED25519 CERT-----" NL
+
+   The certificate is base64-encoded with
+   terminating =s removed.  When this element is present, it MUST appear
+   as the first or second element in the router descriptor.
+   [XXX The rationale here is to allow extracting the identity key and
+   signing key and checking the signature before fully parsing the rest
+   of the document. -NM]
+
+   The certificate has CERT_TYPE of [04].  It must include a
+   signed-with-ed25519-key extension (see section 2.2.1), so that we
+   can extract the identity key.
+
+   When an identity-ed25519 element is present, there must also be a
+   "router-sig-ed25519" element.  It MUST be the next-to-last element in
+   the descriptor, appearing immediately before the RSA signature.  (In
+   future versions of the descriptor format that do not require an RSA
+   identity key, it MUST be last.)  It MUST contain an ed25519 signature
+   of a SHA256 digest of the entire document, from the first character
+   up to and including the first space after the "router-sig-ed25519"
+   string, prefixed
+   with the string "Tor router descriptor signature v1".  Its format is:
+
+      "router-sig-ed25519" SP signature NL
+
+   Where 'signature' is encoded in base64 with terminating =s removed.
+
+   The signing key in the certificate MUST
+   be the one used to sign the document.
+
+   Note that these keys cross-certify as follows: the ed25519 identity
+   key signs the ed25519 signing key in the certificate.  The ed25519
+   signing key signs itself and the ed25519 identity key and the RSA
+   identity key as part of signing the descriptor.  And the RSA identity
+   key also signs all three keys as part of signing the descriptor.
+
+
+   When an ed25519 signature is present, there MAY be a "master-key-ed25519"
+   element containing the base64 encoded ed25519 master key as a single
+   argument.  If it is present, it MUST match the identity key in
+   the certificate.
+
+2.5.1. Checking descriptor signatures.
+
+   Current versions of Tor will handle these new formats by ignoring the
+   new fields, and not checking any ed25519 information.
+
+   New versions of Tor will have a flag that tells them whether to check
+   ed25519 information.  When it is set, they must check:
+
+      * All RSA information and signatures that Tor implementations
+        currently check.
+      * If the identity-ed25519 line is present, it must be well-formed,
+        and the certificate must be well-formed and correctly signed,
+        and there must be a valid router-signature-ed25519 signature.
+      * If we require an ed25519 key for this node (see 3.1 below), the
+        ed25519 key must be present.
+
+   Authorities and directory caches will have this flag always-on.  For
+   clients, it will be controlled by a torrc option and consensus
+   option, to be set to "always-on" in the future once enough clients
+   support it.
+
+2.5.2. Extra-info documents
+
+   Extra-info documents now include "identity-ed25519" and
+   "router-signature-ed25519" fields in the same positions in which they
+   appear in router descriptors.
+
+   Additionally, we add the base64-encoded, =-stripped SHA256 digest of
+   a node's extra-info document field to the extra-info-digest line in
+   the router descriptor. (All versions of Tor that recognize this line
+   allow an extra field there.)
+
+2.5.3. A note on signature verification
+
+   Here and elsewhere, we're receiving a certificate and a document
+   signed with the key certified by that certificate in the same step.
+   This is a fine time to use the batch signature checking capability of
+   Ed25519, so that we can check both signatures at once without (much)
+   additional overhead over checking a single signature.
+
+3. Consensus documents and authority operation
+
+3.1. Handling router identity at the authority
+
+   When receiving router descriptors, authorities must track mappings
+   between RSA and Ed25519 keys.
+
+   Rule 1: Once an authority has seen an Ed25519 identity key and an RSA
+   identity key together on the same (valid) descriptor, it should no
+   longer accept any descriptor signed by that RSA key with a different
+   Ed25519 key, or that Ed25519 key with a different RSA key.
+
+   Rule 2: Once an authority has seen an Ed25519 identity key and an RSA
+   identity key on the same descriptor, it should no longer accept any
+   descriptor signed by that RSA key unless it also has that Ed25519
+   key.
+
+
+   These rules together should enforce the property that, even if an
+   attacker manages to steal or factor a node's RSA identity key, the
+   attacker can't impersonate that node to the authorities, even when
+   that node is identified by its RSA key.
+
+
+   Enforcement of Rule 1 should be advisory-only for a little while (a
+   release or two) while node operators get experience having Ed25519
+   keys, in case there are any bugs that cause or force identity key
+   replacement.  Enforcement of Rule 2 should be advisory-only for
+   little while, so that node operators can try 0.2.5 but downgrade to
+   0.2.4 without being de-listed from the consensus.
+
+
+3.2. Formats
+
+   Vote and microdescriptor documents now contain an optional "id"
+   field for each routerstatus section.  Its format is:
+
+       "id" SP "ed25519" SP ed25519-identity NL
+
+   where ed25519-identity is base64-encoded, with trailing = characters
+   omitted.  In vote documents, it may be replaced by the format:
+
+       "id" SP "ed25519" SP "none" NL
+
+   which indicates that the node does not have an ed25519 identity.  (In
+   a microdescriptor, a lack of "id" line means that the node has no ed25519
+   identity.)
+
+   A vote or consensus document is ill-formed if it includes the same
+   ed25519 identity key twice.
+
+   A vote listing ed25519 identities must also include a new entry in its
+   "r" lines, containing a base64-encoded SHA256 digest of the entire
+   descriptor (including signature).  This kills off another place where
+   we rely on sha1.  The format for 'r' lines is now:
+
+    "r" SP nickname SP identity SP digest SP publication SP IP SP ORPort
+        SP DirPort [ SP digest-sha256 ] NL
+
+3.3. Generating votes
+
+   An authority should pick which descriptor to choose for a node as
+   before, and include the ed25519 identity key for the descriptor if
+   it's present.
+
+   As a transition, before Rule 1 and Rule 2 in 3.1 are fully enforced,
+   authorities need a way to deal with the possibility that there might
+   be two nodes with the same ed25519 key but different RSA keys.  In
+   that case, it votes for the one with the most recent publication
+   date.
+
+   (The existing rules already prevent an authority from voting for two
+   servers with the same RSA identity key.)
+
+3.4. Generating a consensus from votes
+
+   This proposal requires a new consensus vote method.  When we deploy
+   it, we'll pick the next available vote method in sequence to use for
+   this.
+
+   When the new consensus method is in use, we must choose nodes first by ECC
+   key, then by RSA key.  [This procedure is analogous to the current one,
+   except that it is aware of multiple kinds of keys.]
+
+3.4.1. Notation for voting
+
+  We have a set of votes.  Each contains either 'old tuples' or 'new tuples'.
+
+  Old tuples are:
+    <id-RSA, descriptor-digest, published, nickname, IP, ports>
+
+  New tuples are:
+    <id-Ed, id-RSA, descriptor-digest, dd256, published, nickname, IP, ports>
+
+
+3.4.2. Validating votes
+
+  It is an error for a vote to have the same id-RSA or the same id-Ed listed
+  twice.  Throw it away if it does.
+
+3.4.3. Decide which ids to include.
+
+  For each <id-Ed, id-RSA> that is listed by more than half of the total
+    authorities (not just total votes), include it.  (No other <id-Ed, id-RSA'>
+    can have as many votes.)
+
+  Log any other id-RSA values corresponding to an id-Ed we included, and any
+    other id-Ed values corresponding to an id-RSA we included.
+
+  For each <id-RSA> that is not yet included, if it is listed by more than
+    half of the total authorities, and we do not already have it listed with
+    some <id-Ed>, include it without an id-Ed.
+
+3.4.4. Decide which descriptors to include.
+
+   A tuple belongs to an <id-RSA, id-Ed> identity if it is a new tuple that
+   matches both ID parts, or if it is an old tuple that matches the RSA part.
+   A tuple belongs to an <id-RSA> identity if its RSA identity matches.
+
+   A tuple matches another tuple if all the fields that are present in both
+   tuples are the same.
+
+   For every included identity, consider the tuples belonging to that
+   identity.  Group them into sets of matching tuples.  Include the tuple
+   that matches the largest set, breaking ties in favor of the most recently
+   published, and then in favor of the smaller server descriptor digest.
+
+4. The link protocol
+
+4.1. Overview of the status quo
+
+   This section won't make much sense unless you grok the v3
+   link protocol as described in tor-spec.txt, first proposed in
+   proposal 195. So let's review.
+
+   In the v3 link protocol, the client completes a TLS handshake
+   with the server, in which the server uses an arbitrary
+   certificate signed with an RSA key.  The client then sends a
+   VERSIONS cell.  The server replies with a VERSIONS cell to
+   negotiate version 3 or higher.  The server also sends a CERTS
+   cell and an AUTH_CHALLENGE cell and a NETINFO cell.
+
+   The CERTS cell from the server contains a set of one or more
+   certificates that authenticate the RSA key used in the TLS
+   handshake.  (Right now there's one self-signed RSA identity key
+   certificate, and one certificate signing the RSA link key with
+   the identity key.  These certificates are X509.)
+
+   Having received a CERTS cell, the client has enough information
+   to authenticate the server.  At this point, the client may send a
+   NETINFO cell to finish the handshake.  But if the client wants to
+   authenticate as well, it can send a CERTS cell and an AUTENTICATE
+   cell.
+
+   The client's CERTS cell also contains certs of the same general
+   kinds as the server's key file: a self-signed identity
+   certificate, and an authentication certificate signed with the
+   identity key.  The AUTHENTICATE cell contains a signature of
+   various fields, including the contents of the AUTH_CHALLENGE
+   which the server sent, using the client's authentication
+   key.  These cells allow the client to authenticate to the server.
+
+
+4.2. Link protocol changes for ECC ID keys
+
+   We add four new CertType values for use in CERTS cells:
+        4: Ed25519 signing key
+        5: Link key certificate certified by Ed25519 signing key
+        6: Ed25519 TLS authentication key certified by Ed25519 signing key
+        7: RSA cross-certificate for Ed25519 identity key
+   These correspond to types used in the CERT_TYPE field of
+   the certificates.
+
+   The content of certificate type [04] (Ed25519 signing key)
+   is as in section 2.5 above, containing an identity key and the
+   signing key, both signed by the identity key.
+
+   Certificate type [05] (Link certificate signed with Ed25519
+   signing key) contains a SHA256 digest of the X.509 link
+   certificate used on the TLS connection in its key field; it is
+   signed with the signing key.
+
+   Certificate type [06] (Ed25519 TLS authentication signed with
+   Ed25519 signing key) has the signing key used to sign the
+   AUTHENTICATE cell described later in this section.
+
+   Certificate type [07] (Cross-certification of Ed25519 identity
+   with RSA key) contains the following data:
+       ED25519_KEY                       [32 bytes]
+       EXPIRATION_DATE                   [4 bytes]
+       SIGNATURE                         [128 bytes]
+   Here, the Ed25519 identity key is signed with router's RSA
+   identity key, to indicate that authenticating with a key
+   certified by the Ed25519 key counts as certifying with RSA
+   identity key.  (The signature is computed on the SHA256 hash of
+   the non-signature parts of the certificate, prefixed with the
+   string "Tor TLS RSA/Ed25519 cross-certificate".)
+
+   (There's no reason to have a corresponding Ed25519-signed-RSA-key
+   certificate here, since we do not treat authenticating with an RSA
+   key as proving ownership of the Ed25519 identity.)
+
+   Relays with Ed25519 keys should always send these certificate types
+   in addition to their other certificate types.
+
+   Non-bridge relays with Ed25519 keys should generate TLS link keys of
+   appropriate strength, so that the certificate chain from the Ed25519
+   key to the link key is strong enough.
+
+
+   We add a new authentication type for AUTHENTICATE cells:
+   "Ed25519-TLSSecret", with AuthType value 2. Its format is the same as
+   "RSA-SHA256-TLSSecret", except that the CID and SID fields support
+   more key types; some strings are different, and the signature is
+   performed with Ed25519 using the authentication key from a type-6
+   cert.  Clients can send this AUTHENTICATE type if the server
+   lists it in its AUTH_CHALLENGE cell.
+
+   Modified values and new fields below are marked with asterisks.
+
+       TYPE: The characters "AUTH0002"* [8 octets]
+       CID: A SHA256 hash of the initiator's RSA1024 identity key [32 octets]
+       SID: A SHA256 hash of the responder's RSA1024 identity key [32 octets]
+       *CID_ED: The initiator's Ed25519 identity key [32 octets]
+       *SID_ED: The responder's Ed25519 identity key, or all-zero. [32 octets]
+       SLOG: A SHA256 hash of all bytes sent from the responder to the
+         initiator as part of the negotiation up to and including the
+         AUTH_CHALLENGE cell; that is, the VERSIONS cell, the CERTS cell,
+         the AUTH_CHALLENGE cell, and any padding cells.  [32 octets]
+       CLOG: A SHA256 hash of all bytes sent from the initiator to the
+         responder as part of the negotiation so far; that is, the
+         VERSIONS cell and the CERTS cell and any padding cells. [32
+         octets]
+       SCERT: A SHA256 hash of the responder's TLS link certificate. [32
+         octets]
+       TLSSECRETS: A SHA256 HMAC, using the TLS master secret as the
+         secret key, of the following:
+           - client_random, as sent in the TLS Client Hello
+           - server_random, as sent in the TLS Server Hello
+           - the NUL terminated ASCII string:
+             "Tor V3 handshake TLS cross-certification with Ed25519"*
+          [32 octets]
+       RAND: A 24 byte value, randomly chosen by the initiator. [24 octets]
+       *SIG: A signature of all previous fields using the initiator's
+          Ed25519 authentication flags.
+          [variable length]
+
+   If you've got a consensus that lists an ECC key for a node, but the
+   node doesn't give you an ECC key, then refuse this connection.
+
+5. The extend protocol
+
+   We add a new NSPEC node specifier for use in EXTEND2 cells, with
+   LSTYPE value [03].  Its length must be 32 bytes; its content is the
+   Ed25519 identity key of the target node.
+
+   Clients should use this type only when:
+     * They know an Ed25519 identity key for the destination node.
+     * The source node supports EXTEND2 cells
+     * A torrc option is set, _or_ a consensus value is set.
+
+   We'll leave the consensus value off for a while until more clients
+   support this, and then turn it on.
+
+   When picking a channel for a circuit, if this NSPEC value is
+   provided, then the RSA identity *and* the Ed25519 identity must
+   match.
+
+   If we have a channel with a given Ed25519 ID and RSA identity, and we
+   have a request for that Ed25519 ID and a different RSA identity, we
+   do not attempt to make another connection: we just fail and DESTROY
+   the circuit.
+
+   If we receive an EXTEND or EXTEND2 request for a node listed in the
+   consensus, but that EXTEND/EXTEND2 request does not include an
+   Ed25519 identity key, the node SHOULD treat the connection as failed
+   if the Ed25519 identity key it receives does not match the one in the
+   consensus.
+
+6. Naming nodes in the interface
+
+   Anywhere in the interface that takes an $identity should be able to
+   take an ECC identity too.  ECC identities are case-sensitive base64
+   encodings of Ed25519 identity keys. You can use $ to indicate them as
+   well; we distinguish RSA identity digests by length.
+
+   When we need to indicate an Ed25519 identity key in a hostname
+   format (as in a .exit address), we use the lowercased version of the
+   name, and perform a case-insensitive match.  (This loses us a little
+   less than one bit per byte of name, leaving plenty of bits to make
+   sure we choose the right node.)
+
+   Nodes must not list Ed25519 identities in their family lines; clients and
+   authorities must not honor them there.  (Doing so would make different
+   clients change paths differently in a possibly manipulatable way.)
+
+   Clients shouldn't accept .exit addresses with Ed25519 names on SOCKS
+   or DNS ports by default, even when AllowDotExit is set.  We can add
+   another option for them later if there's a good reason to have this.
+
+   We need an identity-to-node map for ECC identity and for RSA
+   identity.
+
+   The controller interface will need to accept and report Ed25519
+   identity keys as well as (or instead of) RSA identity keys.  That's a
+   separate proposal, though.
+
+7. Hidden service changes out of scope
+
+   Hidden services need to be able to identify nodes by ECC keys, just as
+   they will need to include ntor keys as well as TAP keys.  Not just
+   yet though.  This needs to be part of a bigger hidden service
+   revamping strategy.
+
+8. Proposed migration steps
+
+   Once a few versions have shipped with Ed25519 key support, turn on
+   "Rule 1" on the authorities.  (Don't allow an Ed25519<->RSA pairing
+   to change.)
+
+   Once the release with these changes is in beta or rc, turn on the
+   consensus option for everyone who receives descriptors with
+   Ed25519 identity keys to check them.
+
+   Once the release with these changes is in beta or rc, turn on the
+   consensus option for clients to generate EXTEND2 requests with
+   Ed25519 identity keys.
+
+   Once the release with these changes has been stable for a month
+   or two, turn on "Rule 2" on authorities.  (Don't allow nodes that
+   have advertised an Ed25519 key to stop.)
+
+9. Future proposals
+
+   * Ed25519 identity support on the controller interface
+   * Supporting nodes without RSA keys
+   * Remove support for nodes without Ed25519 keys
+   * Ed25519 support for hidden services
+   * Bridge identity support.
+   * Ed25519-aware family support
+
+A.1. List of certificate types
+
+   The values marked with asterisks are not types corresponding to
+   the certificate format of section 2.1.  Instead, they are
+   reserved for RSA-signed certificates to avoid conflicts between
+   the certificate type enumeration of the CERTS cell and the
+   certificate type enumeration of in our Ed25519 certificates.
+
+
+   **[00],[01],[02],[03] - Reserved to avoid conflict with types used
+          in CERTS cells.
+
+   [04] - signing a signing key with an identity key (Section 2.5)
+
+   [05] - TLS link certificate signed with ed25519 signing key
+         (Section 4.2)
+
+   [06] - Ed25519 authentication key signed with ed25519 signing key
+          (Section 4.2)
+
+   **[07] - reserved for RSA identity cross-certification (Section 4.2)
+
+
+A.2. List of extension types
+
+
+   [01] - signed-with-ed25519-key (section 2.2.1)
+
+A.3. List of signature prefixes
+
+   We describe various documents as being signed with a prefix. Here
+   are those prefixes:
+
+      "Tor router descriptor signature v1" (section 2.5)
+      "Tor node signing key certificate v1" (section 2.1)
+
+A.4. List of certified key types
+
+   [01] ed25519 key
+   [02] SHA256 hash of an RSA key
+   [03] SHA256 hash of an X.509 certificate
+
+A.5. Reserved numbers
+
+   We need a new consensus algorithm number to encompass checking
+   ed25519 keys and putting them in microdescriptors.
+
+
+   We need new CertType values for use in CERTS cells.  We reserved
+   in section 4.2.
+
+        4: Ed25519 signing key
+        5: Link key certificate certified by Ed25519 signing key
+        6: TLS authentication key certified by Ed25519 signing key
+        7: RSA cross-certificate for Ed25519 identity key
+

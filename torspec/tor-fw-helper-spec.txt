@@ -1,0 +1,69 @@
+
+                          Tor's (little) Firewall Helper specification
+                                      Jacob Appelbaum
+
+0. Preface
+
+ This document describes issues faced by Tor users who are behind NAT devices
+ and wish to share their resources with the rest of the Tor network. It also
+ explains a possible solution for some NAT devices.
+
+1. Overview
+
+ Tor users often wish to relay traffic for the Tor network and their upstream
+ firewall thwarts their attempted generosity.  Automatic port forwarding
+ configuration for many consumer NAT devices is often available with two common
+ protocols NAT-PMP[0] and UPnP[1].
+
+2. Implementation
+
+ tor-fw-helper is a program that implements basic port forwarding requests; it
+ may be used alone or called from Tor itself.
+
+2.1 Output format
+
+2.1.1. Motivation
+
+ tor-fw-helper should be able to signal to tor whether its actions
+ succeeded so that tor can act accordingly. For this reason it's
+ important to standarize the output format of tor-fw-helper.
+
+ tor-fw-helper outputs signalling commands to stdout, and debugging
+ messages to stderr. This means that a program that launches
+ tor-fw-helper only needs to monitor stdout to learn its status.
+
+2.1.2. TCP forwarding output
+
+ When tor-fw-helper completes a TCP forwarding action, it prints the
+ following message to standard output:
+
+    tor-fw-helper tcp-forwarding <external port> <internal port> <status> [<message>]
+
+ where,
+
+ <external port>, is the TCP port in the external side of the NAT
+                  device that was forwarded.
+ <internal port>, is the TCP port in the internal side of the NAT
+                  device that accepts forwarded traffic.
+ <status>, is either "SUCCESS" or "FAIL".
+ <message>, is an optional supplementary message that can include
+            multiple words.
+
+ For example, upon successfully using NAT-PMP to forward connections from
+ port '4200' to port '4333', tor-fw-helper would output in stdout:
+
+    tor-fw-helper tcp-forwarding 4200 4333 SUCCESS NAT-PMP succeded
+
+3. Security Concerns
+
+ It is probably best to hand configure port forwarding and in the process, we
+ suggest disabling NAT-PMP and/or UPnP. This is of course absolutely confusing
+ to users and so we support automatic, non-authenticated NAT port mapping
+ protocols with compliant tor-fw-helper applications.
+
+ NAT should not be considered a security boundary. NAT-PMP and UPnP are hacks
+ to deal with the shortcomings of user education about TCP/IP, IPv4 shortages,
+ and of course, NAT devices that suffer from horrible user interface design.
+
+[0] http://en.wikipedia.org/wiki/NAT_Port_Mapping_Protocol
+[1] http://en.wikipedia.org/wiki/Universal_Plug_and_Play

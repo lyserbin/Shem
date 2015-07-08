@@ -1,0 +1,79 @@
+Filename: 232-pluggable-transports-through-proxy.txt
+Title: Pluggable Transport through SOCKS proxy
+Author: Arturo Filastò
+Created: 28 February 2012
+Status: Finished
+Implemented-In: 0.2.6
+
+Overview
+
+  Tor introduced Pluggable Transports in proposal "180 Pluggable
+  Transports for circumvention".
+
+  The problem is that Tor currently cannot use a pluggable transport
+  proxy and a normal (SOCKS/HTTP) proxy at the same time. This has
+  been noticed by users in #5195, where Tor would be failing saying
+  "Unacceptable option value: You have configured more than one proxy
+  type".
+
+Trivia
+
+  This comes from a discussion that came up with Nick and I promised
+  to write a proposal for it if I wanted to hear what he had to say.
+  Nick spoke and I am writing this proposal.
+
+Acknowledgments
+
+  Most of the credit goes to Nick Mathewson for the main idea and
+  the rest of it goes to George Kadianakis for helping me out in writing
+  it.
+
+Motivation
+
+  After looking at some options we decided to go for this solution
+  since it guarantees backwards compatibility and is not particularly
+  costly to implement.
+
+Design overview
+
+  When Tor is configured to use both a pluggable transport proxy and a
+  normal proxy it should delegate the proxying to the pluggable
+  transport proxy.
+
+  This can be achieved by specifying the address and port of the normal
+  proxy to the pluggable transport proxy using environment variables:
+  When both a normal proxy and the ClientTransportPlugin directives
+  are set in the torrc, Tor should put the address of the normal proxy
+  in an environment variable and start the pluggable transport
+  proxy. When the pluggable transport proxy starts, it should read the
+  address of the normal proxy and route all its traffic through it.
+
+  After connecting to the normal proxy, the pluggable transport proxy
+  notifies Tor whether it managed to connect or not.
+
+  The environment variables also contain the authentication
+  credentials for accessing the proxy.
+
+Specifications: Tor Pluggable Transport communication
+
+  When Tor detects a normal proxy directive and a pluggable transport
+  proxy directive, it sets the environment variable:
+
+    "TOR_PT_PROXY" -- This is the address of the proxy to be used by
+    the pluggable transport proxy. It is in the format:
+    <proxy_type>://[<user_name>][:<password>][@]<ip>:<port>
+    ex. socks5://tor:test1234@198.51.100.1:8000
+        socks4a://198.51.100.2:8001
+
+  Acceptable values for <proxy_type> are: 'socks5', 'socks4a' and 'http'.
+  If no <password> can be specified (e.g. in 'socks4a'), it is left out.
+
+  If the pluggable transport proxy detects that the TOR_PT_PROXY
+  environment variable is set, it attempts connecting to it. On
+  success it writes to stdout: "PROXY DONE".
+  On failure it writes: "PROXY-ERROR <errormessage>".
+
+  If Tor does not read a PROXY line or it reads a PROXY-ERROR line
+  from its stdout and it is configured to use both a normal proxy and
+  a pluggable transport it should kill the transport proxy.
+
