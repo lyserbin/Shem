@@ -33,7 +33,7 @@ namespace Shem
         /// </summary>
         public bool Connected
         {
-            get { return controlSocket.Connected;  }
+            get { return controlSocket != null? controlSocket.Connected : false ; } // Null reference exception sucks balls.
         }
 
 
