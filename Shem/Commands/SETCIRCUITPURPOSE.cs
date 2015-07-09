@@ -4,7 +4,7 @@ namespace Shem.Commands
     /// <summary>
     /// This changes the circuit's purpose.
     /// </summary>
-    public class SETCIRCUITPURPOSE : TCCommand
+    public class SetCircuitPurpose : TCCommand
     {
         private string circuitID;
         private string purpose;
@@ -14,7 +14,7 @@ namespace Shem.Commands
         /// </summary>
         /// <param name="circuitID"></param>
         /// <param name="purpose"></param>
-        public SETCIRCUITPURPOSE(string circuitID, string purpose = "")
+        public SetCircuitPurpose(string circuitID, string purpose = "")
         {
             this.circuitID = circuitID;
             this.purpose = purpose;

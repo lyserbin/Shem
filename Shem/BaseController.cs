@@ -80,7 +80,7 @@ namespace Shem
         /// </summary>  
         public void Close()
         {
-            SendRawCommand(new QUIT());
+            SendRawCommand(new Quit());
             controlSocket.Close();
         }
 

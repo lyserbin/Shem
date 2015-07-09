@@ -5,12 +5,12 @@ namespace Shem.Commands
     /// <summary>
     /// 
     /// </summary>
-    public class AUTHCHALLENGE : TCCommand
+    public class AuthChallenge : TCCommand
     {
         /// <summary>
         /// 
         /// </summary>
-        public AUTHCHALLENGE()
+        public AuthChallenge()
         {
             //TODO: Implement this, i don't understand the docs :( TyKonKet
         }

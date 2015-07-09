@@ -4,9 +4,9 @@ namespace Shem.Commands
     /// <summary>
     /// This message informs the server about a new descriptor.
     /// </summary>
-    class POSTDESCRIPTOR : TCCommand
+    class PostDescriptor : TCCommand
     {
-        private POSTDESCRIPTOR_Purpose purpose;
+        private PostDescriptorPurpose purpose;
         private bool cache;
         private string descriptor;
 
@@ -16,7 +16,7 @@ namespace Shem.Commands
         /// <param name="purpose"></param>
         /// <param name="cache"></param>
         /// <param name="descriptor">The descriptor, when parsed, must contain a number of well-specified fields, including fields for its nickname and identity.</param>
-        public POSTDESCRIPTOR(string descriptor, POSTDESCRIPTOR_Purpose purpose = POSTDESCRIPTOR_Purpose.general, bool cache = false)
+        public PostDescriptor(string descriptor, PostDescriptorPurpose purpose = PostDescriptorPurpose.general, bool cache = false)
         {
             this.purpose = purpose;
             this.cache = cache;

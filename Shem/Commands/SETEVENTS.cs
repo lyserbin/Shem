@@ -5,12 +5,12 @@ namespace Shem.Commands
     /// <summary>
     /// 
     /// </summary>
-    public class SETEVENTS : TCCommand
+    public class SetEvents : TCCommand
     {
         /// <summary>
         /// 
         /// </summary>
-        public SETEVENTS()
+        public SetEvents()
         {
 
         }

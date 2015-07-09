@@ -4,7 +4,7 @@ namespace Shem.Commands
     /// <summary>
     /// Builds a new circuit or extends an existing one.
     /// </summary>
-    public class EXTENDCIRCUIT : TCCommand
+    public class ExtendCircuit : TCCommand
     {
         private string circuitID;
         private string[] serverSpecs;
@@ -16,7 +16,7 @@ namespace Shem.Commands
         /// <param name="circuitID">If the CircuitID is zero it is a request for the server to build a new circuit, if the CircuitID is nonzero it is a request for the server to extend an existing circuit with that ID according to the specified path.</param>
         /// <param name="purpose"></param>
         /// <param name="serverSpecs"></param>
-        public EXTENDCIRCUIT(string circuitID = "0", string purpose = "", params string[] serverSpecs)
+        public ExtendCircuit(string circuitID = "0", string purpose = "", params string[] serverSpecs)
         {
             this.circuitID = circuitID;
             this.purpose = purpose;

@@ -4,12 +4,12 @@ namespace Shem.Commands
     /// <summary>
     /// Tells the server to create a new Onion ("Hidden") Service
     /// </summary>
-    public class ADD_ONION : TCCommand
+    public class AddOnion : TCCommand
     {
-        private ONION_KeyTypes keyType;
-        private ONION_KeyBlobs keyBlob;
+        private OnionKeyTypes keyType;
+        private OnionKeyBlobs keyBlob;
         private string privateKey;
-        private ONION_Flags[] flags;
+        private OnionFlags[] flags;
         private string virtualPort;
         private string targetPort = "";
 
@@ -22,7 +22,7 @@ namespace Shem.Commands
         /// <param name="flags"></param>
         /// <param name="virtualPort">The virtual TCP Port for the Onion Service (As in the HiddenServicePort "VIRTPORT" argument).</param>
         /// <param name="targetPort">he (optional) target for the given VirtPort (As in the optional HiddenServicePort "TARGET" argument).</param>
-        public ADD_ONION(ONION_KeyTypes keyType, ONION_KeyBlobs keyBlob, string privateKey, string virtualPort, string targetPort = "", params ONION_Flags[] flags)
+        public AddOnion(OnionKeyTypes keyType, OnionKeyBlobs keyBlob, string privateKey, string virtualPort, string targetPort = "", params OnionFlags[] flags)
         {
             this.keyType = keyType;
             this.keyBlob = keyBlob;
@@ -35,7 +35,7 @@ namespace Shem.Commands
         public override string Raw()
         {
             string formattedKeyBlob = "";
-            if (keyBlob != ONION_KeyBlobs.String)
+            if (keyBlob != OnionKeyBlobs.String)
             {
                 formattedKeyBlob = keyBlob.ToString();
             }

@@ -1,7 +1,7 @@
 ﻿
 namespace Shem.Commands
 {
-    public enum ONION_KeyTypes
+    public enum OnionKeyTypes
     {
         /// <summary>
         /// 

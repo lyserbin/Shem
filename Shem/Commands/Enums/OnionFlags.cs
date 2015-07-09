@@ -1,7 +1,7 @@
 ﻿
 namespace Shem.Commands
 {
-    public enum ONION_Flags
+    public enum OnionFlags
     {
         /// <summary>
         /// The server should not include the newly generated private key as part of the response.

@@ -1,6 +1,6 @@
 ﻿namespace Shem.Commands
 {
-    public class QUIT : TCCommand
+    public class Quit : TCCommand
     {
 
         public override string Raw()

@@ -4,7 +4,7 @@ namespace Shem.Commands
     /// <summary>
     /// Save the current configs to the torrc.
     /// </summary>
-    public class SAVECONF : TCCommand
+    public class SaveConf : TCCommand
     {
         /// <summary>
         /// Returns the raw command.

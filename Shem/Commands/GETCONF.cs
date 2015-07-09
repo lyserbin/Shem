@@ -5,7 +5,7 @@ namespace Shem.Commands
     /// <summary>
     /// Request the value of a configuration variable.
     /// </summary>
-    public class GETCONF : TCCommand
+    public class GetConf : TCCommand
     {
         private string configs;
 
@@ -13,7 +13,7 @@ namespace Shem.Commands
         /// Request the value of a configuration variable.
         /// </summary>
         /// <param name="configs"></param>
-        public GETCONF(string configs)
+        public GetConf(string configs)
         {
             this.configs = configs;
         }
@@ -22,7 +22,7 @@ namespace Shem.Commands
         /// Request the value of a configuration variable.
         /// </summary>
         /// <param name="configs"></param>
-        public GETCONF(params Configs[] configs)
+        public GetConf(params Configs[] configs)
         {
             this.configs = new Func<string>(() =>
             {

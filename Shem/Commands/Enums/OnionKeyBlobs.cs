@@ -1,7 +1,7 @@
 ﻿
 namespace Shem.Commands
 {
-    public enum ONION_KeyBlobs
+    public enum OnionKeyBlobs
     {
         /// <summary>
         /// The server should generate a key using the "best" supported algorithm (KeyType == "NEW")

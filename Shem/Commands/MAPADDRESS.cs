@@ -4,7 +4,7 @@ namespace Shem.Commands
     /// <summary>
     /// document this
     /// </summary>
-    public class MAPADDRESS : TCCommand
+    public class MapAddress : TCCommand
     {
         private string oldAddress;
 
@@ -15,7 +15,7 @@ namespace Shem.Commands
         /// </summary>
         /// <param name="oldAddress"></param>
         /// <param name="newAddress"></param>
-        public MAPADDRESS(string oldAddress, string newAddress)
+        public MapAddress(string oldAddress, string newAddress)
         {
             this.newAddress = newAddress;
             this.oldAddress = oldAddress;

@@ -6,7 +6,7 @@ namespace Shem.Commands
     /// <summary>
     /// Unlike GETCONF, this message is used for data that are not stored in the Tor configuration file.
     /// </summary>
-    public class GETINFO : TCCommand
+    public class GetInfo : TCCommand
     {
         private string info = "";
 
@@ -14,7 +14,7 @@ namespace Shem.Commands
         /// Returns requested informations about tor instance.
         /// </summary>
         /// <param name="informations"></param>
-        public GETINFO(params Informations[] informations)
+        public GetInfo(params Informations[] informations)
         {
             this.info = (new Func<string>(() =>
             {
@@ -31,7 +31,7 @@ namespace Shem.Commands
         /// Returns requested informations about tor instance.
         /// </summary>
         /// <param name="informations"></param>
-        public GETINFO(string informations)
+        public GetInfo(string informations)
         {
             this.info = informations;
         }

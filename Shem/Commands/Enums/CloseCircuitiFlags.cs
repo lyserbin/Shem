@@ -1,7 +1,7 @@
 ﻿
 namespace Shem.Commands
 {
-    public enum CLOSECIRCUIT_Flags
+    public enum CloseCircuiteFlags
     {
         /// <summary>
         /// If "IfUnused" is provided, do not close the circuit unless it is unused.

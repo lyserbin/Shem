@@ -4,14 +4,14 @@ namespace Shem.Commands
     /// <summary>
     /// This command allows a controller to upload the text of a config file to Tor over the control port. This config file is then loaded as if it had been read from disk.
     /// </summary>
-    public class LOADCONF : TCCommand
+    public class LoadConf : TCCommand
     {
         private string configtext;
         /// <summary>
         /// This command allows a controller to upload the text of a config file to Tor over the control port. This config file is then loaded as if it had been read from disk.
         /// </summary>
         /// <param name="configtext"></param>
-        public LOADCONF(string configtext)
+        public LoadConf(string configtext)
         {
             this.configtext = configtext;
         }

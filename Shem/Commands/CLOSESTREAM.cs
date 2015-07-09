@@ -4,17 +4,17 @@ namespace Shem.Commands
     /// <summary>
     /// Tells the server to close the specified stream.
     /// </summary>
-    public class CLOSESTREAM : TCCommand
+    public class CloseStream : TCCommand
     {
         private string streamID;
-        private RELAY_END reason;
+        private RelayEnd reason;
 
         /// <summary>
         /// Tells the server to close the specified stream.
         /// </summary>
         /// <param name="streamID"></param>
         /// <param name="reason">The reason should be one of the Tor RELAY_END.</param>
-        public CLOSESTREAM(string streamID, RELAY_END reason)
+        public CloseStream(string streamID, RelayEnd reason)
         {
             this.streamID = streamID;
             this.reason = reason;

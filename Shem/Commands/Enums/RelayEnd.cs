@@ -1,7 +1,7 @@
 ﻿
 namespace Shem.Commands
 {
-    public enum RELAY_END
+    public enum RelayEnd
     {
         /// <summary>
         /// Catch-all for unlisted reasons

@@ -4,17 +4,17 @@ namespace Shem.Commands
     /// <summary>
     /// Tells the server to close the specified circuit.
     /// </summary>
-    public class CLOSECIRCUIT : TCCommand
+    public class CloseCircuit : TCCommand
     {
         private string circuitID;
-        private CLOSECIRCUIT_Flags[] flags;
+        private CloseCircuiteFlags[] flags;
 
         /// <summary>
         /// Tells the server to close the specified circuit.
         /// </summary>
         /// <param name="circuitID"></param>
         /// <param name="flags"></param>
-        public CLOSECIRCUIT(string circuitID, params CLOSECIRCUIT_Flags[] flags)
+        public CloseCircuit(string circuitID, params CloseCircuiteFlags[] flags)
         {
             this.circuitID = circuitID;
             this.flags = flags;

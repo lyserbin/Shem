@@ -5,12 +5,12 @@ namespace Shem.Commands
     /// <summary>
     /// 
     /// </summary>
-    public class HSFETCH : TCCommand
+    public class HSFetch : TCCommand
     {
         /// <summary>
         /// 
         /// </summary>
-        public HSFETCH()
+        public HSFetch()
         {
             //TODO: Implement this, i don't know how "hidden services" works, sorry... TyKonKet
         }

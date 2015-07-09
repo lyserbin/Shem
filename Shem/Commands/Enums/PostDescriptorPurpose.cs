@@ -1,7 +1,7 @@
 ﻿
 namespace Shem.Commands
 {
-    public enum POSTDESCRIPTOR_Purpose
+    public enum PostDescriptorPurpose
     {
         general, controller, bridge
     }

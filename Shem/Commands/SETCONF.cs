@@ -2,7 +2,7 @@
 using System;
 namespace Shem.Commands
 {
-    public class SETCONF : TCCommand
+    public class SetConf : TCCommand
     {
         private Configs[] configs;
         private string[] values;
@@ -12,7 +12,7 @@ namespace Shem.Commands
         /// </summary>
         /// <param name="config"></param>
         /// <param name="value"></param>
-        public SETCONF(Configs config, string value)
+        public SetConf(Configs config, string value)
         {
             this.configs = new Configs[] { config };
             this.values = new string[] { value };

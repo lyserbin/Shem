@@ -5,7 +5,7 @@ namespace Shem.Commands
     /// <summary>
     /// Change the value of one configuration variables if the value is empty set the default value.
     /// </summary>
-    public class RESETCONF : TCCommand
+    public class ResetConf : TCCommand
     {
         private Configs[] configs;
         private string[] values;
@@ -15,7 +15,7 @@ namespace Shem.Commands
         /// </summary>
         /// <param name="config"></param>
         /// <param name="value"></param>
-        public RESETCONF(Configs config, string value = "")
+        public ResetConf(Configs config, string value = "")
         {
             this.configs = new Configs[] { config };
             this.values = new string[] { value };

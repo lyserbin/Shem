@@ -4,7 +4,7 @@ namespace Shem.Commands
     /// <summary>
     ///  This command launches a hidden service descriptor upload to the specified HSDirs. If one or more Server arguments are provided, an upload is triggered on each of them in parallel. If no Server options are provided, it behaves like a normal HS descriptor upload and will upload to the set of responsible HS directories.
     /// </summary>
-    public class HSPOST : TCCommand
+    public class HSPost : TCCommand
     {
         private string[] servers;
         private string descriptor;
@@ -14,7 +14,7 @@ namespace Shem.Commands
         /// </summary>
         /// <param name="servers">The LongName (Fingerprint [~/=Nickname]) of the servers.</param>
         /// <param name="descriptor">The text of the descriptor formatted as specified in rend-spec.txt section 1.3.</param>
-        public HSPOST(string descriptor, params string[] servers)
+        public HSPost(string descriptor, params string[] servers)
         {
             this.servers = servers;
             this.descriptor = descriptor;
