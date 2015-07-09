@@ -12,10 +12,7 @@ namespace Shem.Exceptions
         /// </summary>
         public override string Message
         {
-            get
-            {
-                return "Non-existent connection.";
-            }
+            get { return "Non-existent connection."; }
         }
     }
 }
