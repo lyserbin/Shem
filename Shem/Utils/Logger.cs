@@ -59,9 +59,9 @@ namespace Shem.Utils
         /// </summary>
         /// <param name="type">The type of the log (DEBUG, INFO, WARNING, ERROR).</param>
         /// <param name="message">The message to be logged.</param>
-        /// <param name="logtoconsole">Should the message be logged to the console?</param>
-        /// <param name="logtofile">Should the message be logged to file?</param>
-        private static void Log(string message, LogTypes type = LogTypes.INFO, bool logtoconsole = true, bool logtofile = true)
+        /// <param name="logtoconsole">Force the message be logged to the console</param>
+        /// <param name="logtofile">Force the message be logged to file</param>
+        private static void Log(string message, LogTypes type = LogTypes.INFO, bool logtoconsole = false, bool logtofile = false)
         {
             if (type <= LogTypes.NONE) // Goat boy is a bad boy.
                 return;
@@ -73,22 +73,22 @@ namespace Shem.Utils
                 File.AppendAllText(_logfile, String.Format("[{0} {1}] {2}\r\n", DateTime.Now.ToString("dd MMM yyyy-HH:mm:ss:fff"), type.ToString(), message));
         }
 
-        public static void LogError(string message, bool logtoconsole = true, bool logtofile = true)
+        public static void LogError(string message, bool logtoconsole = false, bool logtofile = false)
         {
             Log(message, LogTypes.ERROR, logtoconsole, logtofile);
         }
 
-        public static void LogWarn(string message, bool logtoconsole = true, bool logtofile = true)
+        public static void LogWarn(string message, bool logtoconsole = false, bool logtofile = false)
         {
             Log(message, LogTypes.WARNING, logtoconsole, logtofile);
         }
 
-        public static void LogInfo(string message, bool logtoconsole = true, bool logtofile = true)
+        public static void LogInfo(string message, bool logtoconsole = false, bool logtofile = false)
         {
             Log(message, LogTypes.INFO, logtoconsole, logtofile);
         }
 
-        public static void LogDebug(string message, bool logtoconsole = true, bool logtofile = true)
+        public static void LogDebug(string message, bool logtoconsole = false, bool logtofile = false)
         {
             Log(message, LogTypes.DEBUG, logtoconsole, logtofile);
         }
