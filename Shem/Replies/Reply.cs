@@ -26,16 +26,24 @@ namespace Shem.Replies
         /// <returns>The raw string replied by TOR</returns>
         public virtual string RawString { get; protected set; }
 
-
-
-        public Reply(ReplyCodes code, string replyline, string raw, int rawcode = -1)
+        internal Reply(ReplyCodes code, string replyline, string raw, int rawcode = -1)
         {
             this.Code = code;
             this.ReplyLine = replyline;
-            if (code == ReplyCodes.UNKNOWN)
+            if (this.Code == ReplyCodes.UNKNOWN)
                 this.RawCode = rawcode;
 
             this.RawString = raw;
+        }
+
+        internal Reply(Reply reply)
+        {
+            this.Code = reply.Code;
+            this.ReplyLine = reply.ReplyLine;
+            if (this.Code == ReplyCodes.UNKNOWN)
+                this.RawCode = reply.RawCode;
+
+            this.RawString = reply.RawString;
         }
     }
 }

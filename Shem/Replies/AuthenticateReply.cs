@@ -1,26 +1,18 @@
 ﻿
 namespace Shem.Replies
 {
-    /*
+    
     public class AuthenticateReply : Reply
     {
-        private string raw;
-        private ReplyCodes code;
+        public AuthenticateReply(Reply reply) : base(reply) { }
 
-        public override ReplyCodes Code
+        /// <summary>
+        /// Check if you are authenticated or not.
+        /// </summary>
+        /// <returns>Returns true if the given password was good.</returns>
+        public bool IsAuthenticated()
         {
-            get { return code; }
-        }
-        
-        public override string RawString()
-        {
-            return raw;
-        }
-
-        public AuthenticateReply(string rawreply)
-        {
-
+            return this.Code == ReplyCodes.OK;
         }
     }
-     * */
 }
