@@ -52,6 +52,7 @@ namespace LazyAsFuck
             string tmp;
             string tmpconfig = "";
             bool parse = false;
+            bool inpara = false;
             StringReader sr = new StringReader(mancontent);
 
 
@@ -74,19 +75,31 @@ namespace LazyAsFuck
                         {
                             if(tmpconfig != "") // Is not the first item we write
                             {
-                                configs += String.Format("/// </summary>\n{0},\n\n", tmpconfig);
+                                configs += String.Format("/// </para></summary>\n{0},\n\n", tmpconfig);
                             }
                             tmpconfig = tmp.Substring(2, tmp.IndexOf("]") - 2);
                             configs += String.Format("/// <summary>\n/// <para>{0}</para>\n/// <para>&#160;</para>\n",
-                                                    removeshit(tmp.Substring(tmpconfig.Length + 5))); 
+                                                    removeshit(tmp.Substring(tmpconfig.Length + 5)));
+                            inpara = false;
                         }
                         else if (tmp.Length > 3 && tmp.Substring(0, 3) == "   ") // Documentation BOYZ!
                         {
-                            configs += String.Format("/// <para>{0}</para>\n", removeshit(tmp.Substring(4, tmp.Length-4)));
+                            string shitty = tmp;
+                            shitty = tmp.Substring(4, tmp.Length - 4); // Remove the spaces
+                            shitty = removeshit(shitty); // hell yeah
+                            if (shitty.EndsWith(" +"))
+                                shitty = shitty.Substring(0, shitty.Length - 2);
+
+                            configs += String.Format("/// {0}{1}\n", inpara ? "" : "<para>", shitty);
+
+                            if (!inpara)
+                                inpara = true;
+
                         }
                         else if (tmp == " +")
                         {
-                            configs += "/// <para>&#160;</para>\n";
+                            configs += "/// </para>\n/// <para>&#160;</para>\n";
+                            inpara = false;
                         }
                     }
                 }
@@ -97,10 +110,7 @@ namespace LazyAsFuck
 
         private string removeshit(string input)
         {
-            string ret = input.Replace("*", "").Replace("_", "").Replace("::", "").Replace("\\", "");
-            if (ret.EndsWith(" +"))
-                ret = ret.Substring(0, ret.Length-2);
-            return ret;
+            return input.Replace("*", "").Replace("_", "").Replace("::", "").Replace("\\", "");
         }
     }
 }
