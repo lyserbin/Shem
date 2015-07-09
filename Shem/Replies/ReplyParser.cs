@@ -13,19 +13,21 @@ namespace Shem.Replies
         // i is the position, named i only cause is shorter to write.
         private static void rparse(string rawstring, int i, ref Collection<Reply> current)
         {
-            int tmpcode = 0;
+            int tmpcode;
             ReplyCodes code;
             string replyline = "";
-
-            if (rawstring.Length < i + 3 && !int.TryParse(rawstring.Substring(i, i + 3), out tmpcode))
+            bool tmpres = int.TryParse(rawstring.Substring(i, i + 3), out tmpcode);
+            
+            if (rawstring.Length < i + 3 || !tmpres)
                 throw new NullReplyCodeException(rawstring, i);
-
+            
             i += 4; // skip one char (' ' OR '-')
             while (i < rawstring.Length)
             {
                 if (rawstring[i] == '\r' && rawstring[i+1] == '\n')
                 {
-                    if (!Enum.TryParse<ReplyCodes>(tmpcode.ToString(), out code))
+                    tmpres = Enum.TryParse<ReplyCodes>(tmpcode.ToString(), out code);
+                    if (!tmpres) // TODO: not working, fix this.
                         Logger.LogWarn(string.Format("Reply code not identified \"{0}\" in \"{1}\"", tmpcode, rawstring));
                     current.Add(new Reply(code, replyline, rawstring, tmpcode));
                     if (i + 2 == rawstring.Length) // we are @ the end
