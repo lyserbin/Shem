@@ -13,7 +13,10 @@ namespace Shem.Sockets
     {
         public IPAddress Address { get; private set; }
         public uint Port { get; private set; }
-        public bool Connected { get; private set; }
+        public bool Connected
+        {
+            get { return _socket.Connected; }
+        }
         public bool ResponseAvailable { get { return _socket.Available > 0; } }
         private Socket _socket;
 
@@ -38,12 +41,8 @@ namespace Shem.Sockets
         /// </summary>
         public void Connect()
         {
-            if (Connected)
-                this.Close();
-
             Logger.LogDebug(string.Format("Connecting to the server \"{0}:{1}\"", this.Address, this.Port));
             _socket.Connect(Address, (int)Port);
-            Connected = true;
         }
 
         /// <summary>
@@ -58,8 +57,6 @@ namespace Shem.Sockets
             }
             else
                 throw new SocketNotConnectedException();
-
-            Connected = false;
         }
 
         /// <summary>

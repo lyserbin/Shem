@@ -10,18 +10,25 @@ namespace Shem.test
     {
         static void Main(string[] args)
         {
-            Logger.ConsoleLogLevel = LogTypes.DEBUG;
-            Logger.FileLogLevel = LogTypes.DEBUG;
+            Logger.ConsoleLogLevel = LogTypes.WARNING;
+            Logger.FileLogLevel = LogTypes.INFO;
 
             try
             {
                 TorController tc;
-                Collection<Reply> replies;
+                string password;
 
                 tc = new TorController("127.0.0.1", 9051);
-                tc.SendCommand(new AUTHENTICATE("test"));
-                //replies = tc.SendCommand(new GETINFO(Informations.config_file, Informations.version));
-                tc.SendCommand(new GETCONF(Configs.HashedControlPassword));
+                Console.Write("Enter your password: ");
+                password = Console.ReadLine();
+                if(tc.Authenticate(password))
+                {
+                    Console.WriteLine("Authenticated successfully!");
+                }
+                else
+                {
+                    Console.WriteLine("Wrong password.");
+                }
                 tc.Close();
             } catch (Exception ex)
             {

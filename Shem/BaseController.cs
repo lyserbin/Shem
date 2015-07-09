@@ -13,19 +13,27 @@ namespace Shem
     /// </summary>
     public class BaseController
     {
-        private ControlSocket controlSocket;
 
-        private int sleep = 10;
+        protected ControlSocket controlSocket;
 
-        private uint responseTimeout = 1000;
+        protected int sleep = 10;
+
+        protected uint responseTimeout = 1000;
 
         /// <summary>
-        /// The time the library should wait for a reply
+        /// The time the library should wait for a reply.
         /// </summary>
         public uint ResponseTimeout
         {
             get { return responseTimeout; }
             set { responseTimeout = value; }
+        }
+        /// <summary>
+        /// Is the Controller connected to the server.
+        /// </summary>
+        public bool Connected
+        {
+            get { return controlSocket.Connected;  }
         }
 
 
@@ -78,7 +86,7 @@ namespace Shem
         /// Close the socket connection.
         /// Is a good idea to call it before your program exits.
         /// </summary>  
-        public void Close()
+        public virtual void Close()
         {
             SendRawCommand(new Quit());
             controlSocket.Close();
@@ -86,7 +94,7 @@ namespace Shem
 
         ~BaseController()
         {
-            if(controlSocket != null && controlSocket.Connected)
+            if(Connected)
                 Close();
         }
     }
