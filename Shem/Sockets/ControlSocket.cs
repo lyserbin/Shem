@@ -23,12 +23,21 @@ namespace Shem.Sockets
         /// <summary>
         /// Create a ControlSocket instance from a specified control port.
         /// </summary>
-        /// <param name="address">The IP address to connect-to (E.G. 192.168.1.1).</param>
+        /// <param name="address">The IP address or the hostname to connect-to (E.G. 192.168.1.1, youporn.com).</param>
         /// <param name="port">The Port number where TOR binded his ControlPort (E.G. 666).</param>
         /// <param name="connect">Connect automatically after the initialization.</param>
         public ControlSocket(string address = "127.0.0.1", uint port = 9051, bool connect = true)
         {
-            this.Address = IPAddress.Parse(address);
+            IPAddress _addr;
+
+            if (!IPAddress.TryParse(address, out _addr))
+            {
+                IPAddress[] tmp = Dns.GetHostAddresses(address);
+                if (tmp.Length < 1)
+                    throw new ServerNotFoundException();
+                _addr = tmp[0];
+            }
+            this.Address = _addr;
             this.Port = port;
             _socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
 
