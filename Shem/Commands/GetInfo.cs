@@ -1,0 +1,44 @@
+﻿using System;
+using Shem.Utils;
+
+namespace Shem.Commands
+{
+    /// <summary>
+    /// Unlike GETCONF, this message is used for data that are not stored in the Tor configuration file.
+    /// </summary>
+    public class GetInfo : TCCommand
+    {
+        private string info = "";
+
+        /// <summary>
+        /// Returns requested informations about tor instance.
+        /// </summary>
+        /// <param name="informations"></param>
+        public GetInfo(params Informations[] informations)
+        {
+            this.info = (new Func<string>(() =>
+            {
+                string ks = "";
+                foreach (var k in informations)
+                {
+                    ks += " " + k.GetStringValue();
+                }
+                return ks;
+            }))();
+        }
+
+        /// <summary>
+        /// Returns requested informations about tor instance.
+        /// </summary>
+        /// <param name="informations"></param>
+        public GetInfo(string informations)
+        {
+            this.info = informations;
+        }
+
+        public override string Raw()
+        {
+            return string.Format("GETINFO{0}\r\n", info);
+        }
+    }
+}
