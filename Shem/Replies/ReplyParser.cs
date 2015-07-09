@@ -16,24 +16,24 @@ namespace Shem.Replies
             int tmpcode;
             ReplyCodes code;
             string replyline = "";
-            bool tmpres = int.TryParse(rawstring.Substring(i, i + 3), out tmpcode);
-            
-            if (rawstring.Length < i + 3 || !tmpres)
-                throw new NullReplyCodeException(rawstring, i);
+
+            if ((rawstring.Length < i + 3) || (!int.TryParse(rawstring.Substring(i, i + 3), out tmpcode)))
+                throw new NullReplyCodeException(rawstring, i); // if the current reply is < 3 chars or has not a code
             
             i += 4; // skip one char (' ' OR '-')
             while (i < rawstring.Length)
             {
-                if (rawstring[i] == '\r' && rawstring[i+1] == '\n')
+                if (rawstring[i] == '\r' && rawstring[i+1] == '\n') // we reached the end of the current reply
                 {
-                    tmpres = Enum.TryParse<ReplyCodes>(tmpcode.ToString(), out code);
-                    if (!tmpres) // TODO: not working, fix this.
-                        Logger.LogWarn(string.Format("Reply code not identified \"{0}\" in \"{1}\"", tmpcode, rawstring));
-                    current.Add(new Reply(code, replyline, rawstring, tmpcode));
-                    if (i + 2 == rawstring.Length) // we are @ the end
+                    if (!Enum.IsDefined(typeof(ReplyCodes), tmpcode)) // if not in the enum
+                        Logger.LogWarn(string.Format("Reply code not identified \"{0}\" in \"{1}\"", tmpcode, rawstring.Replace("\r\n", "\\r\\n")));
+
+                    code = (ReplyCodes)tmpcode;
+                    current.Add(new Reply(code, replyline, rawstring)); // Add the reply to the return collection
+                    if (i + 2 == rawstring.Length) // we are at the end of the string (if it is a multi response one)
                         return;
                     else // another ride BABY
-                        rparse(rawstring, i + 2, ref current);
+                        rparse(rawstring, i + 2, ref current); // We are not at the end of the string (if it is a multi response one)
                 }
 
                 replyline += rawstring[i++];
