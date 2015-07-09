@@ -54,6 +54,7 @@
     <Compile Include="Commands\CloseStream.cs" />
     <Compile Include="Commands\DelOnion.cs" />
     <Compile Include="Commands\DropGuards.cs" />
+    <Compile Include="Commands\Enums\AsyncEvents.cs" />
     <Compile Include="Commands\Enums\CloseCircuitiFlags.cs" />
     <Compile Include="Commands\Enums\Configs.cs" />
     <Compile Include="Commands\Enums\Informations.cs" />
