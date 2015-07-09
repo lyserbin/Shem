@@ -23,13 +23,6 @@
 
     public enum ReplyCodes
     {
-
-        /// <summary>
-        /// The message sent was unknown, maybe the tor protocol version is higher
-        /// then the one supported by this library
-        /// </summary>
-        UNKNOWN = 0,
-
         /// <summary>
         /// The command sent went through good
         /// </summary>
