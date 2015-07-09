@@ -54,8 +54,14 @@
     <Compile Include="Commands\CloseStream.cs" />
     <Compile Include="Commands\DelOnion.cs" />
     <Compile Include="Commands\DropGuards.cs" />
+    <Compile Include="Commands\Enums\AsyncEvents.cs" />
+    <Compile Include="Commands\Enums\BuildFlags.cs" />
+    <Compile Include="Commands\Enums\CircPurpose.cs" />
+    <Compile Include="Commands\Enums\CircReasons.cs" />
+    <Compile Include="Commands\Enums\CircStatus.cs" />
     <Compile Include="Commands\Enums\CloseCircuitiFlags.cs" />
     <Compile Include="Commands\Enums\Configs.cs" />
+    <Compile Include="Commands\Enums\HsStates.cs" />
     <Compile Include="Commands\Enums\Informations.cs" />
     <Compile Include="Commands\Enums\OnionFlags.cs" />
     <Compile Include="Commands\Enums\OnionKeyBlobs.cs" />
