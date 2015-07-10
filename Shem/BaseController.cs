@@ -71,7 +71,7 @@ namespace Shem
 
         public Collection<Reply> SendCommand(TCCommand command)
         {
-            return ReplyParser.Parse(SendRawCommand(command));
+            return Reply.Parse(SendRawCommand(command));
         }
 
         /// <summary>
