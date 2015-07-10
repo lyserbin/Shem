@@ -76,10 +76,10 @@ namespace Shem
         /// <returns></returns>
         public List<Reply> SendCommand(TCCommand command)
         {
-            List<Reply> replyes = Reply.Parse(SendRawCommand(command));
+            List<Reply> replies = Reply.Parse(SendRawCommand(command));
             List<Reply> async_events = new List<Reply>();
 
-            foreach (var r in replyes)
+            foreach (var r in replies)
             {
                 if (r.Code == ReplyCodes.ASYNC_EVENT_NOTIFICATION)
                 {
@@ -89,12 +89,12 @@ namespace Shem
 
             foreach (var e in async_events)
             {
-                replyes.Remove(e);
+                replies.Remove(e);
             }
 
             AsyncEventDispatcher(async_events);
 
-            return replyes;
+            return replies;
         }
 
         protected virtual void AsyncEventDispatcher(Reply reply)
@@ -102,7 +102,7 @@ namespace Shem
 
         }
 
-        protected virtual void AsyncEventDispatcher(List<Reply> replyes)
+        protected virtual void AsyncEventDispatcher(List<Reply> replies)
         {
 
         }
