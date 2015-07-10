@@ -36,7 +36,7 @@ namespace Shem
         /// </summary>
         /// <param name="password">The tor control password NOT-hashed.</param>
         /// <returns>True in case of successful authentication, false in every other case.</returns>
-        public bool Authenticate(string password)
+        public bool Authenticate(string password = "")
         {
             if (!this.controlSocket.Connected)
                 throw new SocketNotConnectedException();
@@ -54,23 +54,23 @@ namespace Shem
             return Authenticated;
         }
 
-        protected override void AsyncEventDispatcher(List<Reply> replyes)
+        protected override void AsyncEventDispatcher(List<Reply> asyncEvents)
         {
             Task.Run(() =>
             {
-                foreach (var r in replyes)
+                foreach (var e in asyncEvents)
                 {
                     if (OnAsyncEvent != null)
                     {
-                        OnAsyncEvent(r);
+                        OnAsyncEvent(e);
                     }
                 }
             });
         }
 
-        protected override void AsyncEventDispatcher(Reply reply)
+        protected override void AsyncEventDispatcher(Reply asyncEvent)
         {
-            AsyncEventDispatcher(new List<Reply>() { reply });
+            AsyncEventDispatcher(new List<Reply>() { asyncEvent });
         }
 
         /// <summary>
@@ -78,10 +78,10 @@ namespace Shem
         /// </summary>
         public override void Close()
         {
-            if (Authenticated)
-                base.Close();
-            else
-                controlSocket.Close();
+            //if (Authenticated)
+            base.Close();
+            //else
+            //controlSocket.Close();
         }
     }
 }
