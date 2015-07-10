@@ -1,5 +1,5 @@
 ﻿
-namespace Shem.Commands
+namespace Shem.AsyncEvents
 {
     public enum CircStatus
     {

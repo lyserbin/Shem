@@ -1,5 +1,6 @@
 ﻿
-namespace Shem.Commands
+using Shem.Utils;
+namespace Shem.AsyncEvents
 {
     public enum AsyncEvents
     {
@@ -7,6 +8,7 @@ namespace Shem.Commands
         AUTHDIR_NEWDESCS,
         BUILDTIMEOUT_SET,
         BW,
+        [TypeValue(typeof(CircEvent))]
         CIRC,
         CIRC_MINOR,
         CLIENTS_SEEN,
