@@ -55,6 +55,11 @@ namespace Shem
             return Authenticated;
         }
 
+        public void GetInfo()
+        {
+            // TODO: gonna do this sheet.
+        }
+
         protected override void AsyncEventDispatcher(List<Reply> asyncEvents)
         {
             Task.Run(() =>
@@ -79,10 +84,7 @@ namespace Shem
         /// </summary>
         public override void Close()
         {
-            //if (Authenticated)
             base.Close();
-            //else
-            //controlSocket.Close();
         }
     }
 }
