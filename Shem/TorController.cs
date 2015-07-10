@@ -1,13 +1,20 @@
-﻿using Shem.Commands;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Shem.Commands;
 using Shem.Exceptions;
 using Shem.Replies;
 using Shem.Utils;
-using System.Collections.ObjectModel;
 
 namespace Shem
 {
     public class TorController : BaseController
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        public event Action<Reply> OnAsyncEvent;
+
         /// <summary>
         /// This is true if we are Authenticated, false if
         /// the authentication failed or you haven't tried
@@ -35,7 +42,7 @@ namespace Shem
                 throw new SocketNotConnectedException();
 
             AuthenticateReply reply;
-            Collection<Reply> replies;
+            List<Reply> replies;
 
             replies = SendCommand(new Authenticate(password));
             if (replies.Count < 1)
@@ -45,6 +52,25 @@ namespace Shem
             this.Authenticated = reply.IsAuthenticated();
             Logger.LogInfo(Authenticated ? "Authentication succeded" : "Authentication failed");
             return Authenticated;
+        }
+
+        protected override void AsyncEventDispatcher(List<Reply> replyes)
+        {
+            Task.Run(() =>
+            {
+                foreach (var r in replyes)
+                {
+                    if (OnAsyncEvent != null)
+                    {
+                        OnAsyncEvent(r);
+                    }
+                }
+            });
+        }
+
+        protected override void AsyncEventDispatcher(Reply reply)
+        {
+            AsyncEventDispatcher(new List<Reply>() { reply });
         }
 
         /// <summary>

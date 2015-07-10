@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Shem.Exceptions;
 using Shem.Utils;
@@ -11,7 +12,7 @@ namespace Shem.Replies
     static class ReplyParser
     {
         // i is the position, named i only cause is shorter to write.
-        private static void rparse(string rawstring, int i, ref Collection<Reply> current)
+        private static void rparse(string rawstring, int i, ref List<Reply> current)
         {
             int tmpcode;
             ReplyCodes code;
@@ -45,9 +46,9 @@ namespace Shem.Replies
         /// </summary>
         /// <param name="rawstring">The string the server replied</param>
         /// <returns>A collection of replies (IT COULD BE EMPTY)</returns>
-        public static Collection<Reply> Parse(string rawstring)
+        public static List<Reply> Parse(string rawstring)
         {
-            Collection<Reply> replies = new Collection<Reply>();
+            List<Reply> replies = new List<Reply>();
 
             rparse(rawstring, 0, ref replies);
 
