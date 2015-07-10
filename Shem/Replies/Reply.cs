@@ -103,7 +103,6 @@ namespace Shem.Replies
                                           replyline.ToString(),
                                           rawstring.Substring(j, i - j)));
 
-                    int z = rawstring.Length;
                     if (i == rawstring.Length)
                     {
                         return; // we are at the end of the string (if it is a multi response one)
@@ -114,6 +113,7 @@ namespace Shem.Replies
                         return;
                     }
                 }
+
                 replyline.Append(rawstring[i]);
                 i++;
             }
