@@ -1,8 +1,8 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using Shem.Commands;
-using Shem.Sockets;
 using Shem.Replies;
-using System.Collections.ObjectModel;
+using Shem.Sockets;
 
 namespace Shem
 {
@@ -33,7 +33,7 @@ namespace Shem
         /// </summary>
         public bool Connected
         {
-            get { return controlSocket != null? controlSocket.Connected : false ; } // Null reference exception sucks balls.
+            get { return controlSocket != null ? controlSocket.Connected : false; } // Null reference exception sucks balls.
         }
 
 
@@ -69,9 +69,42 @@ namespace Shem
             return controlSocket.Receive();
         }
 
-        public Collection<Reply> SendCommand(TCCommand command)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public List<Reply> SendCommand(TCCommand command)
         {
-            return Reply.Parse(SendRawCommand(command));
+            List<Reply> replyes = Reply.Parse(SendRawCommand(command));
+            List<Reply> async_events = new List<Reply>();
+
+            foreach (var r in replyes)
+            {
+                if (r.Code == ReplyCodes.ASYNC_EVENT_NOTIFICATION)
+                {
+                    async_events.Add(r);
+                }
+            }
+
+            foreach (var e in async_events)
+            {
+                replyes.Remove(e);
+            }
+
+            AsyncEventDispatcher(async_events);
+
+            return replyes;
+        }
+
+        protected virtual void AsyncEventDispatcher(Reply reply)
+        {
+
+        }
+
+        protected virtual void AsyncEventDispatcher(List<Reply> replyes)
+        {
+
         }
 
         /// <summary>
@@ -94,7 +127,7 @@ namespace Shem
 
         ~BaseController()
         {
-            if(Connected)
+            if (Connected)
                 Close();
         }
     }
