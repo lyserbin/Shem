@@ -2,16 +2,16 @@
 
 namespace Shem.AsyncEvents
 {
-    public class CircEvent : AsyncEvent
+    public class StatusSeverEvent : AsyncEvent
     {
-        public CircEvent()
+        public StatusSeverEvent()
         {
 
         }
 
         public override AsyncEvents Event
         {
-            get { return AsyncEvents.CIRC; }
+            get { return AsyncEvents.STATUS_SEVER; }
         }
 
         protected override void ParseToEvent(Reply reply)

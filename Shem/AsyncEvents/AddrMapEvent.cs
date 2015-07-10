@@ -1,23 +1,24 @@
-﻿using Shem.Replies;
+﻿using System;
+using Shem.Replies;
 
 namespace Shem.AsyncEvents
 {
-    public class CircEvent : AsyncEvent
+    public class AddrMapEvent : AsyncEvent
     {
-        public CircEvent()
+        public AddrMapEvent()
         {
 
         }
 
         public override AsyncEvents Event
         {
-            get { return AsyncEvents.CIRC; }
+            get { return AsyncEvents.ADDRMAP; }
         }
 
         protected override void ParseToEvent(Reply reply)
         {
             //TODO: Implement parsing
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

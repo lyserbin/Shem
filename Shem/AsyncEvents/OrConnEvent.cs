@@ -2,16 +2,16 @@
 
 namespace Shem.AsyncEvents
 {
-    public class CircEvent : AsyncEvent
+    public class OrConnEvent : AsyncEvent
     {
-        public CircEvent()
+        public OrConnEvent()
         {
 
         }
 
         public override AsyncEvents Event
         {
-            get { return AsyncEvents.CIRC; }
+            get { return AsyncEvents.ORCONN; }
         }
 
         protected override void ParseToEvent(Reply reply)

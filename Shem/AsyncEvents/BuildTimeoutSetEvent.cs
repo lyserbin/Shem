@@ -2,16 +2,16 @@
 
 namespace Shem.AsyncEvents
 {
-    public class CircEvent : AsyncEvent
+    public class BuildTimeoutSetEvent : AsyncEvent
     {
-        public CircEvent()
+        public BuildTimeoutSetEvent()
         {
 
         }
 
         public override AsyncEvents Event
         {
-            get { return AsyncEvents.CIRC; }
+            get { return AsyncEvents.BUILDTIMEOUT_SET; }
         }
 
         protected override void ParseToEvent(Reply reply)

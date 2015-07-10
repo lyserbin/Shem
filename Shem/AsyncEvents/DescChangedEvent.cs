@@ -2,16 +2,16 @@
 
 namespace Shem.AsyncEvents
 {
-    public class CircEvent : AsyncEvent
+    public class DescChangedEvent : AsyncEvent
     {
-        public CircEvent()
+        public DescChangedEvent()
         {
 
         }
 
         public override AsyncEvents Event
         {
-            get { return AsyncEvents.CIRC; }
+            get { return AsyncEvents.DESCCHANGED; }
         }
 
         protected override void ParseToEvent(Reply reply)

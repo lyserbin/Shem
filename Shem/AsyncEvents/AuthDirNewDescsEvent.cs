@@ -2,16 +2,16 @@
 
 namespace Shem.AsyncEvents
 {
-    public class CircEvent : AsyncEvent
+    public class AuthDirNewDescsEvent : AsyncEvent
     {
-        public CircEvent()
+        public AuthDirNewDescsEvent()
         {
 
         }
 
         public override AsyncEvents Event
         {
-            get { return AsyncEvents.CIRC; }
+            get { return AsyncEvents.AUTHDIR_NEWDESCS; }
         }
 
         protected override void ParseToEvent(Reply reply)
