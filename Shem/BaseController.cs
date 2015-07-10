@@ -76,7 +76,7 @@ namespace Shem
         /// <returns></returns>
         public List<Reply> SendCommand(TCCommand command)
         {
-            List<Reply> replyes = ReplyParser.Parse(SendRawCommand(command));
+            List<Reply> replyes = Reply.Parse(SendRawCommand(command));
             List<Reply> async_events = new List<Reply>();
 
             foreach (var r in replyes)

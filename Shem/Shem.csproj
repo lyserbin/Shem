@@ -94,7 +94,6 @@
     <Compile Include="Exceptions\NullReplyCodeException.cs" />
     <Compile Include="Replies\Reply.cs" />
     <Compile Include="Replies\ReplyCodes.cs" />
-    <Compile Include="Replies\ReplyParser.cs" />
     <Compile Include="BaseController.cs" />
     <Compile Include="Commands\Authenticate.cs" />
     <Compile Include="Commands\GetConf.cs" />
