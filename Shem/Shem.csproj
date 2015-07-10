@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsyncEvents\AsyncEvent.cs" />
+    <Compile Include="AsyncEvents\CircEvent.cs" />
     <Compile Include="Commands\AddOnion.cs" />
     <Compile Include="Commands\AttachStream.cs" />
     <Compile Include="Commands\AuthChallenge.cs" />
@@ -54,11 +56,11 @@
     <Compile Include="Commands\CloseStream.cs" />
     <Compile Include="Commands\DelOnion.cs" />
     <Compile Include="Commands\DropGuards.cs" />
-    <Compile Include="Commands\Enums\AsyncEvents.cs" />
+    <Compile Include="AsyncEvents\Enum\AsyncEvents.cs" />
     <Compile Include="Commands\Enums\BuildFlags.cs" />
-    <Compile Include="Commands\Enums\CircPurpose.cs" />
-    <Compile Include="Commands\Enums\CircReasons.cs" />
-    <Compile Include="Commands\Enums\CircStatus.cs" />
+    <Compile Include="AsyncEvents\Enum\CircPurpose.cs" />
+    <Compile Include="AsyncEvents\Enum\CircReasons.cs" />
+    <Compile Include="AsyncEvents\Enum\CircStatus.cs" />
     <Compile Include="Commands\Enums\CloseCircuitiFlags.cs" />
     <Compile Include="Commands\Enums\Configs.cs" />
     <Compile Include="Commands\Enums\HsStates.cs" />
@@ -107,6 +109,7 @@
     <Compile Include="Utils\ClassExtensions.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Utils\StringValueAttribute.cs" />
+    <Compile Include="Utils\TypeValueAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Crypto\" />

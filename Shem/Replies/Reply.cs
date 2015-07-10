@@ -1,8 +1,8 @@
-﻿using Shem.Exceptions;
-using Shem.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Shem.Exceptions;
+using Shem.Utils;
 
 namespace Shem.Replies
 {
@@ -17,7 +17,7 @@ namespace Shem.Replies
         /// The actual reply from the server
         /// </summary>
         public virtual string ReplyLine { get; protected set; }
-        
+
         /// <summary>
         /// Returns the raw string replied by TOR
         /// </summary>

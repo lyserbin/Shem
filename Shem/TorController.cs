@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Shem.AsyncEvents;
 using Shem.Commands;
 using Shem.Exceptions;
 using Shem.Replies;
@@ -13,7 +14,7 @@ namespace Shem
         /// <summary>
         /// 
         /// </summary>
-        public event Action<Reply> OnAsyncEvent;
+        public event Action<AsyncEvent> OnAsyncEvent;
 
         /// <summary>
         /// This is true if we are Authenticated, false if
@@ -62,7 +63,7 @@ namespace Shem
                 {
                     if (OnAsyncEvent != null)
                     {
-                        OnAsyncEvent(e);
+                        OnAsyncEvent(AsyncEvent.Parse(e));
                     }
                 }
             });
