@@ -2,16 +2,16 @@
 
 namespace Shem.AsyncEvents
 {
-    public class CircEvent : AsyncEvent
+    public class NewConsensusEvent : AsyncEvent
     {
-        public CircEvent()
+        public NewConsensusEvent()
         {
 
         }
 
         public override AsyncEvents Event
         {
-            get { return AsyncEvents.CIRC; }
+            get { return AsyncEvents.NEWCONSENSUS; }
         }
 
         protected override void ParseToEvent(Reply reply)

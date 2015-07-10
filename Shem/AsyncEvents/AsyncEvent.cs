@@ -1,19 +1,35 @@
-﻿using Shem.Replies;
+﻿using System;
+using Shem.Replies;
+using Shem.Utils;
 
 namespace Shem.AsyncEvents
 {
-    public class AsyncEvent : Reply
+    public abstract class AsyncEvent
     {
-        public AsyncEvent(Reply reply)
-            : base(reply)
+        protected AsyncEvent()
         {
 
         }
 
+        public abstract AsyncEvents Event { get; }
+
+        protected abstract void ParseToEvent(Reply reply);
+
         public static AsyncEvent Parse(Reply reply)
         {
-            //TODO: parsing the reply and return the right event
-            return new AsyncEvent(reply);
+            string eventName = reply.ReplyLine.Substring(0, reply.ReplyLine.IndexOf(" "));
+            AsyncEvents eventEnum = (AsyncEvents)Enum.Parse(typeof(AsyncEvents), eventName, true);
+
+            Type eventType = eventEnum.GetTypeValue();
+            if (eventType == null)
+            {
+                throw new NullReferenceException();
+            }
+            AsyncEvent asyncEvent = (AsyncEvent)Activator.CreateInstance(eventType);
+
+            asyncEvent.ParseToEvent(reply);
+
+            return asyncEvent;
         }
     }
 }
