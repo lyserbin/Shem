@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Shem.AsyncEvents;
 using Shem.Commands;
 using Shem.Exceptions;
@@ -60,23 +59,23 @@ namespace Shem
             // TODO: gonna do this sheet.
         }
 
-        protected override void AsyncEventDispatcher(List<Reply> asyncEvents)
+        protected override void AsyncEventDispatcher(List<AsyncEvent> asyncEvents)
         {
-            Task.Run(() =>
+            //Task.Run(() =>
+            //{
+            foreach (var e in asyncEvents)
             {
-                foreach (var e in asyncEvents)
+                if (OnAsyncEvent != null)
                 {
-                    if (OnAsyncEvent != null)
-                    {
-                        OnAsyncEvent(AsyncEvent.Parse(e));
-                    }
+                    OnAsyncEvent.Invoke(e);
                 }
-            });
+            }
+            //});
         }
 
-        protected override void AsyncEventDispatcher(Reply asyncEvent)
+        protected override void AsyncEventDispatcher(AsyncEvent asyncEvent)
         {
-            AsyncEventDispatcher(new List<Reply>() { asyncEvent });
+            AsyncEventDispatcher(new List<AsyncEvent>() { asyncEvent });
         }
 
         /// <summary>

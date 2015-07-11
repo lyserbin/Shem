@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Shem.AsyncEvents;
 using Shem.Commands;
 using Shem.Replies;
 using Shem.Sockets;
+using Shem.Utils;
 
 namespace Shem
 {
@@ -70,7 +72,12 @@ namespace Shem
                         if (controlSocket.ResponseAvailable)
                         {
                             string rawReply = controlSocket.Receive();
-                            AsyncEventDispatcher(Reply.Parse(rawReply));
+                            List<AsyncEvent> asyncEvents = new List<AsyncEvent>();
+                            foreach (var r in Reply.Parse(rawReply))
+                            {
+                                asyncEvents.Add(AsyncEvent.Parse(r));
+                            }
+                            AsyncEventDispatcher(asyncEvents);
                         }
                     }
                 }
@@ -83,7 +90,7 @@ namespace Shem
         /// </summary>
         /// <param name="command">The command to be sent</param>
         /// <returns>Returns the raw string replied by the server</returns>
-        protected string SendRawCommand(TCCommand command)
+        public virtual string SendRawCommand(TCCommand command)
         {
             string rawReply = "";
 
@@ -117,22 +124,24 @@ namespace Shem
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        protected List<Reply> SendCommand(TCCommand command)
+        public virtual List<Reply> SendCommand(TCCommand command)
         {
             List<Reply> replies = Reply.Parse(SendRawCommand(command));
-            List<Reply> asyncEvents = new List<Reply>();
+            List<Reply> asyncEventsReply = new List<Reply>();
+            List<AsyncEvent> asyncEvents = new List<AsyncEvent>();
 
             foreach (var r in replies)
             {
                 if (r.Code == ReplyCodes.ASYNC_EVENT_NOTIFICATION)
                 {
-                    asyncEvents.Add(r);
+                    asyncEventsReply.Add(r);
                 }
             }
 
-            foreach (var e in asyncEvents)
+            foreach (var e in asyncEventsReply)
             {
                 replies.Remove(e);
+                asyncEvents.Add(AsyncEvent.Parse(e));
             }
 
             AsyncEventDispatcher(asyncEvents);
@@ -140,9 +149,9 @@ namespace Shem
             return replies;
         }
 
-        protected abstract void AsyncEventDispatcher(Reply asyncEvent);
+        protected abstract void AsyncEventDispatcher(AsyncEvent asyncEvent);
 
-        protected abstract void AsyncEventDispatcher(List<Reply> asyncEvents);
+        protected abstract void AsyncEventDispatcher(List<AsyncEvent> asyncEvents);
 
         /// <summary>
         /// Connect to the control port.
@@ -160,7 +169,14 @@ namespace Shem
         {
             SendRawCommand(new Quit());
             asyncEventsListenerStop = true;
-            asyncEventsListener.Wait();
+            if (asyncEventsListener.Exception != null)
+            {
+                Logger.LogError(asyncEventsListener.Exception.Message);
+            }
+            else
+            {
+                asyncEventsListener.Wait();
+            }
             controlSocket.Close();
         }
 
