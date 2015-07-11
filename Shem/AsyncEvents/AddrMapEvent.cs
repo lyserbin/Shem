@@ -20,5 +20,15 @@ namespace Shem.AsyncEvents
             //TODO: Implement parsing
             throw new NotImplementedException();
         }
+
+        public override string RawString
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public override string EventLine
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

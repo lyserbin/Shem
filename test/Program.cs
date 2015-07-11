@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Sockets;
+using Shem.AsyncEvents;
 using Shem.Commands;
 using Shem.Utils;
 
@@ -9,7 +10,7 @@ namespace Shem.test
     {
         static void Main(string[] args)
         {
-            Logger.ConsoleLogLevel = LogTypes.DEBUG;
+            Logger.ConsoleLogLevel = LogTypes.INFO;
             Logger.FileLogLevel = LogTypes.INFO;
 
             TorController tc;
@@ -51,7 +52,7 @@ namespace Shem.test
                     Console.WriteLine("Wrong password.");
                 }
 
-                tc.SendCommand(new SetEvents(false, AsyncEvents.AsyncEvents.INFO, AsyncEvents.AsyncEvents.ERR, AsyncEvents.AsyncEvents.DEBUG));
+                tc.SendCommand(new SetEvents(false, AsyncEvents.AsyncEvents.INFO, AsyncEvents.AsyncEvents.ERR, AsyncEvents.AsyncEvents.DEBUG, AsyncEvents.AsyncEvents.WARN, AsyncEvents.AsyncEvents.NOTICE));
 
                 Console.WriteLine("Press a key to close the connection.");
 
@@ -69,7 +70,10 @@ namespace Shem.test
 
         static void tc_OnAsyncEvent(AsyncEvents.AsyncEvent obj)
         {
-            Console.WriteLine("Received evnt -> " + obj.Event.ToString());
+            if (obj is LogEvent)
+            {
+                Console.WriteLine(string.Format("Event -> {0} -> {1}", obj.Event, ((LogEvent)obj).LogMessage));
+            }
         }
     }
 }
