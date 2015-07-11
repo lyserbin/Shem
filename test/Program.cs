@@ -1,9 +1,7 @@
 ﻿using System;
+using System.Net.Sockets;
 using Shem.Commands;
 using Shem.Utils;
-using Shem.Replies;
-using System.Collections.ObjectModel;
-using System.Net.Sockets;
 
 namespace Shem.test
 {
@@ -41,7 +39,10 @@ namespace Shem.test
                 */
 
                 tc = new TorController(hostname, port);
-                if(tc.Authenticate(password))
+
+                tc.OnAsyncEvent += tc_OnAsyncEvent;
+
+                if (tc.Authenticate(password))
                 {
                     Console.WriteLine("Authenticated successfully!");
                 }
@@ -49,6 +50,13 @@ namespace Shem.test
                 {
                     Console.WriteLine("Wrong password.");
                 }
+
+                tc.SendCommand(new SetEvents(false, AsyncEvents.AsyncEvents.INFO, AsyncEvents.AsyncEvents.ERR, AsyncEvents.AsyncEvents.DEBUG));
+
+                Console.WriteLine("Press a key to close the connection.");
+
+                Console.ReadKey();
+
                 tc.Close();
             }
             catch (SocketException iwontuseit)
@@ -57,6 +65,11 @@ namespace Shem.test
             }
 
             Console.ReadKey();
+        }
+
+        static void tc_OnAsyncEvent(AsyncEvents.AsyncEvent obj)
+        {
+            Console.WriteLine("Received evnt -> " + obj.Event.ToString());
         }
     }
 }
