@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Shem.AsyncEvents;
 using Shem.Commands;
 using Shem.Exceptions;
@@ -61,16 +62,16 @@ namespace Shem
 
         protected override void AsyncEventDispatcher(List<AsyncEvent> asyncEvents)
         {
-            //Task.Run(() =>
-            //{
-            foreach (var e in asyncEvents)
+            Task.Run(() =>
             {
-                if (OnAsyncEvent != null)
+                foreach (var e in asyncEvents)
                 {
-                    OnAsyncEvent.Invoke(e);
+                    if (OnAsyncEvent != null)
+                    {
+                        OnAsyncEvent.Invoke(e);
+                    }
                 }
-            }
-            //});
+            });
         }
 
         protected override void AsyncEventDispatcher(AsyncEvent asyncEvent)

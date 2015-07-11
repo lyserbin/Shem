@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Shem.AsyncEvents;
@@ -61,7 +62,7 @@ namespace Shem
             asyncEventsListener = Task.Run(() => { ListenForAsyncEvents(); });
         }
 
-        private void ListenForAsyncEvents()
+        private async void ListenForAsyncEvents()
         {
             while (!asyncEventsListenerStop)
             {
@@ -73,15 +74,23 @@ namespace Shem
                         {
                             string rawReply = controlSocket.Receive();
                             List<AsyncEvent> asyncEvents = new List<AsyncEvent>();
-                            foreach (var r in Reply.Parse(rawReply))
+                            List<Reply> replies = Reply.Parse(rawReply);
+                            foreach (var r in replies)
                             {
-                                asyncEvents.Add(AsyncEvent.Parse(r));
+                                try
+                                {
+                                    asyncEvents.Add(AsyncEvent.Parse(r));
+                                }
+                                catch (Exception ex)
+                                {
+                                    Logger.LogError(ex.Message);
+                                }
                             }
                             AsyncEventDispatcher(asyncEvents);
                         }
                     }
                 }
-                Task.Delay(250);
+                await Task.Delay(250);
             }
         }
 
@@ -169,11 +178,7 @@ namespace Shem
         {
             SendRawCommand(new Quit());
             asyncEventsListenerStop = true;
-            if (asyncEventsListener.Exception != null)
-            {
-                Logger.LogError(asyncEventsListener.Exception.Message);
-            }
-            else
+            if (asyncEventsListener.Exception == null)
             {
                 asyncEventsListener.Wait();
             }
