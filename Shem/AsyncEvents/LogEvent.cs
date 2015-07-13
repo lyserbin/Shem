@@ -20,6 +20,7 @@ namespace Shem.AsyncEvents
 
         protected override void ParseToEvent(Reply reply)
         {
+            base.ParseToEvent(reply);
             LogMessage = EventLine;
         }
     }
