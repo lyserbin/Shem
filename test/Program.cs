@@ -1,15 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Sockets;
 using Shem.AsyncEvents;
 using Shem.Commands;
-using Shem.Utils;
-using System.Collections.Generic;
 using Shem.Replies;
+using Shem.Utils;
 
 namespace Shem.test
 {
     class Program
     {
+        public static LogTypes List { get; set; }
+
         static void Main(string[] args)
         {
             TorController tc;
@@ -19,7 +21,6 @@ namespace Shem.test
 
             Logger.ConsoleLogLevel = LogTypes.INFO;
             Logger.FileLogLevel = LogTypes.INFO;
-
 
             hostname = "127.0.0.1"; // NOTE: ipv6 is NOT supported.
             port = 9051;
@@ -46,13 +47,11 @@ namespace Shem.test
 
                 tc.OnAsyncEvents += tc_OnAsyncEvents;
 
-                tc.OnAsyncEvent[AsyncEvents.AsyncEvents.DEBUG].Event += Program_Event;
-
                 if (tc.Authenticate(password))
                 {
                     Console.WriteLine("Authenticated successfully!");
 
-                    tc.SendCommand(new SetEvents(false, AsyncEvents.AsyncEvents.INFO, AsyncEvents.AsyncEvents.ERR, AsyncEvents.AsyncEvents.DEBUG));
+                    tc.SendCommand(new SetEvents(false, TorEvents.ORCONN));
                     infos = tc.GetInfo(Informations.process_pid, Informations.process_user, Informations.version);
                     foreach (GetInfoReply info in infos)
                     {
@@ -64,12 +63,12 @@ namespace Shem.test
                     Console.WriteLine("Wrong password.");
                 }
 
-                Console.WriteLine("Press a key to close the connection.");
+                //Console.WriteLine("Press a key to close the connection.");
                 Console.ReadKey();
 
                 tc.Close();
             }
-            catch (SocketException iwontuseit)
+            catch (SocketException)
             {
                 Console.WriteLine("Can't connect to the server at \"{0}:{1}\".", hostname, port);
             }
@@ -78,20 +77,9 @@ namespace Shem.test
             Console.ReadKey();
         }
 
-        static void Program_Event(AsyncEvent obj)
+        private static void tc_OnAsyncEvents(TorEvent obj)
         {
-            var debug = (DebugEvent)obj;
-            Console.WriteLine("From specific event -> " + debug.Event + " -> " + debug.LogMessage);
+            Console.WriteLine(string.Format("Event -> {0} -> {1}", obj.Event, obj.EventLine));
         }
-
-        static void tc_OnAsyncEvents(AsyncEvent obj)
-        {
-            if (obj is LogEvent)
-            {
-                Console.WriteLine(string.Format("Event -> {0} -> {1}", obj.Event, ((LogEvent)obj).LogMessage));
-            }
-        }
-
-        public static LogTypes List { get; set; }
     }
 }

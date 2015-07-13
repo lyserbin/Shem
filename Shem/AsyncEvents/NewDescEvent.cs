@@ -2,16 +2,16 @@
 
 namespace Shem.AsyncEvents
 {
-    public class NewDescEvent : AsyncEvent
+    public class NewDescEvent : TorEvent
     {
         public NewDescEvent()
         {
 
         }
 
-        public override AsyncEvents Event
+        public override TorEvents Event
         {
-            get { return AsyncEvents.NEWDESC; }
+            get { return TorEvents.NEWDESC; }
         }
 
         protected override void ParseToEvent(Reply reply)

@@ -2,16 +2,16 @@
 
 namespace Shem.AsyncEvents
 {
-    public class SignalEvent : AsyncEvent
+    public class SignalEvent : TorEvent
     {
         public SignalEvent()
         {
 
         }
 
-        public override AsyncEvents Event
+        public override TorEvents Event
         {
-            get { return AsyncEvents.SIGNAL; }
+            get { return TorEvents.SIGNAL; }
         }
 
         protected override void ParseToEvent(Reply reply)

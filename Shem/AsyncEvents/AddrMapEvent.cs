@@ -3,16 +3,16 @@ using Shem.Replies;
 
 namespace Shem.AsyncEvents
 {
-    public class AddrMapEvent : AsyncEvent
+    public class AddrMapEvent : TorEvent
     {
         public AddrMapEvent()
         {
 
         }
 
-        public override AsyncEvents Event
+        public override TorEvents Event
         {
-            get { return AsyncEvents.ADDRMAP; }
+            get { return TorEvents.ADDRMAP; }
         }
 
         protected override void ParseToEvent(Reply reply)

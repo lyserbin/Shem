@@ -2,16 +2,16 @@
 
 namespace Shem.AsyncEvents
 {
-    public class StatusClientEvent : AsyncEvent
+    public class StatusClientEvent : TorEvent
     {
         public StatusClientEvent()
         {
 
         }
 
-        public override AsyncEvents Event
+        public override TorEvents Event
         {
-            get { return AsyncEvents.STATUS_CLIENT; }
+            get { return TorEvents.STATUS_CLIENT; }
         }
 
         protected override void ParseToEvent(Reply reply)

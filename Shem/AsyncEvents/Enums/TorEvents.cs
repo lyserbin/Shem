@@ -2,7 +2,7 @@
 
 namespace Shem.AsyncEvents
 {
-    public enum AsyncEvents
+    public enum TorEvents
     {
         [TypeValue(typeof(AddrMapEvent))]
         ADDRMAP,
@@ -55,6 +55,22 @@ namespace Shem.AsyncEvents
         [TypeValue(typeof(WarnEvent))]
         WARN,
         [TypeValue(typeof(StatusSeverEvent))]
-        STATUS_SEVER
+        STATUS_SEVER,
+        [TypeValue(typeof(TransportLaunchedEvent))]
+        TRANSPORT_LAUNCHED,
+        [TypeValue(typeof(ConnBwEvent))]
+        CONN_BW,
+        [TypeValue(typeof(CircBwEvent))]
+        CIRC_BW,
+        [TypeValue(typeof(CellStatsEvent))]
+        CELL_STATS,
+        [TypeValue(typeof(TbEmptyEvent))]
+        TB_EMPTY,
+        [TypeValue(typeof(HsDescEvent))]
+        HS_DESC,
+        [TypeValue(typeof(HsDescContentEvent))]
+        HS_DESC_CONTENT,
+        [TypeValue(typeof(NetworkLivenessEvent))]
+        NETWORK_LIVENESS
     }
 }

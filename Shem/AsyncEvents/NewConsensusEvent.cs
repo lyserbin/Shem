@@ -2,16 +2,16 @@
 
 namespace Shem.AsyncEvents
 {
-    public class NewConsensusEvent : AsyncEvent
+    public class NewConsensusEvent : TorEvent
     {
         public NewConsensusEvent()
         {
 
         }
 
-        public override AsyncEvents Event
+        public override TorEvents Event
         {
-            get { return AsyncEvents.NEWCONSENSUS; }
+            get { return TorEvents.NEWCONSENSUS; }
         }
 
         protected override void ParseToEvent(Reply reply)

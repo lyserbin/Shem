@@ -2,16 +2,16 @@
 
 namespace Shem.AsyncEvents
 {
-    public class DescChangedEvent : AsyncEvent
+    public class DescChangedEvent : TorEvent
     {
         public DescChangedEvent()
         {
 
         }
 
-        public override AsyncEvents Event
+        public override TorEvents Event
         {
-            get { return AsyncEvents.DESCCHANGED; }
+            get { return TorEvents.DESCCHANGED; }
         }
 
         protected override void ParseToEvent(Reply reply)

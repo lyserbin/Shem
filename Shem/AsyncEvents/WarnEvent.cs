@@ -1,6 +1,9 @@
 ﻿
 namespace Shem.AsyncEvents
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class WarnEvent : LogEvent
     {
         public WarnEvent()
@@ -8,9 +11,9 @@ namespace Shem.AsyncEvents
 
         }
 
-        public override AsyncEvents Event
+        public override TorEvents Event
         {
-            get { return AsyncEvents.WARN; }
+            get { return TorEvents.WARN; }
         }
     }
 }

@@ -2,16 +2,16 @@
 
 namespace Shem.AsyncEvents
 {
-    public class BuildTimeoutSetEvent : AsyncEvent
+    public class BuildTimeoutSetEvent : TorEvent
     {
         public BuildTimeoutSetEvent()
         {
 
         }
 
-        public override AsyncEvents Event
+        public override TorEvents Event
         {
-            get { return AsyncEvents.BUILDTIMEOUT_SET; }
+            get { return TorEvents.BUILDTIMEOUT_SET; }
         }
 
         protected override void ParseToEvent(Reply reply)

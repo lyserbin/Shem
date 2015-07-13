@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using Shem.AsyncEvents;
 using Shem.Commands;
-using Shem.Exceptions;
 using Shem.Replies;
 using Shem.Utils;
-using System.Net.Sockets;
 
 namespace Shem
 {
@@ -15,12 +14,12 @@ namespace Shem
         /// <summary>
         /// 
         /// </summary>
-        public event Action<AsyncEvent> OnAsyncEvents;
+        public event Action<TorEvent> OnAsyncEvents;
 
         /// <summary>
         /// 
         /// </summary>
-        public Dictionary<AsyncEvents.AsyncEvents, ListableEvents<AsyncEvent>> OnAsyncEvent = new Dictionary<AsyncEvents.AsyncEvents, ListableEvents<AsyncEvent>>();
+        public Dictionary<TorEvents, ListableEvents<TorEvent>> OnAsyncEvent = new Dictionary<TorEvents, ListableEvents<TorEvent>>();
 
         /// <summary>
         /// This is true if we are Authenticated, false if
@@ -39,9 +38,9 @@ namespace Shem
         public TorController(string address = "127.0.0.1", uint port = 9051, bool connect = true)
             : base(address, port, connect)
         {
-            foreach (var v in Enum.GetValues(typeof(AsyncEvents.AsyncEvents)))
+            foreach (var v in Enum.GetValues(typeof(TorEvents)))
             {
-                OnAsyncEvent.Add((AsyncEvents.AsyncEvents)v, new ListableEvents<AsyncEvent>());
+                OnAsyncEvent.Add((TorEvents)v, new ListableEvents<TorEvent>());
             }
         }
 
@@ -81,9 +80,9 @@ namespace Shem
             replies = SendCommand(new GetInfo(informations));
 
             if (replies[replies.Count - 1].Code != ReplyCodes.OK)
-                throw new Exception(string.Format("Something went wrong: \"{0}\".", replies[replies.Count-1].RawString));
+                throw new Exception(string.Format("Something went wrong: \"{0}\".", replies[replies.Count - 1].RawString));
 
-            for (int i = 0; i < replies.Count-1; i++ )
+            for (int i = 0; i < replies.Count - 1; i++)
             {
                 output.Add(new GetInfoReply(replies[i]));
             }
@@ -91,7 +90,7 @@ namespace Shem
             return output;
         }
 
-        protected override void AsyncEventDispatcher(List<AsyncEvent> asyncEvents)
+        protected override void AsyncEventDispatcher(List<TorEvent> asyncEvents)
         {
             Task.Run(() =>
             {
@@ -109,9 +108,9 @@ namespace Shem
             });
         }
 
-        protected override void AsyncEventDispatcher(AsyncEvent asyncEvent)
+        protected override void AsyncEventDispatcher(TorEvent asyncEvent)
         {
-            AsyncEventDispatcher(new List<AsyncEvent>() { asyncEvent });
+            AsyncEventDispatcher(new List<TorEvent>() { asyncEvent });
         }
 
         /// <summary>

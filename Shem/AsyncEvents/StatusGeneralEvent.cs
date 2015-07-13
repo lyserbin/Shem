@@ -2,16 +2,16 @@
 
 namespace Shem.AsyncEvents
 {
-    public class StatusGeneralEvent : AsyncEvent
+    public class StatusGeneralEvent : TorEvent
     {
         public StatusGeneralEvent()
         {
 
         }
 
-        public override AsyncEvents Event
+        public override TorEvents Event
         {
-            get { return AsyncEvents.STATUS_GENERAL; }
+            get { return TorEvents.STATUS_GENERAL; }
         }
 
         protected override void ParseToEvent(Reply reply)
