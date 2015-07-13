@@ -35,7 +35,14 @@ namespace Shem
         /// <param name="address">The address where you want to connect</param>
         /// <param name="port">The port where the control port is binded</param>
         /// <param name="connect">If this is true the controller will connect automatically to the server after initialization.</param>
-        public TorController(string address = "127.0.0.1", uint port = 9051, bool connect = true) : base(address, port, connect) { }
+        public TorController(string address = "127.0.0.1", uint port = 9051, bool connect = true)
+            : base(address, port, connect)
+        {
+            foreach (var v in Enum.GetValues(typeof(AsyncEvents.AsyncEvents)))
+            {
+                OnAsyncEvent.Add((AsyncEvents.AsyncEvents)v, new ListableEvents<AsyncEvent>());
+            }
+        }
 
         /// <summary>
         /// Authenticate with the tor control port.
