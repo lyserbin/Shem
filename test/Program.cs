@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Sockets;
+using Shem.AsyncEvents;
 using Shem.Commands;
 using Shem.Utils;
 using System.Collections.Generic;
@@ -77,7 +78,10 @@ namespace Shem.test
 
         static void tc_OnAsyncEvent(AsyncEvents.AsyncEvent obj)
         {
-            Console.WriteLine("Received evnt -> " + obj.Event.ToString());
+            if (obj is LogEvent)
+            {
+                Console.WriteLine(string.Format("Event -> {0} -> {1}", obj.Event, ((LogEvent)obj).LogMessage));
+            }
         }
 
         public static LogTypes List { get; set; }
