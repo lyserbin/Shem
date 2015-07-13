@@ -48,7 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncEvents\AddrMapEvent.cs" />
-    <Compile Include="AsyncEvents\AsyncEvent.cs" />
+    <Compile Include="AsyncEvents\TorEvent.cs" />
     <Compile Include="AsyncEvents\AuthDirNewDescsEvent.cs" />
     <Compile Include="AsyncEvents\BwEvent.cs" />
     <Compile Include="AsyncEvents\CircEvent.cs" />
@@ -82,7 +82,7 @@
     <Compile Include="Commands\CloseStream.cs" />
     <Compile Include="Commands\DelOnion.cs" />
     <Compile Include="Commands\DropGuards.cs" />
-    <Compile Include="AsyncEvents\Enums\AsyncEvents.cs" />
+    <Compile Include="AsyncEvents\Enums\TorEvents.cs" />
     <Compile Include="Commands\Enums\BuildFlags.cs" />
     <Compile Include="AsyncEvents\Enums\CircPurpose.cs" />
     <Compile Include="AsyncEvents\Enums\CircReasons.cs" />

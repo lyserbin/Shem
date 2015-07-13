@@ -8,9 +8,9 @@ namespace Shem.AsyncEvents
 
         }
 
-        public override AsyncEvents Event
+        public override TorEvents Event
         {
-            get { return AsyncEvents.ERR; }
+            get { return TorEvents.ERR; }
         }
     }
 }

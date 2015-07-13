@@ -4,14 +4,14 @@ using Shem.Utils;
 
 namespace Shem.AsyncEvents
 {
-    public abstract class AsyncEvent
+    public abstract class TorEvent
     {
-        protected AsyncEvent()
+        protected TorEvent()
         {
 
         }
 
-        public abstract AsyncEvents Event { get; }
+        public abstract TorEvents Event { get; }
 
         public abstract string RawString { get; }
 
@@ -19,17 +19,17 @@ namespace Shem.AsyncEvents
 
         protected abstract void ParseToEvent(Reply reply);
 
-        public static AsyncEvent Parse(Reply reply)
+        public static TorEvent Parse(Reply reply)
         {
             string eventName = reply.ReplyLine.Substring(0, reply.ReplyLine.IndexOf(" "));
-            AsyncEvents eventEnum = (AsyncEvents)Enum.Parse(typeof(AsyncEvents), eventName, true);
+            TorEvents eventEnum = (TorEvents)Enum.Parse(typeof(TorEvents), eventName, true);
 
             Type eventType = eventEnum.GetTypeValue();
             if (eventType == null)
             {
                 throw new NullReferenceException();
             }
-            AsyncEvent asyncEvent = (AsyncEvent)Activator.CreateInstance(eventType);
+            TorEvent asyncEvent = (TorEvent)Activator.CreateInstance(eventType);
 
             asyncEvent.ParseToEvent(reply);
 

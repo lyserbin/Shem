@@ -2,16 +2,16 @@
 
 namespace Shem.AsyncEvents
 {
-    public class OrConnEvent : AsyncEvent
+    public class OrConnEvent : TorEvent
     {
         public OrConnEvent()
         {
 
         }
 
-        public override AsyncEvents Event
+        public override TorEvents Event
         {
-            get { return AsyncEvents.ORCONN; }
+            get { return TorEvents.ORCONN; }
         }
 
         protected override void ParseToEvent(Reply reply)

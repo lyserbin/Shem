@@ -2,16 +2,16 @@
 
 namespace Shem.AsyncEvents
 {
-    public class StreamEvent : AsyncEvent
+    public class StreamEvent : TorEvent
     {
         public StreamEvent()
         {
 
         }
 
-        public override AsyncEvents Event
+        public override TorEvents Event
         {
-            get { return AsyncEvents.STREAM; }
+            get { return TorEvents.STREAM; }
         }
 
         protected override void ParseToEvent(Reply reply)

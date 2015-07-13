@@ -6,13 +6,13 @@ namespace Shem.Commands
     /// </summary>
     public class ExtendedEvents : TCCommand
     {
-        private Shem.AsyncEvents.AsyncEvents[] events;
+        private Shem.AsyncEvents.TorEvents[] events;
 
         /// <summary>
         /// Same as passing 'EXTENDED' to SETEVENTS; this is the preferred way to request the extended event syntax.
         /// </summary>
         /// <param name="events"></param>
-        public ExtendedEvents(params Shem.AsyncEvents.AsyncEvents[] events)
+        public ExtendedEvents(params Shem.AsyncEvents.TorEvents[] events)
         {
             this.events = events;
         }

@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Sockets;
 using Shem.AsyncEvents;
 using Shem.Commands;
-using Shem.Utils;
-using System.Collections.Generic;
 using Shem.Replies;
+using Shem.Utils;
 
 namespace Shem.test
 {
@@ -46,13 +46,13 @@ namespace Shem.test
 
                 tc.OnAsyncEvents += tc_OnAsyncEvents;
 
-                tc.OnAsyncEvent[AsyncEvents.AsyncEvents.DEBUG].Event += Program_Event;
+                tc.OnAsyncEvent[TorEvents.DEBUG].Event += Debug_Event;
 
                 if (tc.Authenticate(password))
                 {
                     Console.WriteLine("Authenticated successfully!");
 
-                    tc.SendCommand(new SetEvents(false, AsyncEvents.AsyncEvents.INFO, AsyncEvents.AsyncEvents.ERR, AsyncEvents.AsyncEvents.DEBUG));
+                    tc.SendCommand(new SetEvents(false, TorEvents.INFO, TorEvents.ERR, TorEvents.DEBUG, TorEvents.NOTICE, TorEvents.WARN));
                     infos = tc.GetInfo(Informations.process_pid, Informations.process_user, Informations.version);
                     foreach (GetInfoReply info in infos)
                     {
@@ -69,7 +69,7 @@ namespace Shem.test
 
                 tc.Close();
             }
-            catch (SocketException iwontuseit)
+            catch (SocketException)
             {
                 Console.WriteLine("Can't connect to the server at \"{0}:{1}\".", hostname, port);
             }
@@ -78,13 +78,13 @@ namespace Shem.test
             Console.ReadKey();
         }
 
-        static void Program_Event(AsyncEvent obj)
+        private static void Debug_Event(TorEvent obj)
         {
             var debug = (DebugEvent)obj;
             Console.WriteLine("From specific event -> " + debug.Event + " -> " + debug.LogMessage);
         }
 
-        static void tc_OnAsyncEvents(AsyncEvent obj)
+        private static void tc_OnAsyncEvents(TorEvent obj)
         {
             if (obj is LogEvent)
             {

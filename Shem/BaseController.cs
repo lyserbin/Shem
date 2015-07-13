@@ -73,13 +73,13 @@ namespace Shem
                         if (controlSocket.ResponseAvailable)
                         {
                             string rawReply = controlSocket.Receive();
-                            List<AsyncEvent> asyncEvents = new List<AsyncEvent>();
+                            List<TorEvent> asyncEvents = new List<TorEvent>();
                             List<Reply> replies = Reply.Parse(rawReply);
                             foreach (var r in replies)
                             {
                                 try
                                 {
-                                    asyncEvents.Add(AsyncEvent.Parse(r));
+                                    asyncEvents.Add(TorEvent.Parse(r));
                                 }
                                 catch (Exception ex)
                                 {
@@ -137,7 +137,7 @@ namespace Shem
         {
             List<Reply> replies = Reply.Parse(SendRawCommand(command));
             List<Reply> asyncEventsReply = new List<Reply>();
-            List<AsyncEvent> asyncEvents = new List<AsyncEvent>();
+            List<TorEvent> asyncEvents = new List<TorEvent>();
 
             foreach (var r in replies)
             {
@@ -150,7 +150,7 @@ namespace Shem
             foreach (var e in asyncEventsReply)
             {
                 replies.Remove(e);
-                asyncEvents.Add(AsyncEvent.Parse(e));
+                asyncEvents.Add(TorEvent.Parse(e));
             }
 
             AsyncEventDispatcher(asyncEvents);
@@ -158,9 +158,9 @@ namespace Shem
             return replies;
         }
 
-        protected abstract void AsyncEventDispatcher(AsyncEvent asyncEvent);
+        protected abstract void AsyncEventDispatcher(TorEvent asyncEvent);
 
-        protected abstract void AsyncEventDispatcher(List<AsyncEvent> asyncEvents);
+        protected abstract void AsyncEventDispatcher(List<TorEvent> asyncEvents);
 
         /// <summary>
         /// Connect to the control port.

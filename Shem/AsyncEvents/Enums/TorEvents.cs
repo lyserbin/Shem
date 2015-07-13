@@ -2,7 +2,7 @@
 
 namespace Shem.AsyncEvents
 {
-    public enum AsyncEvents
+    public enum TorEvents
     {
         [TypeValue(typeof(AddrMapEvent))]
         ADDRMAP,

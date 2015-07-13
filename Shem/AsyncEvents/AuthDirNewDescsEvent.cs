@@ -2,16 +2,16 @@
 
 namespace Shem.AsyncEvents
 {
-    public class AuthDirNewDescsEvent : AsyncEvent
+    public class AuthDirNewDescsEvent : TorEvent
     {
         public AuthDirNewDescsEvent()
         {
 
         }
 
-        public override AsyncEvents Event
+        public override TorEvents Event
         {
-            get { return AsyncEvents.AUTHDIR_NEWDESCS; }
+            get { return TorEvents.AUTHDIR_NEWDESCS; }
         }
 
         protected override void ParseToEvent(Reply reply)

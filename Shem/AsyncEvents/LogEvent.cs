@@ -2,7 +2,7 @@
 
 namespace Shem.AsyncEvents
 {
-    public abstract class LogEvent : AsyncEvent
+    public abstract class LogEvent : TorEvent
     {
         public LogEvent()
         {

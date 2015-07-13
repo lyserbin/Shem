@@ -2,16 +2,16 @@
 
 namespace Shem.AsyncEvents
 {
-    public class ConfChangedEvent : AsyncEvent
+    public class ConfChangedEvent : TorEvent
     {
         public ConfChangedEvent()
         {
 
         }
 
-        public override AsyncEvents Event
+        public override TorEvents Event
         {
-            get { return AsyncEvents.CONF_CHANGED; }
+            get { return TorEvents.CONF_CHANGED; }
         }
 
         protected override void ParseToEvent(Reply reply)
