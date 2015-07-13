@@ -11,13 +11,26 @@ namespace Shem.AsyncEvents
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public abstract TorEvents Event { get; }
 
-        public abstract string RawString { get; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public virtual string RawString { get; protected set; }
 
-        public abstract string EventLine { get; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public virtual string EventLine { get; protected set; }
 
-        protected abstract void ParseToEvent(Reply reply);
+        protected virtual void ParseToEvent(Reply reply)
+        {
+            RawString = reply.RawString;
+            EventLine = reply.ReplyLine.Substring(reply.ReplyLine.IndexOf(" "));
+        }
 
         public static TorEvent Parse(Reply reply)
         {

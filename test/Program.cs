@@ -50,7 +50,7 @@ namespace Shem.test
                 {
                     Console.WriteLine("Authenticated successfully!");
 
-                    tc.SendCommand(new SetEvents(false, TorEvents.INFO, TorEvents.ERR, TorEvents.DEBUG, TorEvents.NOTICE, TorEvents.WARN));
+                    tc.SendCommand(new SetEvents(false, TorEvents.BW));
                     infos = tc.GetInfo(Informations.process_pid, Informations.process_user, Informations.version);
                     foreach (GetInfoReply info in infos)
                     {
@@ -62,7 +62,7 @@ namespace Shem.test
                     Console.WriteLine("Wrong password.");
                 }
 
-                Console.WriteLine("Press a key to close the connection.");
+                //Console.WriteLine("Press a key to close the connection.");
                 Console.ReadKey();
 
                 tc.Close();
@@ -78,10 +78,7 @@ namespace Shem.test
 
         private static void tc_OnAsyncEvents(TorEvent obj)
         {
-            if (obj is LogEvent)
-            {
-                Console.WriteLine(string.Format("Event -> {0} -> {1}", obj.Event, obj.EventLine));
-            }
+            Console.WriteLine(string.Format("Event -> {0} -> {1}", obj.Event, obj.EventLine));
         }
 
         public static LogTypes List { get; set; }

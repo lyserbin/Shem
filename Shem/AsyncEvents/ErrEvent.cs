@@ -1,6 +1,9 @@
 ﻿
 namespace Shem.AsyncEvents
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ErrEvent : LogEvent
     {
         public ErrEvent()

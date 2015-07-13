@@ -1,6 +1,9 @@
 ﻿
 namespace Shem.AsyncEvents
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class DebugEvent : LogEvent
     {
         public DebugEvent()

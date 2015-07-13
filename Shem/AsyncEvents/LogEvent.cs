@@ -9,29 +9,18 @@ namespace Shem.AsyncEvents
 
         }
 
-        private string logMessage = "";
+        /// <summary>
+        /// 
+        /// </summary>
         public string LogMessage
         {
-            get { return logMessage; }
-        }
-
-        private string rawString = "";
-        public override string RawString
-        {
-            get { return rawString; }
-        }
-
-        private string eventLine = "";
-        public override string EventLine
-        {
-            get { return eventLine; }
+            get;
+            protected set;
         }
 
         protected override void ParseToEvent(Reply reply)
         {
-            rawString = reply.RawString;
-            eventLine = reply.ReplyLine.Substring(reply.ReplyLine.IndexOf(" "));
-            logMessage = eventLine;
+            LogMessage = EventLine;
         }
     }
 }
