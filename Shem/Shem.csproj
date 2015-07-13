@@ -61,6 +61,7 @@
     <Compile Include="AsyncEvents\ErrEvent.cs" />
     <Compile Include="AsyncEvents\GuardEvent.cs" />
     <Compile Include="AsyncEvents\InfoEvent.cs" />
+    <Compile Include="AsyncEvents\LogEvent.cs" />
     <Compile Include="AsyncEvents\NewConsensusEvent.cs" />
     <Compile Include="AsyncEvents\NewDescEvent.cs" />
     <Compile Include="AsyncEvents\NoticeEvent.cs" />

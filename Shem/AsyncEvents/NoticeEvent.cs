@@ -1,8 +1,7 @@
-﻿using Shem.Replies;
-
+﻿
 namespace Shem.AsyncEvents
 {
-    public class NoticeEvent : AsyncEvent
+    public class NoticeEvent : LogEvent
     {
         public NoticeEvent()
         {
@@ -12,12 +11,6 @@ namespace Shem.AsyncEvents
         public override AsyncEvents Event
         {
             get { return AsyncEvents.NOTICE; }
-        }
-
-        protected override void ParseToEvent(Reply reply)
-        {
-            //TODO: Implement parsing
-            throw new System.NotImplementedException();
         }
     }
 }

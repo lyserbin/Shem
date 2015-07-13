@@ -1,8 +1,7 @@
-﻿using Shem.Replies;
-
+﻿
 namespace Shem.AsyncEvents
 {
-    public class ErrEvent : AsyncEvent
+    public class ErrEvent : LogEvent
     {
         public ErrEvent()
         {
@@ -12,12 +11,6 @@ namespace Shem.AsyncEvents
         public override AsyncEvents Event
         {
             get { return AsyncEvents.ERR; }
-        }
-
-        protected override void ParseToEvent(Reply reply)
-        {
-            //TODO: Implement parsing
-            throw new System.NotImplementedException();
         }
     }
 }
