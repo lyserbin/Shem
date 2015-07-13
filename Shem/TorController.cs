@@ -14,7 +14,12 @@ namespace Shem
         /// <summary>
         /// 
         /// </summary>
-        public event Action<AsyncEvent> OnAsyncEvent;
+        public event Action<AsyncEvent> OnAsyncEvents;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Dictionary<AsyncEvents.AsyncEvents, ListableEvents<AsyncEvent>> OnAsyncEvent = new Dictionary<AsyncEvents.AsyncEvents, ListableEvents<AsyncEvent>>();
 
         /// <summary>
         /// This is true if we are Authenticated, false if
@@ -66,9 +71,13 @@ namespace Shem
             {
                 foreach (var e in asyncEvents)
                 {
-                    if (OnAsyncEvent != null)
+                    if (OnAsyncEvents != null)
                     {
-                        OnAsyncEvent.Invoke(e);
+                        OnAsyncEvents.Invoke(e);
+                    }
+                    if (OnAsyncEvent.ContainsKey(e.Event))
+                    {
+                        OnAsyncEvent[e.Event].Dispatch(e);
                     }
                 }
             });
