@@ -11,14 +11,17 @@ namespace Shem.Sockets
     /// </summary>
     public class ControlSocket
     {
+        private Socket _socket;
         public IPAddress Address { get; private set; }
         public uint Port { get; private set; }
         public bool Connected
         {
-            get { return _socket.Connected; }
+            get
+            {
+                return !(_socket == null || !_socket.Connected || (_socket.Poll(1000, SelectMode.SelectRead) && (_socket.Available == 0)));
+            }
         }
         public bool ResponseAvailable { get { return _socket.Available > 0; } }
-        private Socket _socket;
 
         /// <summary>
         /// Create a ControlSocket instance from a specified control port.
@@ -50,7 +53,7 @@ namespace Shem.Sockets
         /// </summary>
         public void Connect()
         {
-            Logger.LogDebug(string.Format("Connecting to the server \"{0}:{1}\"", this.Address, this.Port));
+            Logger.LogDebug(string.Format("Connecting to the server \"{0}:{1}\".", this.Address, this.Port));
             _socket.Connect(Address, (int)Port);
         }
 
@@ -61,11 +64,9 @@ namespace Shem.Sockets
         {
             if (Connected)
             {
-                Logger.LogDebug(string.Format("Closing the connection to \"{0}:{1}\"", this.Address, this.Port));
+                Logger.LogDebug(string.Format("Closing the connection to \"{0}:{1}\".", this.Address, this.Port));
                 _socket.Close();
             }
-            else
-                throw new SocketNotConnectedException();
         }
 
         /// <summary>
@@ -74,7 +75,7 @@ namespace Shem.Sockets
         /// <param name="message">The message to send-to TOR.</param>
         public void Send(string message)
         {
-            Logger.LogDebug(string.Format("Sent message to the server: \"{0}\"", message.Replace("\r\n", "\\r\\n")));
+            Logger.LogDebug(string.Format("Sent message to the server: \"{0}\".", message.Replace("\r\n", "\\r\\n")));
             _socket.Send(Encoding.ASCII.GetBytes(message));
         }
 
@@ -84,7 +85,7 @@ namespace Shem.Sockets
             string reply;
             _socket.Receive(buffer);
             reply = Encoding.ASCII.GetString(buffer);
-            Logger.LogDebug(string.Format("Received a reply from the server: \"{0}\"", reply.Replace("\r\n", "\\r\\n")));
+            Logger.LogDebug(string.Format("Received a reply from the server: \"{0}\".", reply.Replace("\r\n", "\\r\\n")));
             return reply;
         }
 

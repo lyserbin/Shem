@@ -2,6 +2,8 @@
 using System.Net.Sockets;
 using Shem.Commands;
 using Shem.Utils;
+using System.Collections.Generic;
+using Shem.Replies;
 
 namespace Shem.test
 {
@@ -9,12 +11,13 @@ namespace Shem.test
     {
         static void Main(string[] args)
         {
-            Logger.ConsoleLogLevel = LogTypes.DEBUG;
-            Logger.FileLogLevel = LogTypes.INFO;
-
             TorController tc;
             uint port;
             string hostname, password, tmp;
+            List<GetInfoReply> infos;
+
+            Logger.ConsoleLogLevel = LogTypes.INFO;
+            Logger.FileLogLevel = LogTypes.INFO;
 
 
             hostname = "127.0.0.1"; // NOTE: ipv6 is NOT supported.
@@ -45,25 +48,30 @@ namespace Shem.test
                 if (tc.Authenticate(password))
                 {
                     Console.WriteLine("Authenticated successfully!");
+
+                    tc.SendCommand(new SetEvents(false, AsyncEvents.AsyncEvents.INFO, AsyncEvents.AsyncEvents.ERR, AsyncEvents.AsyncEvents.DEBUG));
+                    infos = tc.GetInfo(Informations.process_pid, Informations.process_user, Informations.version);
+                    foreach (GetInfoReply info in infos)
+                    {
+                        Console.WriteLine("{0} -> {1}", info.Name, info.Value);
+                    }
                 }
                 else
                 {
                     Console.WriteLine("Wrong password.");
                 }
 
-                tc.SendCommand(new SetEvents(false, AsyncEvents.AsyncEvents.INFO, AsyncEvents.AsyncEvents.ERR, AsyncEvents.AsyncEvents.DEBUG));
-
                 Console.WriteLine("Press a key to close the connection.");
-
                 Console.ReadKey();
 
                 tc.Close();
             }
             catch (SocketException iwontuseit)
             {
-                Console.WriteLine("Can't connect to the server at \"{0}:{1}\"", hostname, port);
+                Console.WriteLine("Can't connect to the server at \"{0}:{1}\".", hostname, port);
             }
 
+            Console.WriteLine("Press a key to close the program.");
             Console.ReadKey();
         }
 
@@ -71,5 +79,7 @@ namespace Shem.test
         {
             Console.WriteLine("Received evnt -> " + obj.Event.ToString());
         }
+
+        public static LogTypes List { get; set; }
     }
 }

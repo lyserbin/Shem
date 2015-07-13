@@ -176,19 +176,22 @@ namespace Shem
         /// </summary>  
         public virtual void Close()
         {
-            SendRawCommand(new Quit());
-            asyncEventsListenerStop = true;
-            if (asyncEventsListener.Exception == null)
+            if (Connected)
             {
-                asyncEventsListener.Wait();
+
+                SendRawCommand(new Quit());
+                asyncEventsListenerStop = true;
+                if (asyncEventsListener.Exception == null)
+                {
+                    asyncEventsListener.Wait();
+                }
+                controlSocket.Close();
             }
-            controlSocket.Close();
         }
 
         ~BaseController()
         {
-            if (Connected)
-                Close();
+            Close();
         }
     }
 }

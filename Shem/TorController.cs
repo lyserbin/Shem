@@ -6,6 +6,7 @@ using Shem.Commands;
 using Shem.Exceptions;
 using Shem.Replies;
 using Shem.Utils;
+using System.Net.Sockets;
 
 namespace Shem
 {
@@ -40,7 +41,7 @@ namespace Shem
         public bool Authenticate(string password = "")
         {
             if (!this.controlSocket.Connected)
-                throw new SocketNotConnectedException();
+                throw new SocketException();
 
             AuthenticateReply reply;
             List<Reply> replies;
@@ -55,9 +56,27 @@ namespace Shem
             return Authenticated;
         }
 
-        public void GetInfo()
+        /// <summary>
+        /// Get informations about tor internal settings
+        /// </summary>
+        /// <param name="informations">The list of informations you want to retrieve</param>
+        public List<GetInfoReply> GetInfo(params Informations[] informations)
         {
-            // TODO: gonna do this sheet.
+            List<Reply> replies;
+            List<GetInfoReply> output;
+
+            output = new List<GetInfoReply>();
+            replies = SendCommand(new GetInfo(informations));
+
+            if (replies[replies.Count - 1].Code != ReplyCodes.OK)
+                throw new Exception(string.Format("Something went wrong: \"{0}\".", replies[replies.Count-1].RawString));
+
+            for (int i = 0; i < replies.Count-1; i++ )
+            {
+                output.Add(new GetInfoReply(replies[i]));
+            }
+
+            return output;
         }
 
         protected override void AsyncEventDispatcher(List<AsyncEvent> asyncEvents)
