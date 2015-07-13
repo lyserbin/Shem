@@ -48,6 +48,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncEvents\AddrMapEvent.cs" />
+    <Compile Include="AsyncEvents\CellStatsEvent.cs" />
+    <Compile Include="AsyncEvents\CircBwEvent.cs" />
+    <Compile Include="AsyncEvents\ConnBwEvent.cs" />
+    <Compile Include="AsyncEvents\HsDescContentEvent.cs" />
+    <Compile Include="AsyncEvents\HsDescEvent.cs" />
+    <Compile Include="AsyncEvents\NetworkLivenessEvent.cs" />
+    <Compile Include="AsyncEvents\TbEmptyEvent.cs" />
     <Compile Include="AsyncEvents\TorEvent.cs" />
     <Compile Include="AsyncEvents\AuthDirNewDescsEvent.cs" />
     <Compile Include="AsyncEvents\BwEvent.cs" />
@@ -74,6 +81,7 @@
     <Compile Include="AsyncEvents\StatusSeverEvent.cs" />
     <Compile Include="AsyncEvents\StreamBwEvent.cs" />
     <Compile Include="AsyncEvents\StreamEvent.cs" />
+    <Compile Include="AsyncEvents\TransportLaunchedEvent.cs" />
     <Compile Include="AsyncEvents\WarnEvent.cs" />
     <Compile Include="Commands\AddOnion.cs" />
     <Compile Include="Commands\AttachStream.cs" />

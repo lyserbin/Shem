@@ -10,6 +10,8 @@ namespace Shem.test
 {
     class Program
     {
+        public static LogTypes List { get; set; }
+
         static void Main(string[] args)
         {
             TorController tc;
@@ -19,7 +21,6 @@ namespace Shem.test
 
             Logger.ConsoleLogLevel = LogTypes.INFO;
             Logger.FileLogLevel = LogTypes.INFO;
-
 
             hostname = "127.0.0.1"; // NOTE: ipv6 is NOT supported.
             port = 9051;
@@ -50,7 +51,7 @@ namespace Shem.test
                 {
                     Console.WriteLine("Authenticated successfully!");
 
-                    tc.SendCommand(new SetEvents(false, TorEvents.BW));
+                    tc.SendCommand(new SetEvents(false, TorEvents.ORCONN));
                     infos = tc.GetInfo(Informations.process_pid, Informations.process_user, Informations.version);
                     foreach (GetInfoReply info in infos)
                     {
@@ -80,7 +81,5 @@ namespace Shem.test
         {
             Console.WriteLine(string.Format("Event -> {0} -> {1}", obj.Event, obj.EventLine));
         }
-
-        public static LogTypes List { get; set; }
     }
 }
