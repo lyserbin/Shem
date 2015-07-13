@@ -46,8 +46,6 @@ namespace Shem.test
 
                 tc.OnAsyncEvents += tc_OnAsyncEvents;
 
-                tc.OnAsyncEvent[TorEvents.DEBUG].Event += Debug_Event;
-
                 if (tc.Authenticate(password))
                 {
                     Console.WriteLine("Authenticated successfully!");
@@ -78,17 +76,11 @@ namespace Shem.test
             Console.ReadKey();
         }
 
-        private static void Debug_Event(TorEvent obj)
-        {
-            var debug = (DebugEvent)obj;
-            Console.WriteLine("From specific event -> " + debug.Event + " -> " + debug.LogMessage);
-        }
-
         private static void tc_OnAsyncEvents(TorEvent obj)
         {
             if (obj is LogEvent)
             {
-                Console.WriteLine(string.Format("Event -> {0} -> {1}", obj.Event, ((LogEvent)obj).LogMessage));
+                Console.WriteLine(string.Format("Event -> {0} -> {1}", obj.Event, obj.EventLine));
             }
         }
 

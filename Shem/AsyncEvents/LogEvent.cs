@@ -31,6 +31,7 @@ namespace Shem.AsyncEvents
         {
             rawString = reply.RawString;
             eventLine = reply.ReplyLine.Substring(reply.ReplyLine.IndexOf(" "));
+            logMessage = eventLine;
         }
     }
 }
