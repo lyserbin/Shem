@@ -15,7 +15,12 @@ namespace Shem
         /// <summary>
         /// 
         /// </summary>
-        public event Action<AsyncEvent> OnAsyncEvent;
+        public event Action<AsyncEvent> OnAsyncEvents;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Dictionary<AsyncEvents.AsyncEvents, ListableEvents<AsyncEvent>> OnAsyncEvent = new Dictionary<AsyncEvents.AsyncEvents, ListableEvents<AsyncEvent>>();
 
         /// <summary>
         /// This is true if we are Authenticated, false if
@@ -31,7 +36,14 @@ namespace Shem
         /// <param name="address">The address where you want to connect</param>
         /// <param name="port">The port where the control port is binded</param>
         /// <param name="connect">If this is true the controller will connect automatically to the server after initialization.</param>
-        public TorController(string address = "127.0.0.1", uint port = 9051, bool connect = true) : base(address, port, connect) { }
+        public TorController(string address = "127.0.0.1", uint port = 9051, bool connect = true)
+            : base(address, port, connect)
+        {
+            foreach (var v in Enum.GetValues(typeof(AsyncEvents.AsyncEvents)))
+            {
+                OnAsyncEvent.Add((AsyncEvents.AsyncEvents)v, new ListableEvents<AsyncEvent>());
+            }
+        }
 
         /// <summary>
         /// Authenticate with the tor control port.
@@ -85,9 +97,13 @@ namespace Shem
             {
                 foreach (var e in asyncEvents)
                 {
-                    if (OnAsyncEvent != null)
+                    if (OnAsyncEvents != null)
                     {
-                        OnAsyncEvent.Invoke(e);
+                        OnAsyncEvents.Invoke(e);
+                    }
+                    if (OnAsyncEvent.ContainsKey(e.Event))
+                    {
+                        OnAsyncEvent[e.Event].Dispatch(e);
                     }
                 }
             });

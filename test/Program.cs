@@ -44,7 +44,9 @@ namespace Shem.test
 
                 tc = new TorController(hostname, port);
 
-                tc.OnAsyncEvent += tc_OnAsyncEvent;
+                tc.OnAsyncEvents += tc_OnAsyncEvents;
+
+                tc.OnAsyncEvent[AsyncEvents.AsyncEvents.DEBUG].Event += Program_Event;
 
                 if (tc.Authenticate(password))
                 {
@@ -76,7 +78,13 @@ namespace Shem.test
             Console.ReadKey();
         }
 
-        static void tc_OnAsyncEvent(AsyncEvents.AsyncEvent obj)
+        static void Program_Event(AsyncEvent obj)
+        {
+            var debug = (DebugEvent)obj;
+            Console.WriteLine("From specific event -> " + debug.Event + " -> " + debug.LogMessage);
+        }
+
+        static void tc_OnAsyncEvents(AsyncEvent obj)
         {
             if (obj is LogEvent)
             {
