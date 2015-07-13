@@ -13,6 +13,10 @@ namespace Shem.AsyncEvents
 
         public abstract AsyncEvents Event { get; }
 
+        public abstract string RawString { get; }
+
+        public abstract string EventLine { get; }
+
         protected abstract void ParseToEvent(Reply reply);
 
         public static AsyncEvent Parse(Reply reply)
