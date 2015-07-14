@@ -59,7 +59,8 @@ namespace Shem.test
                                    Informations.process_pid,
                                    Informations.version,
                                    Informations.traffic_read,
-                                   Informations.traffic_written
+                                   Informations.traffic_written,
+                                   Informations.circuit_status
                                    )
                         .Code == ReplyCodes.OK)
                     {
