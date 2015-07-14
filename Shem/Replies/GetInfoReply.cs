@@ -1,5 +1,4 @@
 ﻿using Shem.Exceptions;
-using System;
 
 namespace Shem.Replies
 {
@@ -41,18 +40,11 @@ namespace Shem.Replies
         
         internal GetInfoReply(Reply reply) : base(reply)
         {
-            _isvalid = this.Code == ReplyCodes.OK;
+            _isvalid = (this.Code == ReplyCodes.OK) && this.ReplyLine.Contains("=");
             if (_isvalid)
             {
-                try
-                {
-                    _name = this.ReplyLine.Substring(0, this.ReplyLine.IndexOf("="));
-                    _value = this.ReplyLine.Substring(this.ReplyLine.IndexOf("=") + 1);
-                }
-                catch (ArgumentNullException ex)
-                {
-                    _isvalid = false;
-                }
+                _name = this.ReplyLine.Substring(0, this.ReplyLine.IndexOf("="));
+                _value = this.ReplyLine.Substring(this.ReplyLine.IndexOf("=") + 1);
             }
         }
     }
