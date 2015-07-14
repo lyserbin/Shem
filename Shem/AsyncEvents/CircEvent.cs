@@ -138,12 +138,8 @@ namespace Shem.AsyncEvents
             ID = split[index];
             index++;
 
-            CircStatus tmpcs = CircStatus.LAUNCHED;
-            if (!Enum.TryParse<CircStatus>(split[index], true, out tmpcs))
-            {
-                Logger.LogWarn("Error during the parsing of CircStatus in CircEvent.");
-            }
-            Status = tmpcs;
+            Status = ParseCircStatus(index, split);
+
             index++;
 
             if (!split[index].Contains("="))
@@ -169,30 +165,15 @@ namespace Shem.AsyncEvents
                             List<CircBuildFlags> flags = new List<CircBuildFlags>();
                             foreach (var stringFlag in value.Split(','))
                             {
-                                CircBuildFlags tmpbf = CircBuildFlags.IS_INTERNAL;
-                                if (!Enum.TryParse<CircBuildFlags>(value, true, out tmpbf))
-                                {
-                                    Logger.LogWarn("Error during the parsing of CircBuildFlags in CircEvent.");
-                                }
-                                flags.Add(tmpbf);
+                                flags.Add(ParseCircBuildFlags(value));
                             }
                             BuildFlags = flags;
                             break;
                         case "PURPOSE":
-                            CircPurpose tmpp = CircPurpose.GENERAL;
-                            if (!Enum.TryParse<CircPurpose>(value, true, out tmpp))
-                            {
-                                Logger.LogWarn("Error during the parsing of CircPurpose in CircEvent.");
-                            }
-                            Purpose = tmpp;
+                            Purpose = ParseCircPurpose(value);
                             break;
                         case "HS_STATE":
-                            CircHsState tmphs = CircHsState.HSCI_CONNECTING;
-                            if (!Enum.TryParse<CircHsState>(value, true, out tmphs))
-                            {
-                                Logger.LogWarn("Error during the parsing of CircHsState in CircEvent.");
-                            }
-                            HsState = tmphs;
+                            HsState = ParseCircHsState(value);
                             break;
                         case "REND_QUERY":
                             RendQuery = value;
@@ -201,20 +182,10 @@ namespace Shem.AsyncEvents
                             TimeCreated = value;
                             break;
                         case "REASON":
-                            CircReasons tmpr = CircReasons.CONNECTFAILED;
-                            if (!Enum.TryParse<CircReasons>(value, true, out tmpr))
-                            {
-                                Logger.LogWarn("Error during the parsing of CircReason in CircEvent.");
-                            }
-                            Reason = tmpr;
+                            Reason = ParseCircReason(value);
                             break;
                         case "REMOTE_REASON":
-                            CircReasons tmprr = CircReasons.CONNECTFAILED;
-                            if (!Enum.TryParse<CircReasons>(value, true, out tmprr))
-                            {
-                                Logger.LogWarn("Error during the parsing of CircReason in CircEvent.");
-                            }
-                            RemoteReason = tmprr;
+                            RemoteReason = ParseCircReason(value);
                             break;
                         case "SOCKS_USERNAME":
                             SocksUsername = value.Replace("\"", "");
@@ -225,6 +196,56 @@ namespace Shem.AsyncEvents
                     }
                 }
             }
+        }
+
+        private static CircReasons ParseCircReason(string value)
+        {
+            CircReasons tmpr = CircReasons.CONNECTFAILED;
+            if (!Enum.TryParse<CircReasons>(value, true, out tmpr))
+            {
+                Logger.LogWarn("Error during the parsing of CircReason in CircEvent.");
+            }
+            return tmpr;
+        }
+
+        private static CircHsState ParseCircHsState(string value)
+        {
+            CircHsState tmphs = CircHsState.HSCI_CONNECTING;
+            if (!Enum.TryParse<CircHsState>(value, true, out tmphs))
+            {
+                Logger.LogWarn("Error during the parsing of CircHsState in CircEvent.");
+            }
+            return tmphs;
+        }
+
+        private static CircPurpose ParseCircPurpose(string value)
+        {
+            CircPurpose tmpp = CircPurpose.GENERAL;
+            if (!Enum.TryParse<CircPurpose>(value, true, out tmpp))
+            {
+                Logger.LogWarn("Error during the parsing of CircPurpose in CircEvent.");
+            }
+            return tmpp;
+        }
+
+        private static CircBuildFlags ParseCircBuildFlags(string value)
+        {
+            CircBuildFlags tmpbf = CircBuildFlags.IS_INTERNAL;
+            if (!Enum.TryParse<CircBuildFlags>(value, true, out tmpbf))
+            {
+                Logger.LogWarn("Error during the parsing of CircBuildFlags in CircEvent.");
+            }
+            return tmpbf;
+        }
+
+        private static CircStatus ParseCircStatus(int index, string[] split)
+        {
+            CircStatus tmpcs = CircStatus.LAUNCHED;
+            if (!Enum.TryParse<CircStatus>(split[index], true, out tmpcs))
+            {
+                Logger.LogWarn("Error during the parsing of CircStatus in CircEvent.");
+            }
+            return tmpcs;
         }
     }
 }
