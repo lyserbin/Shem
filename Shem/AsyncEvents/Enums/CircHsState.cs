@@ -1,7 +1,7 @@
 ﻿
-namespace Shem.Commands
+namespace Shem.AsyncEvents
 {
-    public enum HsStates
+    public enum CircHsState
     {
         /// <summary>
         /// Connecting to intro point

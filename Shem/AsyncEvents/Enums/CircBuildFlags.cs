@@ -1,7 +1,7 @@
 ﻿
-namespace Shem.Commands
+namespace Shem.AsyncEvents
 {
-    public enum BuildFlags
+    public enum CircBuildFlags
     {
         /// <summary>
         /// One-hop circuit, used for tunneled directory conns
