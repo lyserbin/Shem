@@ -129,6 +129,7 @@
     <Compile Include="Exceptions\ServerNotFoundException.cs" />
     <Compile Include="Replies\AuthenticateReply.cs" />
     <Compile Include="Exceptions\NullReplyCodeException.cs" />
+    <Compile Include="Replies\GetConfReply.cs" />
     <Compile Include="Replies\GetInfoReply.cs" />
     <Compile Include="Replies\Reply.cs" />
     <Compile Include="Replies\ReplyCodes.cs" />

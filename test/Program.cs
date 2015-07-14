@@ -18,8 +18,9 @@ namespace Shem.test
             uint port;
             string hostname, password, tmp;
             List<GetInfoReply> infos;
+            List<GetConfReply> configs;
 
-            Logger.ConsoleLogLevel = LogTypes.INFO;
+            Logger.ConsoleLogLevel = LogTypes.NONE;
             Logger.FileLogLevel = LogTypes.INFO;
 
             hostname = "127.0.0.1"; // NOTE: ipv6 is NOT supported.
@@ -52,24 +53,41 @@ namespace Shem.test
                     Console.WriteLine("Authenticated successfully!");
 
                     tc.SendCommand(new SetEvents(false, TorEvents.ORCONN));
+
+                    #region Infos
                     if (tc.GetInfo(out infos,
                                    Informations.process_pid,
-                                   Informations.process_user,
                                    Informations.version,
-                                   Informations.entry_guards,
-                                   Informations.status_clients_seen,
                                    Informations.traffic_read,
                                    Informations.traffic_written
-                                   ).Code == ReplyCodes.OK)
+                                   )
+                        .Code == ReplyCodes.OK)
                     {
                         foreach (GetInfoReply info in infos)
                         {
-                            Console.WriteLine("{0} -> {1}", info.Name, info.Value);
+                            Console.WriteLine("[INFORMATION] {0} -> {1}", info.Name, info.Value);
                         }
-                    } else
+                    }
+                    else
                     {
                         Console.WriteLine("Something went wrong retrieving the informations..."); // should never happen.
                     }
+                    #endregion
+
+                    #region Configs
+                    tc.GetConf(out configs,
+                               Configs.NewCircuitPeriod,
+                               Configs.ORPort,
+                               Configs.NumEntryGuards,
+                               Configs.CookieAuthentication,
+                               Configs.ControlSocket);
+                    foreach(GetConfReply conf in configs)
+                    {
+                        Console.WriteLine("[CONFIG] {0} -> {1}", conf.Name, conf.Value==null?"null":conf.Value);
+                    }
+                    #endregion
+
+                    Console.WriteLine("[CURRENT CONFIG]:\r\n{0}\r\n\r\n",tc.GetCurrentConfig());
                 }
                 else
                 {
@@ -92,7 +110,7 @@ namespace Shem.test
 
         private static void tc_OnAsyncEvents(TorEvent obj)
         {
-            Console.WriteLine(string.Format("Event -> {0} -> {1}", obj.Event, obj.EventLine));
+            Console.WriteLine(string.Format("[EVENT] {0} -> {1}", obj.Event, obj.EventLine));
         }
     }
 }

@@ -13,10 +13,10 @@ namespace Shem.Commands
         /// This command launches a remote hostname lookup request for every specified request.
         /// </summary>
         /// <param name="address">A hostname or IPv4 address</param>
-        /// <param name="reverse"></param>
+        /// <param name="reverse">If should do a reverse lookup</param>
         public Resolve(string address, bool reverse = false)
         {
-            //TODO: Pay attention, this command does not receive a synchronous reply.
+            //NOTE: Pay attention, this command does not receive a synchronous reply.
             this.address = address;
             this.reverse = reverse;
         }

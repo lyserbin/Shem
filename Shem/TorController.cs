@@ -6,6 +6,7 @@ using Shem.AsyncEvents;
 using Shem.Commands;
 using Shem.Replies;
 using Shem.Utils;
+using System.Net;
 
 namespace Shem
 {
@@ -86,6 +87,49 @@ namespace Shem
             }
 
             return replies[replies.Count - 1];
+        }
+
+        /// <summary>
+        /// Writes the requested configs in the passed GetConfReply list.
+        /// </summary>
+        /// <param name="output">The list that has to be filled with the requested configs.</param>
+        /// <param name="informations">A potentially infinite list of informations to be requested to the server.</param>
+        public void GetConf(out List<GetConfReply> output, params Configs[] configs)
+        {
+            List<Reply> replies;
+
+            output = new List<GetConfReply>();
+            replies = SendCommand(new GetConf(configs));
+
+            for (int i = 0; i < replies.Count - 1; i++)
+            {
+                output.Add(new GetConfReply(replies[i]));
+            }
+        }
+
+        /// <summary>
+        /// This functions returns the current run-time edited torrc.
+        /// </summary>
+        /// <returns>Returns the current configuration of TOR.</returns>
+        public string GetCurrentConfig()
+        {
+            List<GetInfoReply> tmp;
+            GetInfo(out tmp, Informations.config_text);
+            return tmp[0].ReplyLine;
+        }
+
+        public IPAddress Resolve(string address)
+        {
+            SendCommand(new Resolve(address));
+            OnAsyncEvent[TorEvents.ADDRMAP].Event += Resolve_Event;
+
+            // TODO: wait tykonket to implement the ADDRMAP event.
+            return null;
+        }
+
+        private void Resolve_Event(TorEvent obj)
+        {
+            // TODO: wait tykonket to implement the ADDRMAP event.
         }
 
         protected override void AsyncEventDispatcher(List<TorEvent> asyncEvents)
