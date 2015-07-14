@@ -52,6 +52,9 @@
     <Compile Include="AsyncEvents\CircBwEvent.cs" />
     <Compile Include="AsyncEvents\ConnBwEvent.cs" />
     <Compile Include="AsyncEvents\Enums\CircHsState.cs" />
+    <Compile Include="AsyncEvents\Enums\StreamPurpose.cs" />
+    <Compile Include="AsyncEvents\Enums\StreamReason.cs" />
+    <Compile Include="AsyncEvents\Enums\StreamStatus.cs" />
     <Compile Include="AsyncEvents\HsDescContentEvent.cs" />
     <Compile Include="AsyncEvents\HsDescEvent.cs" />
     <Compile Include="AsyncEvents\NetworkLivenessEvent.cs" />
