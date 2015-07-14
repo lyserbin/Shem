@@ -1,5 +1,4 @@
-﻿using System;
-using Shem.Replies;
+﻿using Shem.Replies;
 
 namespace Shem.AsyncEvents
 {
@@ -17,18 +16,7 @@ namespace Shem.AsyncEvents
 
         protected override void ParseToEvent(Reply reply)
         {
-            //TODO: Implement parsing
-            throw new NotImplementedException();
-        }
-
-        public override string RawString
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public override string EventLine
-        {
-            get { throw new NotImplementedException(); }
+            base.ParseToEvent(reply);
         }
     }
 }
