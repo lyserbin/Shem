@@ -12,5 +12,10 @@ namespace Shem.AsyncEvents
         {
             get { return TorEvents.CELL_STATS; }
         }
+
+        protected override void ParseToEvent(Replies.Reply reply)
+        {
+            base.ParseToEvent(reply);
+        }
     }
 }
