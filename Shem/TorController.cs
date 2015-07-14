@@ -68,26 +68,24 @@ namespace Shem
         }
 
         /// <summary>
-        /// Get informations about tor internal settings
+        /// Writes the requested infos in the passed GetInfoReply list.
         /// </summary>
-        /// <param name="informations">The list of informations you want to retrieve</param>
-        public List<GetInfoReply> GetInfo(params Informations[] informations)
+        /// <param name="output">The list that has to be filled with the requested infos.</param>
+        /// <param name="informations">A potentially infinite list of informations to be requested to the server.</param>
+        /// <returns>Returns the general response given by the server, it is a good idea to check if it is 250 OK.</returns>
+        public Reply GetInfo(out List<GetInfoReply> output, params Informations[] informations)
         {
             List<Reply> replies;
-            List<GetInfoReply> output;
 
             output = new List<GetInfoReply>();
             replies = SendCommand(new GetInfo(informations));
-
-            if (replies[replies.Count - 1].Code != ReplyCodes.OK)
-                throw new Exception(string.Format("Something went wrong: \"{0}\".", replies[replies.Count - 1].RawString));
 
             for (int i = 0; i < replies.Count - 1; i++)
             {
                 output.Add(new GetInfoReply(replies[i]));
             }
 
-            return output;
+            return replies[replies.Count - 1];
         }
 
         protected override void AsyncEventDispatcher(List<TorEvent> asyncEvents)

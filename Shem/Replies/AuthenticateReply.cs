@@ -4,7 +4,7 @@ namespace Shem.Replies
     
     public class AuthenticateReply : Reply
     {
-        public AuthenticateReply(Reply reply) : base(reply) { }
+        internal AuthenticateReply(Reply reply) : base(reply) { }
 
         /// <summary>
         /// Check if you are authenticated or not.

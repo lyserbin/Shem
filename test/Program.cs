@@ -52,10 +52,23 @@ namespace Shem.test
                     Console.WriteLine("Authenticated successfully!");
 
                     tc.SendCommand(new SetEvents(false, TorEvents.ORCONN));
-                    infos = tc.GetInfo(Informations.process_pid, Informations.process_user, Informations.version);
-                    foreach (GetInfoReply info in infos)
+                    if (tc.GetInfo(out infos,
+                                   Informations.process_pid,
+                                   Informations.process_user,
+                                   Informations.version,
+                                   Informations.entry_guards,
+                                   Informations.status_clients_seen,
+                                   Informations.traffic_read,
+                                   Informations.traffic_written
+                                   ).Code == ReplyCodes.OK)
                     {
-                        Console.WriteLine("{0} -> {1}", info.Name, info.Value);
+                        foreach (GetInfoReply info in infos)
+                        {
+                            Console.WriteLine("{0} -> {1}", info.Name, info.Value);
+                        }
+                    } else
+                    {
+                        Console.WriteLine("Something went wrong retrieving the informations..."); // should never happen.
                     }
                 }
                 else
