@@ -52,6 +52,8 @@
     <Compile Include="AsyncEvents\CircBwEvent.cs" />
     <Compile Include="AsyncEvents\ConnBwEvent.cs" />
     <Compile Include="AsyncEvents\Enums\CircHsState.cs" />
+    <Compile Include="AsyncEvents\Enums\OrConnReasons.cs" />
+    <Compile Include="AsyncEvents\Enums\OrConnStatus.cs" />
     <Compile Include="AsyncEvents\Enums\StreamPurpose.cs" />
     <Compile Include="AsyncEvents\Enums\StreamReason.cs" />
     <Compile Include="AsyncEvents\Enums\StreamStatus.cs" />
@@ -155,6 +157,7 @@
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Utils\StringValueAttribute.cs" />
     <Compile Include="Utils\TypeValueAttribute.cs" />
+    <Compile Include="Utils\Utility.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
