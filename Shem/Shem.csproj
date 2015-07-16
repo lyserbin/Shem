@@ -54,12 +54,14 @@
     <Compile Include="AsyncEvents\Enums\CircHsState.cs" />
     <Compile Include="AsyncEvents\Enums\OrConnReasons.cs" />
     <Compile Include="AsyncEvents\Enums\OrConnStatus.cs" />
+    <Compile Include="AsyncEvents\Enums\StatusSeverity.cs" />
     <Compile Include="AsyncEvents\Enums\StreamPurpose.cs" />
     <Compile Include="AsyncEvents\Enums\StreamReason.cs" />
     <Compile Include="AsyncEvents\Enums\StreamStatus.cs" />
     <Compile Include="AsyncEvents\HsDescContentEvent.cs" />
     <Compile Include="AsyncEvents\HsDescEvent.cs" />
     <Compile Include="AsyncEvents\NetworkLivenessEvent.cs" />
+    <Compile Include="AsyncEvents\StatusEvent.cs" />
     <Compile Include="AsyncEvents\TbEmptyEvent.cs" />
     <Compile Include="AsyncEvents\TorEvent.cs" />
     <Compile Include="AsyncEvents\AuthDirNewDescsEvent.cs" />
