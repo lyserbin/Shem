@@ -2,7 +2,7 @@
 
 namespace Shem.AsyncEvents
 {
-    public class StatusGeneralEvent : TorEvent
+    public class StatusGeneralEvent : StatusEvent
     {
         public StatusGeneralEvent()
         {

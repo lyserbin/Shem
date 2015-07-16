@@ -2,7 +2,7 @@
 
 namespace Shem.AsyncEvents
 {
-    public class StatusClientEvent : TorEvent
+    public class StatusClientEvent : StatusEvent
     {
         public StatusClientEvent()
         {
