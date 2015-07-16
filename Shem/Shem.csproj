@@ -53,6 +53,7 @@
     <Compile Include="AsyncEvents\ConnBwEvent.cs" />
     <Compile Include="AsyncEvents\Enums\BuildTimeoutSetTypes.cs" />
     <Compile Include="AsyncEvents\Enums\CircHsState.cs" />
+    <Compile Include="AsyncEvents\Enums\ConnBwTypes.cs" />
     <Compile Include="AsyncEvents\Enums\OrConnReasons.cs" />
     <Compile Include="AsyncEvents\Enums\OrConnStatus.cs" />
     <Compile Include="AsyncEvents\Enums\StatusSeverity.cs" />
