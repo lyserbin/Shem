@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Shem.Replies;
 using Shem.Utils;
 
@@ -138,7 +137,7 @@ namespace Shem.AsyncEvents
             ID = split[index];
             index++;
 
-            Status = ParseCircStatus(index, split);
+            Status = Utility.ParseEnum<CircStatus>(split[index]);
 
             index++;
 
@@ -165,15 +164,15 @@ namespace Shem.AsyncEvents
                             List<CircBuildFlags> flags = new List<CircBuildFlags>();
                             foreach (var stringFlag in value.Split(','))
                             {
-                                flags.Add(ParseCircBuildFlags(value));
+                                flags.Add(Utility.ParseEnum<CircBuildFlags>(stringFlag));
                             }
                             BuildFlags = flags;
                             break;
                         case "PURPOSE":
-                            Purpose = ParseCircPurpose(value);
+                            Purpose = Utility.ParseEnum<CircPurpose>(value);
                             break;
                         case "HS_STATE":
-                            HsState = ParseCircHsState(value);
+                            HsState = Utility.ParseEnum<CircHsState>(value);
                             break;
                         case "REND_QUERY":
                             RendQuery = value;
@@ -182,10 +181,10 @@ namespace Shem.AsyncEvents
                             TimeCreated = value;
                             break;
                         case "REASON":
-                            Reason = ParseCircReason(value);
+                            Reason = Utility.ParseEnum<CircReasons>(value);
                             break;
                         case "REMOTE_REASON":
-                            RemoteReason = ParseCircReason(value);
+                            RemoteReason = Utility.ParseEnum<CircReasons>(value);
                             break;
                         case "SOCKS_USERNAME":
                             SocksUsername = value.Replace("\"", "");
@@ -196,56 +195,6 @@ namespace Shem.AsyncEvents
                     }
                 }
             }
-        }
-
-        private static CircReasons ParseCircReason(string value)
-        {
-            CircReasons tmpr = CircReasons.CONNECTFAILED;
-            if (!Enum.TryParse<CircReasons>(value, true, out tmpr))
-            {
-                Logger.LogWarn("Error during the parsing of CircReason in CircEvent.");
-            }
-            return tmpr;
-        }
-
-        private static CircHsState ParseCircHsState(string value)
-        {
-            CircHsState tmphs = CircHsState.HSCI_CONNECTING;
-            if (!Enum.TryParse<CircHsState>(value, true, out tmphs))
-            {
-                Logger.LogWarn("Error during the parsing of CircHsState in CircEvent.");
-            }
-            return tmphs;
-        }
-
-        private static CircPurpose ParseCircPurpose(string value)
-        {
-            CircPurpose tmpp = CircPurpose.GENERAL;
-            if (!Enum.TryParse<CircPurpose>(value, true, out tmpp))
-            {
-                Logger.LogWarn("Error during the parsing of CircPurpose in CircEvent.");
-            }
-            return tmpp;
-        }
-
-        private static CircBuildFlags ParseCircBuildFlags(string value)
-        {
-            CircBuildFlags tmpbf = CircBuildFlags.IS_INTERNAL;
-            if (!Enum.TryParse<CircBuildFlags>(value, true, out tmpbf))
-            {
-                Logger.LogWarn("Error during the parsing of CircBuildFlags in CircEvent.");
-            }
-            return tmpbf;
-        }
-
-        private static CircStatus ParseCircStatus(int index, string[] split)
-        {
-            CircStatus tmpcs = CircStatus.LAUNCHED;
-            if (!Enum.TryParse<CircStatus>(split[index], true, out tmpcs))
-            {
-                Logger.LogWarn("Error during the parsing of CircStatus in CircEvent.");
-            }
-            return tmpcs;
         }
     }
 }
