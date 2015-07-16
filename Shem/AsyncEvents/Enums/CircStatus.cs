@@ -26,6 +26,16 @@ namespace Shem.AsyncEvents
         /// <summary>
         /// Circuit closed (was built)
         /// </summary>
-        CLOSED
+        CLOSED,
+
+        /// <summary>
+        /// Circuit purpose or HS-related state changed
+        /// </summary>
+        PURPOSE_CHANGED,
+
+        /// <summary>
+        /// Circuit cannibalized
+        /// </summary>
+        CANNIBALIZED
     }
 }
