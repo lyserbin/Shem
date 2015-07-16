@@ -51,6 +51,7 @@
     <Compile Include="AsyncEvents\CellStatsEvent.cs" />
     <Compile Include="AsyncEvents\CircBwEvent.cs" />
     <Compile Include="AsyncEvents\ConnBwEvent.cs" />
+    <Compile Include="AsyncEvents\Enums\BuildTimeoutSetTypes.cs" />
     <Compile Include="AsyncEvents\Enums\CircHsState.cs" />
     <Compile Include="AsyncEvents\Enums\OrConnReasons.cs" />
     <Compile Include="AsyncEvents\Enums\OrConnStatus.cs" />

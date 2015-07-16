@@ -132,13 +132,12 @@ namespace Shem.AsyncEvents
             base.ParseToEvent(reply);
 
             int index = 0;
-
             string[] split = EventLine.Split(' ');
+
             ID = split[index];
             index++;
 
             Status = Utility.ParseEnum<CircStatus>(split[index]);
-
             index++;
 
             if (!split[index].Contains("="))
