@@ -1,5 +1,4 @@
-﻿using System;
-using Shem.Replies;
+﻿using Shem.Replies;
 using Shem.Utils;
 
 namespace Shem.AsyncEvents
@@ -107,7 +106,7 @@ namespace Shem.AsyncEvents
             StreamID = split[index];
             index++;
 
-            Status = ParseStreamStatus(index, split);
+            Status = Utility.ParseEnum<StreamStatus>(split[index]);
             index++;
 
             CircuitID = split[index];
@@ -126,7 +125,7 @@ namespace Shem.AsyncEvents
                     switch (key.ToUpper())
                     {
                         case "PURPOSE":
-                            Purpose = ParseStreamPurpose(value);
+                            Purpose = Utility.ParseEnum<StreamPurpose>(value);
                             break;
                         case "SOURCE_ADDR":
                             SourceAddr = value;
@@ -135,44 +134,14 @@ namespace Shem.AsyncEvents
                             Source = value;
                             break;
                         case "REMOTE_REASON":
-                            RemoteReason = ParseStreamReason(value);
+                            RemoteReason = Utility.ParseEnum<StreamReason>(value);
                             break;
                         case "REASON":
-                            Reason = ParseStreamReason(value);
+                            Reason = Utility.ParseEnum<StreamReason>(value);
                             break;
                     }
                 }
             }
-        }
-
-        private static StreamStatus ParseStreamStatus(int index, string[] split)
-        {
-            StreamStatus tmp = StreamStatus.CLOSED;
-            if (!Enum.TryParse<StreamStatus>(split[index], true, out tmp))
-            {
-                Logger.LogWarn("Error during the parsing of StreamStatus in StreamEvent.");
-            }
-            return tmp;
-        }
-
-        private static StreamPurpose ParseStreamPurpose(string value)
-        {
-            StreamPurpose tmp = StreamPurpose.DIR_FETCH;
-            if (!Enum.TryParse<StreamPurpose>(value, true, out tmp))
-            {
-                Logger.LogWarn("Error during the parsing of StreamPurpose in StreamEvent.");
-            }
-            return tmp;
-        }
-
-        private static StreamReason ParseStreamReason(string value)
-        {
-            StreamReason tmp = StreamReason.CONNECTREFUSED;
-            if (!Enum.TryParse<StreamReason>(value, true, out tmp))
-            {
-                Logger.LogWarn("Error during the parsing of StreamReason in StreamEvent.");
-            }
-            return tmp;
         }
     }
 }
