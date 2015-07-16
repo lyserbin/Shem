@@ -2,6 +2,9 @@
 
 namespace Shem.AsyncEvents
 {
+    /// <summary>
+    /// A signal has been received and actions taken by Tor.
+    /// </summary>
     public class SignalEvent : TorEvent
     {
         public SignalEvent()
@@ -14,9 +17,20 @@ namespace Shem.AsyncEvents
             get { return TorEvents.SIGNAL; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Signal
+        {
+            get;
+            protected set;
+        }
+
         protected override void ParseToEvent(Reply reply)
         {
             base.ParseToEvent(reply);
+
+            Signal = EventLine;
         }
     }
 }

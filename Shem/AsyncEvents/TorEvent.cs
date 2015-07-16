@@ -29,7 +29,7 @@ namespace Shem.AsyncEvents
         protected virtual void ParseToEvent(Reply reply)
         {
             RawString = reply.RawString;
-            EventLine = reply.ReplyLine.Substring(reply.ReplyLine.IndexOf(" "));
+            EventLine = reply.ReplyLine.Substring(reply.ReplyLine.IndexOf(" ")).Replace("\r\n", "");
         }
 
         public static TorEvent Parse(Reply reply)
