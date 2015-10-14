@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using Shem.AsyncEvents;
 using Shem.Commands;
 using Shem.Replies;
 using Shem.Sockets;
-using Shem.Utils;
+using Shem.Exceptions;
 
 namespace Shem
 {
@@ -15,37 +14,45 @@ namespace Shem
     /// If you wanna do things in the right way use the 'TorController'
     /// class instead.
     /// </summary>
-    public abstract class BaseController
+    public abstract class BaseController : IDisposable
     {
-
-        protected ControlSocket controlSocket;
-
-        protected int sleep = 10;
-
-        protected uint responseTimeout = 1000;
-
-        protected Task asyncEventsListener;
-
-        protected bool asyncEventsListenerStop = false;
-
-        protected bool canListen = false;
+        /// <summary>
+        /// Contains type of reply which is currently received. 
+        /// </summary>
+        private bool _receiveData;
 
         /// <summary>
-        /// The time the library should wait for a reply.
+        /// Reply which is currently constrocted from received data.
         /// </summary>
-        protected uint ResponseTimeout
-        {
-            get { return responseTimeout; }
-            set { responseTimeout = value; }
-        }
+        private Reply _currentReply;
+
+        /// <summary>
+        /// Socket which receives data from TOR.
+        /// </summary>
+        private ControlSocket _controlSocket;
+
+        /// <summary>
+        /// FIFO buffer for received regular replies.
+        /// </summary>
+        private Queue<Reply> _replyBuffer;
+
+        /// <summary>
+        /// Eventhandle which signals the receiving of a regular reply.
+        /// </summary>
+        private EventWaitHandle _replyReceivedHdl;
+
+        /// <summary>
+        /// The time (in milliseconds) the library should wait for a reply.
+        /// </summary>
+        protected uint ResponseTimeout { get; set; }
+
         /// <summary>
         /// Is the Controller connected to the server.
         /// </summary>
         protected bool Connected
         {
-            get { return controlSocket != null ? controlSocket.Connected : false; } // Null reference exception sucks balls.
+            get { return _controlSocket != null ? _controlSocket.Connected : false; } // Null reference exception sucks balls.
         }
-
 
         /// <summary>
         /// Construct a new TorController, used to control TOR
@@ -55,119 +62,139 @@ namespace Shem
         /// <param name="connect">If the controller should connect just after the initialization</param>
         protected BaseController(string address = "127.0.0.1", uint port = 9051, bool connect = true)
         {
-            controlSocket = new ControlSocket(address, port, connect);
+            _receiveData = false;
+            ResponseTimeout = 1000;
 
-            canListen = true;
+            _controlSocket = new ControlSocket(address, port, connect);
+            _controlSocket.OnLineReceived += ControlSocket_OnLineReceived;
 
-            asyncEventsListener = Task.Run(() => { ListenForAsyncEvents(); });
+            _replyReceivedHdl = new EventWaitHandle(false, EventResetMode.AutoReset);
+
+            _replyBuffer = new Queue<Reply>();
         }
 
-        private async void ListenForAsyncEvents()
+        /// <summary>
+        /// Handle a single line which was received by the ControlSocket.
+        /// </summary>
+        /// <param name="line">Received line (ending with CRLF)</param>
+        private void ControlSocket_OnLineReceived(string line)
         {
-            while (!asyncEventsListenerStop)
+            if(_receiveData)
             {
-                if (canListen)
+                if (line.Length > 0)
                 {
-                    lock (controlSocket)
+                    if (line[0] == '.')
                     {
-                        if (controlSocket.ResponseAvailable)
+                        if (line == ".\r\n")
                         {
-                            string rawReply = controlSocket.Receive();
-                            List<TorEvent> asyncEvents = new List<TorEvent>();
-                            List<Reply> replies = Reply.Parse(rawReply);
-                            foreach (var r in replies)
-                            {
-                                try
-                                {
-                                    asyncEvents.Add(TorEvent.Parse(r));
-                                }
-                                catch (Exception ex)
-                                {
-                                    Logger.LogError(ex.Message);
-                                }
-                            }
-                            AsyncEventDispatcher(asyncEvents);
+                            // terminating sequence received
+                            // RFC2821: If the line is composed of a single period, it is
+                            //          treated as the end of mail indicator.
+                            _receiveData = false;
+                            HandleFinishedReply();
+                            return;
+                        }
+                        else
+                        {
+                            // escaped line received
+                            // RFC2821: If the first character is a period and there are 
+                            //          other characters on the line, the first character 
+                            //          is deleted
+                            line = line.Substring(1);
                         }
                     }
                 }
-                await Task.Delay(250);
+
+                _currentReply.RawString += line;
+            }
+            else
+            {
+                _currentReply = new Reply(line);
+
+                if ((line[3] == ' ') || // EndReply
+                   (line[3] == '-'))   // MidReply
+                {
+                    HandleFinishedReply();
+                }
+                else if (line[3] == '+') // DataReply
+                {
+                    _receiveData = true;
+                }
+                else
+                {
+                    throw new NullReplyCodeException(line, 3);
+                }
             }
         }
 
         /// <summary>
-        /// Send a command and returns the reply as a raw string
+        /// Handle a completely received reply.
+        /// </summary>
+        private void HandleFinishedReply()
+        {
+            if (((int)_currentReply.Code >= 600) && ((int)_currentReply.Code < 700))
+            {
+                // reply is async if first number in reply code is 6
+                AsyncEventDispatcher(TorEvent.Parse(_currentReply));
+            }
+            else
+            {
+                // all other replies are defined as synchronous
+                lock (_replyBuffer)
+                {
+                    _replyBuffer.Enqueue(_currentReply);
+                }
+
+                _replyReceivedHdl.Set();
+            }
+        }
+
+        /// <summary>
+        /// Send a command and returns all replies
         /// </summary>
         /// <param name="command">The command to be sent</param>
-        /// <returns>Returns the raw string replied by the server</returns>
-        public virtual string SendRawCommand(TCCommand command)
-        {
-            string rawReply = "";
-
-            canListen = false;
-
-            lock (controlSocket)
-            {
-                //Send the command
-                controlSocket.Send(command.Raw());
-
-                //Wait for response
-                int timeout = (int)ResponseTimeout / sleep;
-                int i = 1;
-                while (!controlSocket.ResponseAvailable && i < timeout)
-                {
-                    Thread.Sleep(sleep);
-                    i++;
-                }
-                //Read Response
-
-                rawReply = controlSocket.Receive();
-            }
-
-            canListen = true;
-
-            return rawReply;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
+        /// <returns>List of all received replies</returns>
         public virtual List<Reply> SendCommand(TCCommand command)
         {
-            List<Reply> replies = Reply.Parse(SendRawCommand(command));
-            List<Reply> asyncEventsReply = new List<Reply>();
-            List<TorEvent> asyncEvents = new List<TorEvent>();
+            _controlSocket.Send(command.Raw());
 
-            foreach (var r in replies)
+            List<Reply> replies = new List<Reply>();
+
+            // receive replies until we get an end reply
+            for (;;)
             {
-                if (r.Code == ReplyCodes.ASYNC_EVENT_NOTIFICATION)
+                lock (_replyBuffer)
                 {
-                    asyncEventsReply.Add(r);
+                    while (_replyBuffer.Count > 0)
+                    {
+                        Reply reply = _replyBuffer.Dequeue();
+                        replies.Add(reply);
+                        if (reply.RawString[3] == ' ')
+                        {
+                            // end reply received --> finished
+                            return replies;
+                        }
+                    }
+                }
+#if DEBUG
+                if (!_replyReceivedHdl.WaitOne())
+#else
+                if(!_replyReceivedHdl.WaitOne((int)ResponseTimeout))
+#endif
+                {
+                    throw new TimeoutException("Timeout while receiving replies");
                 }
             }
-
-            foreach (var e in asyncEventsReply)
-            {
-                replies.Remove(e);
-                asyncEvents.Add(TorEvent.Parse(e));
-            }
-
-            AsyncEventDispatcher(asyncEvents);
-
-            return replies;
         }
 
         protected abstract void AsyncEventDispatcher(TorEvent asyncEvent);
-
-        protected abstract void AsyncEventDispatcher(List<TorEvent> asyncEvents);
 
         /// <summary>
         /// Connect to the control port.
         /// </summary>
         protected void Connect()
         {
-            controlSocket.Connect();
+            _controlSocket.Connect();
         }
 
         /// <summary>
@@ -178,20 +205,32 @@ namespace Shem
         {
             if (Connected)
             {
-
-                SendRawCommand(new Quit());
-                asyncEventsListenerStop = true;
-                if (asyncEventsListener.Exception == null)
-                {
-                    asyncEventsListener.Wait();
-                }
-                controlSocket.Close();
+                SendCommand(new Quit());
+                _controlSocket.Close();
             }
+        }
+
+        public void Dispose(bool disposing)
+        {
+            Close();
+
+            if (disposing)
+            {
+                _controlSocket.Dispose();
+                _controlSocket = null;
+                _replyReceivedHdl.Dispose();
+                _replyReceivedHdl = null;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
         }
 
         ~BaseController()
         {
-            Close();
+            Dispose(false);
         }
     }
 }
