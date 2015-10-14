@@ -52,7 +52,7 @@ namespace Shem
         /// <returns>True in case of successful authentication, false in every other case.</returns>
         public bool Authenticate(string password = "")
         {
-            if (!this.controlSocket.Connected)
+            if (!this.Connected)
                 throw new SocketException();
 
             AuthenticateReply reply;
@@ -132,27 +132,19 @@ namespace Shem
             // TODO: wait tykonket to implement the ADDRMAP event.
         }
 
-        protected override void AsyncEventDispatcher(List<TorEvent> asyncEvents)
+        protected override void AsyncEventDispatcher(TorEvent asyncEvent)
         {
             Task.Run(() =>
             {
-                foreach (var e in asyncEvents)
+                if (OnAsyncEvents != null)
                 {
-                    if (OnAsyncEvents != null)
-                    {
-                        OnAsyncEvents.Invoke(e);
-                    }
-                    if (OnAsyncEvent.ContainsKey(e.Event))
-                    {
-                        OnAsyncEvent[e.Event].Dispatch(e);
-                    }
+                    OnAsyncEvents.Invoke(asyncEvent);
+                }
+                if (OnAsyncEvent.ContainsKey(asyncEvent.Event))
+                {
+                    OnAsyncEvent[asyncEvent.Event].Dispatch(asyncEvent);
                 }
             });
-        }
-
-        protected override void AsyncEventDispatcher(TorEvent asyncEvent)
-        {
-            AsyncEventDispatcher(new List<TorEvent>() { asyncEvent });
         }
 
         /// <summary>
